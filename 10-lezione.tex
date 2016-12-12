@@ -1,0 +1,438 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+%\usepackage{mathabx}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+% \usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 10}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 10}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 10}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Teoremi fondamentali della ``Recursion Theory''}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{theorem}[$s$-$m$-$n$]\label{thm:smn}
+Dati due numeri naturali $m,n$ esiste una funzione primitiva ricorsiva ed iniettiva $S_n^m(e,x_1,\ldots,x_n)$ tale che 
+ $$ \varphi_e^{n+m}(x_1,\ldots,x_n,y_1,\ldots,y_m)\simeq\varphi_{S_n^m(e,x_1,\ldots,x_n)}(y_1,\ldots,y_m)$$
+\end{theorem}
+
+\begin{proof}
+Sia $e$ l'indice di una funzione ricorsiva parziale $\varphi_e^{n+m}(x_1,\ldots,x_n,y_1,\ldots,y_m)$. Vogliamo produrre a partire da $e$
+ una descrizione (un codice) della funzione $\gamma(y_1,\ldots,y_m) \simeq \varphi_e^{n+m}(x_1,\ldots,x_n,y_1,\ldots,y_m)$ al variare
+ degli input $x_1,\ldots,x_n$. Informalmente il processo di decodificare $e$, e modificare la definizione della funzione da 
+ esso codificata cambiandone la segnatura e sostituendo ``nel corpo'' le funzioni costanti a valore $x_1,\ldots,x_n$ rispettivamente
+ \`{e} esso stesso un procedimento effettivo e definibile, usando i metodi dell'aritmetizzazione, con una funzione totale primitiva ricorsiva
+ $S_n^m$, che prende appunto come input il codice $e$ ed i valori $x_1,\ldots,x_n$. Inoltre per le propriet\`{a} delle codifiche
+ la funzione $S_n^m$ risulta anche essere iniettiva.
+\qed\end{proof}
+
+Un'importante applicazione del Teorema \ref{thm:smn} \`{e} la possibilit\`{a} di dimostrare il seguente teorema, che parla di come 
+ esistano funzioni che forniscono programmi.
+
+\begin{theorem}[del parametro]\label{thm:parametro}
+Data una funzione ricorsiva parziale $f(x_1,\ldots,x_n,y_1,\ldots,y_m)$ esiste una funzione primitiva ricorsiva ed iniettiva
+ $S(x_1,\ldots,x_n)$ tale che
+ $$ f(x_1,\ldots,x_n,y_1,\ldots,y_m)\simeq\varphi_{S(x_1,\ldots,x_n)}(y_1,\ldots,y_m)$$
+\end{theorem}
+
+\begin{proof}
+Siccome $f(x_1,\ldots,x_n,y_1,\ldots,y_m)$ \`{e} parziale ricorsiva, allora esiste un numero $e$ tale che
+ $\varphi_e \simeq f$. Pertanto basta usare il Teorema \ref{thm:smn} e definire $S(x_1,\ldots,x_n) = S_n^m(e,x_1,\ldots,x_n)$.
+\qed\end{proof}
+
+Un'istanza semplice del Teorema del parametro \`{e} la seguente: data una funzione ricorsiva parziale $f(x,y)$ esiste una funzione
+ primitiva ricorsiva ed iniettiva $S(x)$ tale che $f(x,y)\simeq\varphi_{S(x)}(y)$. Si noti che la funzione $S(x)$
+ (ed in generale $S_n^m(e,x_1,\ldots,x_n)$), essendo primitiva ricorsiva, \`{e} totale.
+
+\begin{theorem}[di ricorsione II]\label{thm:second-recursion}
+Sia $\psi$ una funzione ricorsiva parziale $m+1$-aria. Allora esiste un indice $e$ tale che $\varphi_{e}(\vec y) \simeq \psi(e,\vec y)$, per ogni
+ $\vec y \in \nat^m$.
+\end{theorem}
+
+\begin{proof}
+Sia $h$ una funzione ricorsiva totale unaria qualsiasi. Allora la funzione $\varphi(e,\vec y)\simeq\psi(h(e),\vec y)$ \`{e} ricorsiva parziale, per lo schema
+ di rimpiazzamento e dunque ha un indice $a$, ovvero $\varphi \simeq \varphi_a$. Ora per il Teorema \ref{thm:smn} ($s$-$m$-$n$) esiste una funzione primitiva ricorsiva binaria $S_1^m$
+ tale che per ogni $\vec y \in \nat^m$
+ $$\varphi_a(e,\vec y) \simeq \varphi(e,\vec y) \simeq \psi(h(e),\vec y) \simeq \varphi_{S_1^m(a,e)}(\vec y) \qquad \qquad (1) $$
+ Poich\'{e} la (1) vale per ogni $h:\nat\to \nat$ ricorsiva ed ogni $e \in\nat$, in particolare vale per $h(z) = S_1^m(z,z)$ e per $e = a$.
+ 
+Quindi abbiamo che per ogni $\vec y \in \nat^m$
+$$\varphi_a(a,\vec y) \simeq \varphi(a,\vec y) \simeq \psi(S_1^m(a,a),\vec y) \simeq \varphi_{S_1^m(a,a)}(\vec y) \qquad \qquad (2)$$
+
+Ma allora la (2) ci dice che $S_1^m(a,a)$ \`{e} un indice che soddisfa l'enunciato del teorema.
+\qed\end{proof}
+
+\textbf{Notazione.} Useremo talvolta una notazione per definire funzioni on-the-fly senza darvi un nome (come si fa in OCaml ed $\mathrm{F}^\#$).
+ Ad esempio la funzione quadrato pu\`{o} essere definita dall'espressione $x \mapsto x*x$, piuttosto che dire che l'elevamento al
+ quadrato \`{e} la funzione $f$ data da $f(x) = x*x$.
+
+\begin{lemma}\label{lem:totalizzazione}
+Per ogni funzione parziale ricorsiva $\psi$ esiste una funzione ricorsiva totale $\overline{\psi}$ tale che
+ $\varphi_{\psi(x)} = \varphi_{\overline{\psi}(x)}$, per ogni $x \in \dom{\psi}$.
+\end{lemma}
+
+\begin{proof}
+Poich\'{e} la funzione $\psi$ \`{e} parziale ricorsiva, essa ha un indice: sia $\psi \simeq \varphi_e$. Sia $u$ la funzione ricorsiva parziale universale.
+ Allora la funzione binaria $(x,y) \mapsto u(u(e,x),y)$ \`{e} ricorsiva parziale e quindi ha un indice $p$.
+ \`{E} chiaro che, per definizione, $\varphi_p(x,y) \simeq \varphi_{\psi(x)}(y)$ per ogni $x \in \dom{\psi}$ ed ogni $y \in \nat$.
+ Per il Teorema \ref{thm:smn} ($s$-$m$-$n$) esiste una funzione primitiva ricorsiva binaria $S_1^1$ tale che $\varphi_p(x,y) \simeq \varphi_{S_1^1(p,x)}(y)$
+ e quindi abbiamo che 
+$$\varphi_{\psi(x)}(y) \simeq \varphi_{S_1^1(p,x)}(y)$$
+per ogni $x \in \dom{\psi}$ ed ogni $y \in \nat$. Ci\`{o} significa che la funzione unaria ricorsiva totale $x \mapsto S_1^1(p,x)$
+ soddisfa l'enunciato del teorema.
+\qed\end{proof}
+
+\begin{theorem}[di punto fisso]\label{thm:fixpoint}
+Sia $f$ una funzione ricorsiva totale. Allora esiste un indice $n$ tale che $\varphi_{n} \simeq \varphi_{f(n)}$.
+\end{theorem}
+
+\begin{proof}
+Sia $p$ un indice di $f$. La funzione $\phi(x) \simeq \varphi_p(\varphi_x(x))$ \`{e} ricorsiva parziale, dato che 
+ $\phi(x) \simeq u(p,u(x,x))$, dove $u$ \`{e} la funzione ricorsiva parziale universale.
+ Per il Lemma \ref{lem:totalizzazione} esiste una funzione ricorsiva totale $\overline{\phi}$ tale che
+ $\varphi_{\phi(x)} = \varphi_{\overline{\phi}(x)}$, per ogni $x \in \dom{\phi}$.
+
+Sia $q$ un indice di $\overline{\phi}$. Poich\'{e} sia $f$ che $\overline{\phi}$ sono totali,
+ sicuramente $\varphi_q(q)\downarrow$ e $f(\varphi_q(q))\downarrow$, quindi possiamo porre $n=\varphi_q(q)$, per comodit\`{a}.
+
+Ora ci accorgiamo che $q \in \dom{\phi}$, perch\'{e} $\phi(q)\simeq\varphi_p(\varphi_q(q)) = f(n)$ e siccome la funzione
+ $\overline{\phi}$ ci \`{e} data dal Lemma \ref{lem:totalizzazione}, abbiamo che $\varphi_{\phi(q)} = \varphi_{\overline{\phi}(q)}$.
+
+Ma allora possiamo concludere osservando che
+$$ \varphi_{f(n)} \simeq \varphi_{\phi(q)} \simeq \varphi_{\overline{\phi}(q)} \simeq \varphi_{\varphi_q(q)} \simeq \varphi_n $$
+e quindi $n$ \`{e} il numero che cercavamo.
+\qed\end{proof}
+
+% Notiamo che il II Teorema Ricorsione (Theorema \ref{thm:second-recursion}) ammette la seguente prova alternativa.
+% 
+% \begin{proof}
+% Sia $\psi$ una funzione ricorsiva parziale binaria. Allora $$
+% 
+%  Allora esiste un indice $e$ tale che $\varphi_{e}(x) \simeq \psi(e,x)$, per ogni
+%  $x \in \nat$.
+% \qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Insiemi che rispettano le funzioni e teorema di Rice}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Abbiamo visto che i numeri naturali ``sono'' allo stesso tempo anche funzioni dai naturali ai naturali. In questa sezione
+ guardiamo ai sottoinsiemi di $\nat$ come insiemi di funzioni. Si pensi all'analogia tra insiemi e predicati: un insieme di numeri naturali
+ pu\`{o} essere pensato come l'\emph{estensione} di una propriet\`{a} (e quindi di un predicato) di numeri naturali e, tramite la codificata 
+ data dal Teorema di Enumerazione di Kleene, pu\`{o} essere pensato anche come l'estensione di una propriet\`{a} di ``programmi''.
+
+Ogni funzione r.p. ha molti indici e quindi se vogliamo vedere in maniera sensata un insieme $A \subseteq \nat$ come un 
+ insieme di funzioni, allora $A$ deve soddisfare la seguente propriet\`{a}: se $e \in A$ allora tutti gli indici della funzione
+ $\varphi_e$ devono stare in $A$. Questa propriet\`{a} viene resa precisamente nella prossima definizione.
+
+\begin{definition}\label{def:risp-fun}
+Un insieme $A\subseteq \nat$ \emph{rispetta le funzioni} se per ogni coppia di numeri $a,b \in\nat$ abbiamo che 
+$$ \varphi_a \simeq \varphi_b \Rightarrow (a \in A \iff b \in A) $$
+\end{definition}
+
+\begin{definition}\label{def:compl-re}
+Un insieme $A\subseteq \nat$ \`{e} \emph{completamente ricorsivo} (resp. \emph{completamente r.e.}) se \`{e} r.e. (resp ricorsivo)
+ e rispetta le funzioni.
+\end{definition}
+
+Per la suriettivit\`{a} dell'enumerazione di Kleene, ogni insieme $A$ che rispetta le funzioni rappresenta una propriet\`{a} di 
+ programmi $P$. Allora il fatto che $A$ sia completamente r.e. (ricorsivo) corrisponde al fatto che $P$ sia r.e. (ricorsiva).
+
+Diciamo che un insieme $A\subseteq \nat$ \`{e} \emph{triviale} se $A = \emptyset$ oppure $A = \nat$. Il prossimo teorema,
+ chiamato il \emph{Teorema di Rice}, dice in sostanza che nessuna propriet\`{a} non banale dei programmi pu\`{o} essere
+ ricorsiva.
+
+\begin{theorem}[di Rice]\label{thm:rice}
+Sia $A \subseteq \nat$ un insieme che rispetta le funzioni. Allora $A$ \`{e} completamente ricorsivo sse $A$ \`{e} triviale.
+\end{theorem}
+
+\begin{proof}
+Dimostriamo i due versi della doppia implicazione.
+
+\noindent($\Leftarrow$) Se $A$ \`{e} triviale allora \`{e} completamente ricorsivo perch\`{e} $\emptyset$ e $\nat$ sono entrambi ricorsivi
+ e rispettano le funzioni.
+
+\noindent($\Rightarrow$) Supponiamo, per assurdo, che $A$ sia completamente ricorsivo e non-triviale. Allora anche $A^c$ \`{e}
+ completamente ricorsivo e non-triviale e quindi esistono due numeri $x_0 \in A$, $x_1 \in A^c$. Definiamo una funzione $f$ come segue:
+$$
+f(m) =
+\begin{cases}
+x_0	& \mbox{ se $m \in A^c$} \\ 
+x_1	& \mbox{ se $m \in A$} \\
+\end{cases}
+$$
+Chiaramente $f$ \`{e} una funzione ricorsiva totale e quindi, per il Teorema \ref{thm:fixpoint}, esiste un numero $n$ tale che
+ $\varphi_{f(n)} \simeq \varphi_n$. A questo punto $n$ deve appartenere ad $A$ o ad $A^c$:
+\begin{itemize}
+\item[(1)] se $n \in A$, allora $f(n) = x_1 \in A^c$.
+\item[(2)] se $n \in A^c$, allora $f(n) = x_0 \in A$.
+\end{itemize}
+Nel caso (1) $n \in A$ ed $f(n) \not\in A$ e nel caso (2) $n \not\in A$ ed $f(n) \in A$. Pertanto in entrambi i casi $A$ non
+ rispetta le funzioni, e questo contraddice l'ipotesi iniziale.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Applicazioni dei teoremi fondamentali}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Che cos'ha ache fare il Teorema \ref{thm:second-recursion} con la ricorsione? Perch\`{e} si chiama cos\`{i}?
+ Si chiama cos\`{i} perch\'{e} ci aiuta a risolvere equazioni in cui le incognite sono funzioni ricorsive, un po' come 
+ i metodi che si usano per risolvere equazioni differenziali, in cui le incognite sono appunto funzioni.
+
+% \begin{exercise}
+% Consideriamo la funzione $x \mapsto 2^x$. Vogliamo mostrare che \`{e} ricorsiva trovando un suo indice.
+% 
+% Siccome la funzione ``potenza $x$-esima di due'' \`{e} una soluzione della seguente equazione ricorsiva nell'incognita $f$:
+% $$
+% f(x) = 
+% \begin{cases}
+% 1 & \mbox{se $x = 0$} \\
+% 2f(x-1) & \mbox{se $x > 0$} \\
+% \end{cases}
+% $$
+% Vogliamo ora trovare un numero $n$ tale che la funzione $\varphi_n$ soddisfa la stessa equazione: un tale $n$ sar\`{a} un indice della
+%  funzione $x \mapsto 2^x$. Ora la funzione 
+% $$
+% t(y,x) = 
+% \begin{cases}
+% 1 & \mbox{se $x = 0$} \\
+% 2\varphi_y(x-1) & \mbox{se $x > 0$} \\
+% \end{cases}
+% $$
+% \`{e} ricorsiva e quindi per il II Teorema di Ricorsione (Teorema \ref{thm:second-recursion}) esiste un indice
+%  $n$ tale che $\varphi_{n}(x) \simeq t(n,x)$, per ogni $x \in \nat$. Quindi abbiamo che
+% $$
+% \varphi_{n}(x) = 
+% \begin{cases}
+% 1 & \mbox{se $x = 0$} \\
+% 2\varphi_n(x-1) & \mbox{se $x > 0$} \\
+% \end{cases}
+% $$
+% e questo ci dice che $n$ \`{e} un indice della funzione $x \mapsto 2^x$.
+% \end{exercise}
+
+\begin{exercise}
+Consideriamo la seguente equazione ricorsiva nell'incognita $f$:
+$$
+f(x) \simeq 
+\begin{cases}
+3         & \mbox{se $x = 2$} \\
+f(f(x+1)) & \mbox{se $x \neq 2$} \\
+\end{cases}
+$$
+Vediamo che l'equazione non pu\`{o} intendersi come una definizione per induzione e quindi pu\`{o} avere pi\`{u} soluzioni,
+ anche totali, differenti. Vogliamo ora trovare una soluzione a quest'equazione in $\PR$, e quindi trovare un numero $n$ tale che la funzione $\varphi_n$
+ soddisfa la stessa equazione.
+\end{exercise}
+
+\begin{solution}
+Ora la funzione 
+$$
+t(y,x) \simeq 
+\begin{cases}
+3 & \mbox{se $x = 2$} \\
+\varphi_y(\varphi_y(x+1)) & \mbox{se $x \neq 2$} \\
+\end{cases}
+$$
+\`{e} ricorsiva e quindi per il II Teorema di Ricorsione (Teorema \ref{thm:second-recursion}) esiste un indice
+ $n$ tale che $\varphi_{n}(x) \simeq t(n,x)$, per ogni $x \in \nat$. Quindi abbiamo che
+$$
+\varphi_{n}(x)\simeq
+\begin{cases}
+3 & \mbox{se $x = 2$} \\
+\varphi_n(\varphi_n(x+1)) & \mbox{se $x \neq 2$} \\
+\end{cases}
+$$
+e questo ci dice che $n$ \`{e} un indice di una funzione che soddisfa la nostra equazione ricorsiva.
+
+Vediamo due soluzioni diverse dell'equazione data:
+$$
+g_0(x) \simeq 
+\begin{cases}
+3        & \mbox{se $x = 2$} \\
+\uparrow & \mbox{se $x \neq 2$} \\
+\end{cases}
+\qquad  \qquad \qquad
+g_1(x) = 
+\begin{cases}
+3             & \mbox{se $x = 2$} \\
+0             & \mbox{se $x \neq 2$} \\
+\end{cases}
+$$
+Sfortunatamente non sappiamo se $\varphi_n$ \`{e} $g_0,g_1$ oppure un'altra funzione ancora.
+\qed\end{solution}
+
+\begin{exercise}
+Consideriamo la seguente equazione ricorsiva nell'incognita $f$:
+$$
+f(x,y) = 
+\begin{cases}
+1         & \mbox{se $x = 0$} \\
+f(x-1,f(x,y)) & \mbox{se $x >0$} \\
+\end{cases}
+$$
+Vogliamo ora trovare una soluzione a quest'equazione in $\PR$, e quindi trovare un numero $n$ tale che la funzione $\varphi_n$
+ soddisfa la stessa equazione.
+\end{exercise}
+
+\begin{solution}
+Ora la funzione 
+$$
+t(z,y,x) \simeq 
+\begin{cases}
+1                         & \mbox{se $x = 0$} \\
+\varphi_z(x-1,\varphi_z(x,y)) & \mbox{se $x > 0$} \\
+\end{cases}
+$$
+\`{e} ricorsiva parziale e quindi per il II Teorema di Ricorsione (Teorema \ref{thm:second-recursion}) esiste un indice
+ $n$ tale che $\varphi_{n}(x,y) \simeq t(n,x,y)$, per ogni $x,y \in \nat$. Quindi abbiamo che
+$$
+\varphi_{n}(x,y) = 
+\begin{cases}
+1                         & \mbox{se $x = 0$} \\
+\varphi_n(x-1,\varphi_n(x,y)) & \mbox{se $x > 0$} \\
+\end{cases}
+$$
+e questo ci dice che $n$ \`{e} un indice di una funzione che soddisfa la nostra equazione ricorsiva. Ancora una volta per\`{o}
+ non sappiamo come sia fatta veramente $\varphi_n$ poich\`{e} non vi \`{e} un'unica soluzione possibile all'equazione.
+\qed\end{solution}
+
+\begin{exercise}
+La funzione di Ackermann \`{e} una soluzione della seguente equazione ricorsiva nell'incognita $A$:
+$$
+A(x,y) =
+\begin{cases}
+y+1 & \mbox{se $x = 0$} \\
+A(x-1,1)        & \mbox{se $x > 0$ e $y = 0$} \\
+A(x-1,A(x,y-1)) & \mbox{se $x >0$ e $y>0$} \\
+\end{cases}
+$$
+Mettendo il simbolo ``$=$'' otteniamo che quest'equazione vuole funzioni totali come soluzioni e per come \`{e} data ammette una unica 
+ soluzione totale. Per questo \`{e} vista come una \emph{definizione} della funzione di Ackermann.
+ Dimostriamo che esiste una soluzione in $\PR$ all'equazione qui sopra per\`{o} con '$\simeq$' al posto di '$=$'.
+\end{exercise}
+
+\begin{solution}
+La funzione 
+$$
+t(z,x,y) \simeq
+\begin{cases}
+y+1 & \mbox{se $x = 0$} \\
+\varphi_z(x-1,1)        & \mbox{se $x > 0$ e $y = 0$} \\
+\varphi_z(x-1,\varphi_z(x,y-1)) & \mbox{se $x >0$ e $y>0$} \\
+\end{cases}
+$$
+\`{e} ricorsiva parziale e quindi per il II Teorema di Ricorsione (Teorema \ref{thm:second-recursion}) esiste un indice
+ $n$ tale che $\varphi_{n}(x,y) \simeq t(n,x,y)$, per ogni $x,y \in \nat$. Quindi abbiamo che
+$$
+\varphi_{n}(x,y) \simeq
+\begin{cases}
+y+1 & \mbox{se $x = 0$} \\
+\varphi_{n}(x-1,1)        & \mbox{se $x > 0$ e $y = 0$} \\
+\varphi_{n}(x-1,\varphi_{n}(x,y-1)) & \mbox{se $x >0$ e $y>0$} \\
+\end{cases}
+$$
+e questo ci dice che $n$ \`{e} un indice di una funzione che soddisfa l'equazione ricorsiva, ma ancora una volta non sappiamo se 
+ $\varphi_n$ \`{e} o meno la funzione di Ackermann. Quindi per dimostrare che Ackermann sta in $\REC$ non basta il II Teorema di Ricorsione
+ di Kleene. Infatti ci vuole il I Teorema di Ricorsione di Kleene, che per\`{o} noi non vedremo.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostriamo che esiste un numero naturale $n$ tale che $\dom{\varphi_n} = \{n\}$ e $\varphi_n(n) = n$.
+\end{exercise}
+
+\begin{solution}
+Definiamo una funzione 
+$$
+t(x,y) \simeq
+\begin{cases}
+x         & \mbox{se $x = y$} \\
+\uparrow  & \mbox{altrimenti} \\
+\end{cases}
+$$
+La funzione $t$ \`{e} ricorsiva parziale, per cui possiamo applicare il II Teorema di Ricorsione che ci da 
+ un indice $n$ tale che $\varphi_{n}(y) \simeq t(n,y)$, per ogni $y \in \nat$. Per cui $\varphi_n(n) = t(n,n) = n$,
+ da cui $\varphi_n(n)\downarrow$ e per ogni $x \neq n$ abbiamo $\varphi_n(m) \simeq t(n,m)$, da cui $\varphi_n(m)\uparrow$.
+\qed\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

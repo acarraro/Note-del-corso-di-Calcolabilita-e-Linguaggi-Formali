@@ -1,0 +1,195 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+\usepackage{multirow}
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 1}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 1}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 5 ottobre 2011}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 1}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Alfabeti, stringhe linguaggi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Alfabeto]
+Un \emph{alfabeto} \`{e} un insieme finito non vuoto.
+\end{definition}
+
+Per indicare un alfabeto si usano convenzionalmente le lettere greche maiuscole $\Sigma,\Sigma',\ldots$. Per esempio un noto alfabeto \`{e} l'insieme $\{0,1\}$, detto \emph{alfabeto binario}. Per convenzione gli elementi di una alfabeto si chiamano \emph{simboli} e si usano le prime lettere minuscole dell'alfabeto $a,b,c,\ldots$ per indicare generici simboli di un alfabeto.
+
+\begin{definition}[Stringa]
+Si $\Sigma$ un alfabeto. Una \emph{stringa} (o \emph{parola}) su $\Sigma$ \`{e} una sequenza finita di simboli scelti da $\Sigma$.
+\end{definition}
+
+Ad esempio $01001$ \`{e} una stringa sull'alfabeto binario. Per indicare le stringhe si usano di solito le ultime lettere minuscole dell'alfabeto inglese come $x,y,u,w,z,\ldots$, con eventuali apici/pedici. Una particolare stringa \`{e} quella vuota, composta da zero simboli. Questa stringa, indicata con $\epsilon$, \`{e} la sola componibile con qualunque alfabeto. La \emph{lunghezza} di una stringa $w$, indicata con $|w|$, \`{e} la quantit\`{a} di occorrenze di simboli in essa. Ad esempio $|01001| = 5$ e $|\epsilon| = 0$.
+
+Un'operazione molto utilizzata sulle stringhe \`{e} la \emph{concatenazione}. Il risultato della concatenazione di $x$ ad $y$ \`{e} la stringa $xy$ di lunghezza $|x|+|y|$ ottenuta giustapponendo i simboli di $y$, nel loro ordine, all'ultimo simbolo di $x$. Ad esempio $01001$ \`{e} la concatenazione di $01$ a $010$. La concatenazione \`{e} un'operazione associativa, cio\`{e} $(xy)z = x(yz)$; ci\`{o} rende superfluo l'uso delle parentesi, permettendo di scrivere semplicemente $xyz$.
+
+Diciamo che $x$ \`{e} \emph{sottostringa} di $y$ se esistono due stringhe $w,w'$ tali che $wxw' = y$. Due particolari casi di sottostringa sono il \emph{suffisso} ed il \emph{prefisso}. Una stringa $x$ \`{e} suffisso di $y$ se esiste una stringa $w$ tale che $wx = y$ ed \`{e} prefisso di $y$ se esiste una stringa $w$ tale che $xw = y$. Ad esempio $01$ e $11$ sono, rispettivamente, un prefisso ed un suffisso della stringa $0101011$. Diciamo che un prefisso (resp. suffisso) $x$ di $w$ \`{e} \emph{proprio} se $|x| < w$ e \emph{non banale} se $0 < |x| < w$.
+
+La \emph{potenza} $n$-esima di una stringa $x$, indicata con $x^n$, \`{e} definita per induzione da $x^0 = \epsilon$ e $x^{n+1} = x^nx$. Ad esempio $(01)^2 = 0101$.
+
+La stringa \emph{rovesciata} di $w = a_1\cdots a_n$, indicata con $w^R$, \`{e} definita come $w^R = a_n\cdots a_1$.
+
+\begin{definition}[Linguaggio]
+Un \emph{linguaggio} su un alfabeto $\Sigma$ \`{e} un insieme di stringhe su $\Sigma$. 
+\end{definition}
+
+Per indicare un linguaggio si usano convenzionalmente le lettere maiuscole $L,L',\ldots$. Si noti che ogni alfabeto \`{e} un caso particolare di linguaggio su se stesso.
+
+Le operazioni applicabili alle stringhe si possono di norma estendere ai linguaggi. Ad esempio abbiamo 
+\begin{itemize}
+\item Rovesciamento: $L^R = \{w^R \st w \in L\}$
+\item Concatenazione: $LL' = \{xy \st x \in L,\ y \in L'\}$
+\item Potenza: $L^0 = \{\epsilon\}$, \qquad $L^{n+1} = L^nL$
+\end{itemize}
+Notate che $\{x^n \st x \in L\} \subseteq L^n$ ma i due linguaggi non sono in generale uguali.
+
+Sui linguaggi si possono inoltre applicare le operazioni proprie degli insiemi, come l'unione, l'intersezione, ecc.
+
+Combinando unione e potenza si ottiene un'importante operazione, chiamata \emph{stella (o chiusura) di Kleene}, cos\`{i} definita: $L^* = \bigcup_{n\geq 0} L^n$. Un'operazione da essa derivata \`{e} $L^+ = \bigcup_{n\geq 1} L^n = L^*- \{\epsilon\}$.
+
+Risulta dunque che $\Sigma^*$ \`{e} il pi\`{u} grande (al senso dell'inclusione insiemistica) linguaggio su $\Sigma$. \`{E} per tale motivo che spesso si pu\`{o} genericamente definire un linguaggio come un sottoinsieme di $\Sigma^*$.
+
+A questo punto possiamo anche definire formalmente il complemento di un linguaggio $L$ come $L^c = \{w \in \Sigma^* \st w \not\in L \}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Linguaggi e problemi - una visione d'insieme sul corso}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Un tema fondamentale della teoria dei linguaggi formali \`{e} la loro classificazione. Il criterio  di maggior interesse adottato per tale classificare un linguaggio $L$ \`{e} la difficolt\`{a} di decidere se, data una stringa $w$, essa appartiene ad $L$. La procedura di decisione a cui si fa implicitamente riferimento qui si intende essere implementata da un dispositivo automatico che pu\`{o} essere descritto matematicamente ed il concetto di difficolt\`{a} pu\`{o} corrispondere sia alla complicazione/potenza del dispositivo automatico sopraccitato, che al tempo di calcolo richiesto dal dispositivo per dare la risposta.
+
+Il problema di decisione, la cui forma generale \`{e}
+\begin{itemize}
+\item[($\ast$)] ``data $w$, \`{e} vero che $w \in L$?"
+\end{itemize}
+\`{e} di fondamentale importanza perch\'{e}, tramite opportuna codifica, esso potrebbe corrispondere a domande come ``dato un grafo $G$, \`{e} vero che $G$ \`{e} bipartito?".
+
+I principali dispositivi automatici, detti \emph{automi}, che incontreremo sono:
+\begin{itemize}
+  \item gli Automi Finiti (FA),
+  \item gli Automi a Pila (PDA),
+  \item le Macchine di Turing.
+\end{itemize}
+La potenza di una classe di dispositivi \`{e} data dalla classe di problemi del tipo ($\ast$) che essa pu\`{o} risolvere, o equivalentemente dalla classe di linguaggi che essa pu\`{o} riconoscere; chiaramente daremo un significato matematico a questa frase. L'elenco rispecchia la potenza di calcolo dei dispositivi citati (crescente dall'alto verso il basso).
+
+La grande differenza delle Macchine di Turing rispetto agli altri tipi di automi \`{e} il fatto che esista una Macchina di Turing ``general purpose"; al contrario gli Automi Finiti ed a Pila sono ``single purpose". Avremo modo di capire cosa significano queste cose.
+
+Ogni tipo di automa corrisponde a un modello astratto di computazione: per ogni tale modello vedremo studieremo delle sue variazioni che possono o meno mutarne la potenza, ovvero la classe dei linguaggi che quel tipo di automa pu\`{o} riconoscere. 
+
+Le classi di linguaggi di cui parliamo sono le seguenti:
+\begin{itemize}
+  \item i linguaggi regolari,
+  \item i linguaggi liberi dal contesto,
+  \item i linguaggi ricorsivamente enumerabili.
+\end{itemize}
+L'ordine di questo elenco riflette il fatto che ognuna di queste classi \`{e} definita come la classe di linguaggi riconosciuti dal tipo di automi nella posizione corrispondente dell'elenco precedente. Un tema centrale della teoria dei linguaggi formali \`{e} dare caratterizzazioni alternative per le classi di linguaggi sopraccitate. Per definire un linguaggio possiamo utilizzare diversi approcci: 
+\begin{itemize}
+\item un approccio \emph{riconoscitivo}, fornando cio\`{e} una 'macchina' che ricevendo una stringa in input dice se essa appartiene o no al linguaggio;
+\item un approccio \emph{algebrico}, mostrando cio\`{e} come il linguaggio \`{e} costruito a partire da linguaggi pi\`{u} elementari utilizzando operazioni su linguaggi;
+\item un approccio \emph{generativo}, definendo cio\`{e} mediante una grammatica le regole strutturali che devono essere soddisfatte dalle sue stringhe;
+\item un approccio \emph{descrittivo}, che da delle condizioni sulla forma delle stringhe che appartengono ad un linguaggio. Questo ultimo approccio si applica bene per le classi di linguaggi pi\`{u} ristrette ed \`{e} soprattutto utile per dimostrare quando un dato linguaggio \emph{non} appartiene ad una data classe (\emph{Pumping Lemmas}).
+\end{itemize}
+
+Concludiamo questa sezione con una tabella che riassume le corrispondenze tra i temi principali della teoria dei Linguaggi Formali, che occupa la prima parte del corso. \\
+
+\begin{tabular}{|l|l|l|}
+%\hline
+%\multicolumn{3}{|c|}{Team sheet} \\
+\hline
+\textbf{Grammatiche (Chomsky)} & \textbf{Automi} & \textbf{Linguaggi} \\ 
+\hline
+Tipo 3 & Automi finiti & Regolari \\
+\hline
+Tipo 2 & Automi a pila & Liberi dal contesto \\
+\hline
+Tipo 1 & Automi linear-bounded & Sensibili al contesto \\
+\hline
+\multirow{2}{*}{Tipo 0} & Decisori & Ricorsivi \\
+                                & Macchine di Turing & Ricorsivamente enumerabili \\
+\hline
+\end{tabular}
+
+La seconda parte del corso invece \`{e} dedicata alla teoria della Calcolabilit\`{a}, che si sviluppa uno studio approfondito dei linguaggi citati nell'ultima riga della tabella qui sopra. In particolare la teoria della Calcolabilit\`{a} si sviluppa su un modello matematico di computazione alternativo alle macchine di Turing (ma equivalente) basato su insiemi di numeri naturali e funzioni su di essi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

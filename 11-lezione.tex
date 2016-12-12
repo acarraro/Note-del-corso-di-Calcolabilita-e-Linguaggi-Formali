@@ -1,0 +1,451 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Il padding lemma}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Per commpletezza, diamo un ultimo risultato riguardante la numerazione delle funzioni ricorsive parziali. \`{E} un risultato che abbiamo
+ tenuto implicito, a volte nominato in maniera discorsiva: il fatto che nella numerazione dell'insieme $\PR$ ogni funzione ha
+ un numero infinito di indici. Il risultato non dovrebbe essere sorprendente poich\'{e} la numerazione delle funzioni p.r. \`{e}
+ fatta in base alla loro definizione, cio\`{e} guardando ad esse come programmi. Ma \`{e} chiaro che dato un programma $P$
+ si pu\`{o} modificare il suo sorgente aggiungendo istruzioni inutili. Si otterr\`{a} cos\`{i} un programma $P'$ che rappresenta la 
+ stessa funzione di $P$, perch\`{e} fa le stesse cose a livello di input/output, ma ha un indice diverso.
+
+\begin{lemma}[Padding]\label{lem:padding}
+Ogni funzione ricorsiva parziale ammette infiniti indici nella numerazione di Kleene.
+\end{lemma}
+
+\begin{proof}
+Per ogni $m\in \nat$ definiamo $\phi^{2+m}(x,z,\vec y) \simeq \varphi_x(\vec y)+z-z$, dove $\vec y$ ha lunghezza $m$.
+ Tale funzione \`{e} ricorsiva parziale, quindi esiste un indice $e$ tale che $\varphi_e^{2+m} \simeq \phi^{2+m}$.
+ Per il Teorema $s$-$m$-$n$ esiste una funzione primitiva ricorsiva ed iniettiva $S_2^{m}(e,x,z)$ tale che 
+ $$ \varphi_e^{2+m}(x,z,\vec y)\simeq\varphi_{S_2^m(e,x,z)}(\vec y)$$
+per ogni $x,z \in \nat$ ed ogni $\vec y \in \nat^m$.
+Perci\`{o} per ogni funzione $m$-aria $\varphi_a$, la funzione $z \mapsto S_2^m(e,a,z)$ calcola inifniti indici diversi, al variare 
+ di $z$, ma tutti sono indici della funzione $\varphi_a$ perch\'{e} per ogni $z \in \nat$ abbiamo
+$$ \varphi_{S_2^m(e,a,z)}(\vec y) \simeq \varphi_e(a,z,\vec y) \simeq \phi(a,z,\vec y) \simeq \varphi_a(\vec y)+z-z \qquad \qquad \text{ per ogni } \vec y \in \nat^m $$
+\qed\end{proof}
+
+% Dati due numeri naturali $m,n$ esiste una funzione primitiva ricorsiva ed iniettiva $S_n^m(e,x_1,\ldots,x_n)$ tale che 
+%  $$ \varphi_e^{n+m}(x_1,\ldots,x_n,y_1,\ldots,y_m)\simeq\varphi_{S_n^m(e,x_1,\ldots,x_n)}(y_1,\ldots,y_m)$$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Insiemi non ricorsivi e non r.e.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Facciamo notare che c'\`{e} un nuovo modo ammissibile per definire funzioni ricorsive parziali. Siano $P(\vec x)$ e
+ $\varphi(\vec x)$ un predicato r.e. $n$-ario ed una funzione ricorsiva parziale, rispettivamente, e definiamo la funzione
+$$
+\phi(\vec x) \simeq
+\begin{cases}
+\varphi(\vec x) & \mbox{se $P(\vec x)$} \\
+\uparrow               & \mbox{altrimenti} \\
+\end{cases}
+$$
+La funzione $\phi$ cos\`{i} definita \`{e} ricorsiva parziale, perch\`{e} $\phi(\vec x) \simeq \car{P}(\vec x) \cdot \varphi(\vec x)$.
+ Si noti che nella definizione di $\phi$ nel caso ``altrimenti'' la funzione \emph{deve} essere indefinita, altrimenti non potrebbe
+ essere ricorsiva parziale.
+
+Abbiamo visto molti risultati sulle funzioni ricorsive e sugli insiemi r.e. Indubbiamente ci sono molte propriet\`{a} ricorsive 
+ come l'essere pari, essere primo, essere potenza di due, ecc. Nel seguito usiamo le seguenti definizioni
+\begin{itemize}
+\item $\RESET = \{A \subseteq \nat \st A \mbox{ \`{e} r.e. }\}$
+\item $\RECSET = \{A \subseteq \nat \st A \mbox{ \`{e} ricorsivo }\}$
+\end{itemize}
+
+In questa sezione andremo ad investigare il ``lato oscuro'', ovvero il mondo delle propriet\`{a} che non sono ricorsive o r.e.
+ Prima di tutto un semplice argomento ci convince che tali propriet\`{a} devono esistere: il Teorema di Enumerazione degli insiemi 
+ r.e. ci dice che la famiglia $(\cW_n)_{n \in \nat}$ enumera tutti gli insiemi r.e., ovvero $\cW_{(\cdot)}: \nat \to \RESET$ \`{e} una
+ funzione suriettiva. Quindi la cardinalit\`{a} di $\RESET$ \`{e} la stessa di $\nat$, che sappiamo essere strettamente inferiore
+ alla cardinalit\`{a} di $\cP(\nat)$, per il Teorema di Cantor.
+
+\begin{definition}
+Definiamo l'insieme $\cK = \{x \in \nat \st \varphi_x(x)\downarrow \}$.
+\end{definition}
+
+\begin{theorem}\label{thm:Kre}
+L'insieme $\cK$ \`{e} r.e. ma non ricorsivo.
+\end{theorem}
+
+\begin{proof}
+Osserviamo subito che la funzione $x \mapsto \varphi_x(x)$ \`{e} ricorsiva parziale e quindi ha un indice $b$ e siccome
+ $\cK = \dom{\varphi_b}$, allora $\cK$ \`{e} r.e.
+
+Supponiamo per assurdo che $\cK$ sia ricorsivo. Allora anche $\cK^c$ \`{e} ricorsivo e quindi funzione
+$$
+f(x) \simeq 
+\begin{cases}
+0        & \mbox{ se $x \in \cK^c$} \\
+\uparrow & \mbox{ altrimenti } \\
+\end{cases}
+$$
+\`{e} ricorsiva parziale ed ammette un indice $b$. Allora abbiamo che $b \in \cK \iff \varphi_b(b)\downarrow \iff b \in \cK^c$ e 
+ questo \`{e} assurdo.
+\qed\end{proof}
+
+\begin{corollary}\label{cor:Kre}
+L'insieme $\cK^c$ non \`{e} r.e.
+\end{corollary}
+
+\begin{proof}
+Se $\cK^c$ fosse r.e. allora $\cK$ sarebbe ricorsivo, ma questo \`{e} assurdo perch\'{e} contraddice il Teorema \ref{thm:Kre}.
+\qed\end{proof}
+
+\begin{definition}[Riducibilit\`{a}]
+Siano $A,B \subseteq \nat$ due insiemi. Diciamo che $A$ \`{e} \emph{riducibile} a $B$, notazione $A \leq_T B$, sse esiste una
+ funzione ricorsiva totale $f$ tale che $x \in A \iff f(x) \in B$.
+\end{definition}
+
+\begin{theorem}\label{thm:transfer}
+Siano $A,B$ tali che $A \leq_T B$. Allora
+\begin{enumerate}[label=(\roman*)]
+\item Se $B$ \`{e} ricorsivo, allora anche $A$ \`{e} ricorsivo.
+\item Se $B$ \`{e} r.e., allora anche $A$ \`{e} r.e.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Basta osservare che $A = f^{-1}(B)$ ed usare due risultati dimostrati in precedenza.
+\qed\end{proof}
+
+Notiamo che se $A \in \RECSET$ e $A$ \`{e} non-triviale, allora $A\leq_T B$ per ogni $B \subseteq \nat$.
+
+Ora vediamo che si pu\`{o} dare una ulteriore (sorprendente) caratterizzazione degli insiemi r.e.
+
+\begin{theorem}\label{thm:all-reduce}
+Un insieme $A\subseteq \nat$ \`{e} r.e. sse $A \leq_T \cK$.
+\end{theorem}
+
+\begin{proof}
+\noindent($\Leftarrow$) Se $A \leq_T \cK$ allora banalmente $A$ \`{e} r.e. per il Teorema \ref{thm:transfer}.
+
+\noindent($\Rightarrow$) Supponiamo $A$ sia r.e. Dobbiamo esibire una funzione ricorsiva totale $f$ tale che $x \in A \iff f(x) \in \cK$.
+ La funzione
+$$
+\phi(x,y) \simeq
+\begin{cases}
+1            & \mbox{ se $x \in A$} \\
+\uparrow     & \mbox{ altrimenti } \\
+\end{cases}
+$$
+\`{e} ricorsiva ricorsiva parziale e quindi per il Teorema $s$-$m$-$n$ esiste una funzione primitiva ricorsiva unaria $S$ tale che 
+ $\varphi_{S(x)}(y) \simeq \phi(x,y)$ per ogni $x,y\in \nat$.
+
+Se $S(x) \in \cK$, allora $\varphi_{S(x)}(S(x))\downarrow$, cio\`{e} $\phi(S(x),S(x))\downarrow$, e questo implica $S(x) \in A$.
+
+Se $x \in A$, allora $\phi(x,S(x))\downarrow$, cio\`{e} $\varphi_{S(x)}(S(x))\downarrow$, e questo implica $S(x) \in \cK$.
+\qed\end{proof}
+
+% Diciamo che un insieme $B\subseteq \nat$ \`{e} co-r.e. sse esiste un unsieme r.e. $A$ tale che $B = A^c$.
+% 
+% \begin{corollary}
+% Un insieme $B\subseteq \nat$ \`{e} co-r.e. sse $B \leq_T \cK^c$.
+% \end{corollary}
+% 
+% \begin{proof}
+% \noindent($\Leftarrow$) Se $A \leq_T \cK$ allora banalmente $A$ \`{e} r.e. per il Teorema \ref{thm:transfer}.
+% Sia $A$ un insieme r.e. tale che $B = A^c$. Il risuSegue trivialmente dal Teorema \ref{thm:all-reduce}, perch\'{e} $B \leq_T \cK^c$
+% 
+% \noindent($\Rightarrow$) Sia $B$ un insieme 
+% \qed\end{proof}
+
+\begin{exercise}
+Dimostrare che l'insieme $I = \{x \in \nat \st \forall y \in\nat.\ \varphi_x(y) = 0\}$ non \`{e} ricorsivo.
+\end{exercise}
+
+\begin{solution}
+ Dimostriamo che $I^c$ non \`{e} r.e. per via di una riduzione di $\cK^c$ a $I^c$. La funzione
+$$
+\phi(x,y) \simeq
+\begin{cases}
+0            & \mbox{ se $x \in \cK$} \\
+\uparrow     & \mbox{ altrimenti } \\
+\end{cases}
+$$
+\`{e} ricorsiva parziale. Per il Teorema $s$-$n$-$m$ esiste una funzione primitiva ricorsiva $S$ unaria tale che $\varphi_{S(x)}(y) \simeq \phi(x,y)$ per ogni $x,y \in \nat$.
+ 
+Se $x\in\cK^c$, allora $\varphi_{S(x)}(y)\uparrow$ per ogni $y \in\nat$, ovvero $S(x)$ \`{e} un indice della funzione completamente indefinita.
+ Pertanto $S(x) \in I^c$.
+
+Se $S(x)\in I^c$, allora deve esistere un $y \in \nat$ tale che $\phi(x,y)$ non \`{e} uguale a $0$ e ci\`{o} \`{e} possibile solo se
+ $\phi(x,y)\uparrow$, che implica $x\in\cK^c$.
+
+Siccome $S$ \`{e} ricorsiva totale e soddisfa $x \in\cK^c \iff S(x)\in I^c$, abbiamo dimostrato che $\cK^c \leq_T I^c$. Se $I^c$ fosse
+ r.e. allora anche $\cK^c$ lo sarebbe, ma questo \`{e} assurdo.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostrare che l'insieme $\cK$ non rispetta le funzioni.
+\end{exercise}
+
+\begin{solution}
+Dobbiamo dimostrare che esistono due numeri $x_0,x_1 \in\nat$ tali che $x_0 \in \cK$, $x_1 \in \cK^c$ e $\varphi_{x_0} \simeq \varphi_{x_1}$.
+
+Scegliamo $x_0=n$ dove $n$ \`{e} tale che $\dom{\varphi_n} = \{n\}$. Chiaramente la funzione $\varphi_n$ ha infiniti indici, per cui possiamo
+ scegliere $x_1 = m$, dove $m$ \`{e} un indice di $\varphi_n$ diverso da $n$. Ora abbiamo che $\varphi_n(n)\downarrow$ e
+ $\varphi_m(m)\uparrow$, il che ci dice che $n \in \cK$ e $m \in \cK^c$.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostrare che l'insieme $I=\{x \in \nat \st 0 \in \dom{\varphi_x}\}$ non \`{e} ricorsivo.
+\end{exercise}
+
+\begin{solution}
+L'insieme $I$ \`{e} non-triviale e rispetta le funzioni. Quindi per il Teorema di Rice non \`{e} ricorsivo.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostrare che l'insieme $I=\{x \in \nat \st \varphi_x \text{\`{e} totale }\}$ non \`{e} ricorsivo.
+\end{exercise}
+
+\begin{solution}
+L'insieme $I$ \`{e} non-triviale e rispetta le funzioni. Quindi per il Teorema di Rice non \`{e} ricorsivo.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostrare che l'insieme $I=\{x \in \nat \st \varphi_{x,x}(x)\downarrow\}$ \`{e} ricorsivo. Dare almeno due numeri $n,m$ tali che
+ $n,m \not\in I$ e $\varphi_n \not\simeq \varphi_m$.
+\end{exercise}
+
+\begin{solution}
+L'insieme $I$ \`{e} ricorsivo perch\'{e} il predicato $\exists y<x.\cT_1(x,x,y)$ \`{e} ricorsivo.
+ La funzione totalmente indefinita \`{e} ricorsiva parziale e quindi ha un indice $n$. Sicuramente $\varphi_{n,n}(n)\uparrow$, e questo ci dice che
+ $n \not\in I$.
+
+Definiamo una funzione 
+$$
+t(x,y) \simeq
+\begin{cases}
+x        & \mbox{se $x \neq y$} \\
+\uparrow & \mbox{altrimenti} \\
+\end{cases}
+$$
+La funzione $t$ \`{e} ricorsiva parziale, per cui possiamo applicare il II Teorema di Ricorsione che ci da 
+ un indice $m$ tale che $\varphi_{m}(y) \simeq t(m,y)$, per ogni $y \in \nat$. Per cui $\varphi_m(m) \simeq t(m,m)$,
+ da cui $\varphi_m(m)\uparrow$. Quindi $m \not\in I$
+
+Concludiamo osservando che $\varphi_m$ non \`{e} completamente indefinita e quindi $\varphi_m \not\simeq \varphi_n$.
+\qed\end{solution}
+
+\begin{exercise}
+Dimostrare che l'insieme dei numeri pari non rispetta le funzioni.
+\end{exercise}
+
+\begin{solution}
+Segue da Teorema di Rice, perch\'{e} l'insieme dei pari \`{e} ricorsivo e non-triviale.
+\qed\end{solution}
+
+
+% \begin{exercise}
+% L'insieme $J = \{x \in \nat \st \exists y,s \in\nat.\ \varphi_{x,s}(y)\downarrow \}$ \`{e} r.e. ma non \`{e} ricorsivo.
+% 
+% Il predicato $P(x,y,s) \ass \varphi_{x,s}(y)\downarrow$ \`{e} ricorsivo e $x \in J \sse \exists y,s.P(x,y,s)$. Quindi $J$ \`{e} r.e.
+% 
+% Ora dimostriamo che $J^c$ non \`{e} r.e. riducendo $\cK^c$ a $J^c$. La funzione
+% $$
+% \phi(x,y) \simeq
+% \begin{cases}
+% 0            & \mbox{ se $x \in \cK$} \\
+% \uparrow     & \mbox{ altrimenti } \\
+% \end{cases}
+% $$
+% \`{e} ricorsiva parziale e quindi per il Teorema $s$-$m$-$n$ esiste una funzione $S \in \PRIMREC$ tale che
+% $\phi(x,y) \simeq \varphi_{S(x)}(y)$, per ogni $x,y \in\nat$.
+%
+% Se $x \in\cK^c$ allora $\phi(x,y) = \varphi_{S(x)}(y) = 0$ per ogni $y \in \nat$
+
+% Se $S(x) \in J^c$ allora $\varphi_{S(x)}(y)\uparrow$ per ogni $y \in \nat$, quindi $\phi(x,y)\uparrwo$ per ogni $y$ e dunque $x\in\cK^c$.
+% $x$
+% \end{exercise}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Funzioni non ricorsive}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In questa sezione dimostriamo l'esistenza di funzioni che non sono ricorsive: si tratta quindi di individuare alcuni limiti teorici
+ della capacit\`{a} di calcolo espressa tramite il formalismo della ricorsivit\`{a}, e quindi anche della Turing-calcolabilit\`{a}.
+
+Il Teorema di Enumerazione delle funzioni ricorsive parziali ci dice che la famiglia $(\varphi_n)_{n \in \nat}$ enumera tutto l'insieme
+ $\PR$, cio\`{e} $\varphi_{(\cdot)}: \nat \to \PR$ \`{e} una funzione suriettiva. Quindi la cardinalit\`{a} di $\PR$ \`{e} la stessa di $\nat$,
+ che sappiamo essere strettamente inferiore alla cardinalit\`{a} di $\cP(\nat)$, per il Teorema di Cantor. D'altra parte l'insieme
+ delle funzioni dai naturali in $\{0,1\}$ ha la stessa cardinalit\`{a} di $\cP(\nat)$, come si pu\`{o} facilmente dimostrare.
+ Quindi devono esistere delle funzioni da $\nat$ in $\nat$ che non sono n\'{e} ricorsive n\'{e} ricorsive parziali.
+
+\begin{lemma}[Halting problem]
+La funzione 
+$f(x,y) = 
+\begin{cases}
+1 & \text{ se } \varphi_x(y)\downarrow \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+non \`{e} ricorsiva.
+\end{lemma}
+
+\begin{proof}
+Supponiamo per assurdo che $f$ sia ricorsiva. Allora anche la funzione 
+$h(x) = 
+\begin{cases}
+1 & \text{ se } \varphi_x(x)\downarrow \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+\`{e} ricorsiva, perch\'{e} $h(x) = f(x,x)$ per ogni $x \in \nat$. Notiamo che $h$ \`{e} la funzione caratteristica di $\cK$, per cui
+ $\cK$ sarebbe ricorsivo. Questa \`{e} una contraddizione del Teorema \ref{thm:Kre}.
+\qed\end{proof}
+
+\begin{exercise}
+La funzione
+$f(x) = 
+\begin{cases}
+1 & \text{ se $\varphi_x$ \`{e} costante} \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+non \`{e} ricorsiva.
+\end{exercise}
+
+\begin{solution}
+Osserviamo che $f$ \`{e} la funzione caratteristica dell'insieme $I = \{x \in \nat \st \varphi_x \text{ \`{e} costante} \}$.
+ Tale insieme \`{e} non-triviale e rispetta le funzioni, quindi per il Teorema di Rice non \`{e} ricorsivo. Pertanto $f$
+ non pu\`{o} essere riccorsiva.
+\qed\end{solution}
+
+\begin{exercise}
+La funzione
+$f(x,y,z) = 
+\begin{cases}
+1 & \text{ se $\varphi_x(y)\downarrow$ e $\varphi_x(y) = z$} \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+non \`{e} ricorsiva.
+\end{exercise}
+
+\begin{solution}
+Supponiamo per assurdo che $f$ sia ricorsiva. Allora la funzione $x \mapsto f(x,0,0)$ sarebbe ricorsiva totale. Ma essa \`{e}
+ la funzione caratteristica dell'insieme $I=\{x \in \nat \st \varphi_x(0)\downarrow,\ \varphi_x(0) = 0\}$ e quindi l'insieme
+ $I$ sarebbe ricorsivo. Ma ci\`{o} contraddice il Teorema di Rice, perch\'{e} $I$ \`{e} non-triviale e rispetta le funzioni.
+\qed\end{solution}
+
+\begin{exercise}
+La funzione
+$f(x,y) = 
+\begin{cases}
+1 & \text{ se $\varphi_x \simeq \varphi_y$} \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+non \`{e} ricorsiva.
+\end{exercise}
+
+\begin{solution}
+Supponiamo per assurdo che $f$ sia ricorsiva. Sia $e$ un indice della funzione $x \mapsto 0$ e definiamo la funzione
+ $g(x) = f(x,e)$, per ogni $x \in \nat$. La funzione $g$ allora sarebbe ricorsiva, ed essendo la funzione caratteristica
+ dell'insieme $I=\{x \in\nat \st \varphi_x \text{ \`{e} costante a valore } 0\}$, quest'ultimo sarebbe ricorsivo.
+ Ma ci\`{o} contraddice il teorema di RIce perch\'{e} $I$ \`{e} non-triviale e rispetta le funzioni.
+\qed\end{solution}
+
+\begin{exercise}
+La funzione
+$f(x) = 
+\begin{cases}
+\varphi_x(x) + 1 & \text{ se $\varphi_x$ \`{e} totale} \\
+0 & \text{ altrimenti } \\
+\end{cases}
+$
+non \`{e} ricorsiva.
+\end{exercise}
+
+\begin{solution}
+Supponiamo per assurdo che $f$ sia ricorsiva. Allora ammette un indice $n$. Poic\'{e} $f$ \`{e} totale, abbiamo che $\varphi_n(n)\downarrow$
+ e quindi $\varphi_n(n) = f(n) = \varphi_n(n) + 1$. Questo \`{e} assurdo.
+\qed\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

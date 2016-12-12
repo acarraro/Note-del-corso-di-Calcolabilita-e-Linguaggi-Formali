@@ -1,0 +1,666 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+\usepackage{multirow}
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 2}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 2}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 12 ottobre 2011}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 2}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Automi a stati finiti deterministici e non}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Tra gli automi a stati finiti si distinguono due categorie: quelli \emph{deterministici} (DFA) e quelli \emph{non-deterministici} (NFA). I primi sono un caso particolare dei secondi.
+
+\begin{definition}[DFA]\label{def:DFA}
+Un automa a stati finiti deterministico (DFA, in breve) \`{e} una quintupla $\cA = (Q,\Sigma,\delta,q_0,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input,
+\item $\delta: Q \times \Sigma \hookrightarrow Q$ \`{e} la funzione (parziale) di transizione,
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+\end{definition}
+
+La prossima tappa \`{e} definire il linguaggio accettato da un automa a stati finiti deterministico. A tal fine dobbiamo precisare cosa significa dire che una stringa \`{e} accettata da un tale automa.
+
+\begin{definition}[Funzione di transizione estesa]\label{def:trans-est}
+Dato un DFA $\cA = (Q,\Sigma,\delta,q_0,F)$ definiamo la sua funzione di transizione estesa $\hat{\delta}: Q \times \Sigma^* \hookrightarrow Q$ per induzione sulla lunghezza delle stringhe in input nella maniera seguente:
+$$ \hat{\delta}(q,\epsilon) = q ; \qquad \qquad \hat{\delta}(q,xa) = \delta(\hat{\delta}(q,x),a) $$
+\end{definition}
+
+\begin{definition}[Linguaggio di un DFA]\label{def:lang-acc}
+Sia $\cA = (Q,\Sigma,\delta,q_0,F)$ un DFA. Diciamo che una stringa $w \in \Sigma^*$ \`{e} accettata da $\cA$ sse $\hat{\delta}(q_0,w) \in F$. Il linguaggio accettato da $\cA$, indicato con $\cL(\cA)$, \`{e} l'insieme delle stringhe accettate da $\cA$, ovvero $\cL(\cA) = \{w \in \Sigma^* \st \hat{\delta}(q_0,w) \in F\}$.
+\end{definition}
+
+\textbf{Notazione.} Indichiamo con $\Ps{Q}$ l'insieme delle parti di $Q$, ovvero l'insieme di tutti i sottoinsiemi di $Q$. Inoltre indichiamo con $\Psf{Q}$ l'insieme di tutti i sottoinsiemi finiti di $Q$.
+
+\begin{definition}[NFA]\label{def:NFA}
+Un automa a stati finiti non-deterministico (NFA, in breve) \`{e} una quintupla $\cA = (Q,\Sigma,\delta,q_0,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input,
+\item $\delta: Q \times \Sigma \to \Psf{Q}$ \`{e} la funzione di transizione,
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+\end{definition}
+
+Notiamo che per gli NFA la funzione di transizione $\delta$ \`{e} pensata come una funzione totale: infatti per uno stato $q$ non avente archi uscenti etichettati con input $a$ si pu\`{o} equivalentemente dire che $\delta(q,a) = \emptyset$.
+
+Si pu\`{o} constatare direttamente che ogni DFA \`{e} un NFA in cui ogni valore $\delta(q,a)$ della funzione di transizione \`{e} un insieme di cardinalit\`{a} uno. Viceversa vi sono degli NFA che non sono dei DFA. Andiamo ora a generalizzare le definizioni \ref{def:trans-est} e \ref{def:lang-acc} al caso degli NFA.
+
+\begin{definition}[Funzione di transizione estesa]\label{def:trans-est2}
+Dato un NFA $\cA = (Q,\Sigma,\delta,q_0,F)$ definiamo la sua funzione di transizione estesa $\hat{\delta}: Q \times \Sigma^* \to \Psf{Q}$ per induzione sulla lunghezza delle stringhe nella maniera seguente:
+$$ \hat{\delta}(q,\epsilon) = \{q\} ; \qquad \qquad \hat{\delta}(q,xa) = \bigcup_{p \in \hat{\delta}(q,x)} \delta(p,a) $$
+\end{definition}
+
+\begin{definition}[Linguaggio di un NFA]\label{def:lang-acc2}
+Sia $\cA = (Q,\Sigma,\delta,q_0,F)$ un NFA. Diciamo che una stringa $w \in \Sigma^*$ \`{e} accettata da $\cA$ sse $\hat{\delta}(q_0,w) \cap F \neq \emptyset$. Il linguaggio accettato da $\cA$, indicato con $\cL(\cA)$, \`{e} l'insieme delle stringhe accettate da $\cA$, ovvero $\cL(\cA) = \{w \in \Sigma^* \st \hat{\delta}(q_0,w) \cap F \neq \emptyset\}$.
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equivalenza di automi finiti deterministici e non}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Abbiamo osservato che la classe degli NFA contiene propriamente quella dei DFA. Tuttavia in questa sezione dimostreremo che le due classi hanno la stessa potenza, ovvero che la classe dei linguaggi accettati dagli NFA coincide con quella dei linguaggi accettati dai DFA. Un verso di questa doppia inclusione \`{e} banale. Se $L$ \`{e} un linguaggio tale che esiste un DFA $\cA$ per cui $L = \cL(\cA)$, allora esiste anche un NFA $\cB$ tale che $L = \cL(\cB)$.
+
+L'altra inclusione invece non \`{e} triviale e richiede una dimostrazione. A tale scopo si utilizza una particolare costruzione, chiamata la ``costruzione per sottoinsiemi" (o determinizzazione), che trasforma un NFA in un DFA preservando il linguaggio accettato dall'automa di partenza.
+
+\begin{definition}[Determinizzazione]\label{def:determiniz}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un NFA. Definiamo un DFA $\cB = (Q_\cB,\Sigma,\delta_\cB,\{q_0\},F_\cB)$ come segue:
+\begin{itemize}
+\item $Q_\cB = \Ps{Q_\cA}$;
+\item $F_\cB = \{S \subseteq Q_\cA \st S \cap F_\cA \neq \emptyset\}$;
+\item $\delta_\cB(S,a) = \bigcup_{p \in S} \delta_\cA(p,a)$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Equivalenza]\label{thm:det-non-det}
+Sia $\cA$ un NFA e sia $\cB$ il DFA della Definizione \ref{def:determiniz}. Allora $\cL(\cA) = \cL(\cB)$.
+\end{theorem}
+
+\begin{proof}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un NFA e sia $\cB = (Q_\cB,\Sigma,\delta_\cB,\{q_0\},F_\cB)$ definito come nella Definizione \ref{def:determiniz}. Dimostriamo per induzione sulla lunghezza di $w \in \Sigma^*$ che $\hat{\delta}_\cA(q_0,w)= \hat{\delta}_\cB(\{q_0\},w)$.
+
+\noindent\textbf{Base.} La sola stringa di lunghezza $0$ \`{e} $\epsilon$ e per definizione abbiamo $\hat{\delta}_\cA(q_0,\epsilon) = \{q_0\} = \hat{\delta}_\cB(\{q_0\},\epsilon)$.
+
+\noindent\textbf{Passo induttivo.} Sia $w$ una stringa di lunghezza $\geq 1$, ovvero $w = xa$. Per ipotesi induttiva abbiamo che $\hat{\delta}_\cA(q_0,x) = \hat{\delta}_\cB(\{q_0\},x)$. Quindi
+\begin{eqnarray*}
+\hat{\delta}_\cA(q_0,xa) & = & \bigcup_{p \in \hat{\delta}_\cA(q_0,x)} \delta_\cA(p,a) \qquad \mbox{, per la Def. \ref{def:trans-est2}.} \\
+ & = & \delta_\cB(\hat{\delta}_\cA(q_0,x),a) \qquad \mbox{, per la Def. \ref{def:determiniz},}\\
+ & = & \delta_\cB(\hat{\delta}_\cB(\{q_0\},x),a) \qquad \mbox{, per l'ipotesi induttiva,} \\
+ & = & \hat{\delta}_\cB(\{q_0\},xa) \qquad \mbox{, per la Def. \ref{def:trans-est}.}
+\end{eqnarray*}
+Per concludere osserviamo che $\hat{\delta}_\cA(q_0,w) \cap F_\cA \neq \emptyset \iff \hat{\delta}_\cB(\{q_0\},w) \in F_\cB$, da cui risulta che $\cL(\cA) = \cL(\cB)$.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Automi a stati finiti non-deterministici con $\epsilon$-transizioni}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[$\epsilon$-NFA]\label{def:eps-NFA}
+Un automa a stati finiti non-deterministico con $\epsilon$-transizioni ($\epsilon$-NFA, in breve) \`{e} una quintupla $\cA = (Q,\Sigma,\delta,q_0,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input (non contenente $\epsilon$),
+\item $\delta: Q \times (\Sigma\cup \{\epsilon\}) \hookrightarrow \Psf{Q}$ \`{e} la funzione di transizione,
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+\end{definition}
+
+Si pu\`{o} constatare direttamente che ogni NFA \`{e} un $\epsilon$-NFA in cui ogni $\epsilon$ non compare mai come secondo argomento della funzione di transizione. Viceversa vi sono degli $\epsilon$-NFA che non sono degli NFA. Come fatto in precedenza, definiamo la funzione di transizione estesa di un $\epsilon$-NFA per poi definirne il linguaggio accettato.
+
+Stavolta per\`{o} \`{e} richiesto un passo preliminare: la determinazione delle cosiddette $\epsilon$-chiusure. 
+
+\begin{definition}[$\epsilon$-chiusura]\label{def:eps-chius}
+Dato uno stato $q \in Q$, la sua $\epsilon$-chiusura $n$-esima, indicata con $\textsf{ecl}^n(q)$, \`{e} definita per induzione su $n$ come segue:
+$$ \textsf{ecl}^0(q) = \{q\}; \qquad \textsf{ecl}^{n+1}(q) = \bigcup_{p \in \textsf{ecl}^{n}(q)} \delta(p,\epsilon) $$
+Infine definiamo la $\epsilon$-chiusura $\eclose q$ di $q$ ponendo $\eclose q = \bigcup_{n \geq 0} \textsf{ecl}^{n}(q)$.
+\end{definition}
+
+Per comodit\`{a} estendiamo la definizione della $\epsilon$-chiusura ad un insieme di stati $S \subseteq Q$ ponendo $\eclose S = \bigcup_{p \in S} \eclose p$.
+
+\begin{definition}[Funzione di transizione estesa]\label{def:trans-est3}
+Dato un $\epsilon$-NFA $\cA = (Q,\Sigma,\delta,q_0,F)$ definiamo la sua funzione di transizione estesa $\hat{\delta}: Q \times \Sigma^* \hookrightarrow \Psf{Q}$ per induzione sulla lunghezza delle stringhe nella maniera seguente:
+$$ \hat{\delta}(q,\epsilon) = \eclose q ; \qquad \qquad \hat{\delta}(q,xa) = \eclose{\bigcup_{p \in \hat{\delta}(q,x)} \delta(p,a)} $$
+\end{definition}
+
+A questo punto diciamo che una stringa $w \in \Sigma^*$ \`{e} accettata da $\cA$ sse $\hat{\delta}(q_0,w) \cap F \neq \emptyset$. Quindi $\cL(\cA)$ \`{e} definito esattamente come nella Definizione \ref{def:lang-acc2}.
+
+Abbiamo osservato che la classe degli $\epsilon$-NFA contiene propriamente quella degli NFA. Tuttavia dimostreremo che le due classi hanno la stessa potenza, ovvero che la classe dei linguaggi accettati dagli $\epsilon$-NFA coincide con quella dei linguaggi accettati dagli NFA. Un verso di questa doppia inclusione \`{e} banale. Se $L$ \`{e} un linguaggio tale che esiste un DFA $\cA$ per cui $L = \cL(\cA)$, esiste anche un NFA (e quindi un $\epsilon$-NFA) $\cB$ tale che $L = \cL(\cB)$.
+
+L'altra inclusione invece non \`{e} triviale e richiede una dimostrazione. A tale scopo si utilizza una particolare costruzione, chiamata la ``eliminazione delle $\epsilon$-transizioni", che trasforma un $\epsilon$-NFA in un DFA preservando il linguaggio accettato dall'automa di partenza. Questa costruzione ci d\`{a} il risultato che volevamo, poich\'{e} ogni DFA \`{e} anche un NFA.
+
+\begin{definition}[Eliminazione delle $\epsilon$-transizioni]\label{def:epselim}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un $\epsilon$-NFA. Definiamo un DFA $\cB = (Q_\cB,\Sigma,\delta_\cB,\eclose{q_0},F_\cB)$ come segue:
+\begin{itemize}
+\item $Q_\cB = \{S \subseteq Q_\cA \st S = \eclose S \}$;
+\item $F_\cB = \{S \in Q_\cB \st S \cap F_\cA \neq \emptyset\}$;
+\item $\delta_\cB(S,a) = \eclose{ \bigcup_{p \in S} \delta_\cA(p,a) }$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Equivalenza]\label{thm:epselim}
+Sia $\cA$ un $\epsilon$-NFA e sia $\cB$ il DFA della Definizione \ref{def:epselim}. Allora $\cL(\cA) = \cL(\cB)$.
+\end{theorem}
+
+\begin{proof}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un $\epsilon$-NFA e sia $\cB = (Q_\cB,\Sigma,\delta_\cB,\eclose{q_0},F_\cB)$ dato come nella Definizione \ref{def:epselim}. 
+
+Dimostriamo per induzione sulla lunghezza di $w \in \Sigma^*$ che $\hat{\delta}_\cA(q_0,w) = \hat{\delta}_\cB(\eclose{q_0},w)$.
+
+\noindent\textbf{Base.} La sola stringa di lunghezza $0$ \`{e} $\epsilon$ e per definizione abbiamo $\hat{\delta}_\cA(q_0,\epsilon) = \eclose{q_0} = \hat{\delta}_\cB(\eclose{q_0},\epsilon)$.
+
+\noindent\textbf{Passo induttivo.} Sia $w$ una stringa di lunghezza $\geq 1$, ovvero $w = xa$. Per ipotesi induttiva abbiamo che $\hat{\delta}_\cA(q_0,x) = \hat{\delta}_\cB(\eclose{q_0},x)$. Quindi
+\begin{eqnarray*}
+\hat{\delta}_\cA(q_0,xa) & = & \eclose{\bigcup_{p \in \hat{\delta}_\cA(q_0,x)} \delta_\cA(p,a)} \qquad \mbox{, per la Def. \ref{def:trans-est3}.} \\
+& = & \eclose{ \bigcup_{p \in \hat{\delta}_\cB(\eclose{q_0},x)} \delta_\cA(p,a) } \qquad \mbox{, per l'ipotesi induttiva,} \\
+& = & \delta_\cB(\hat{\delta}_\cB(\eclose{q_0},x),a) \qquad \mbox{, per la Def. \ref{def:epselim},} \\
+& = & \hat{\delta}_\cB(\eclose{q_0},xa) \qquad \mbox{, per la Def. \ref{def:trans-est}.}
+\end{eqnarray*}
+Per concludere osserviamo che $\hat{\delta}_\cA(q_0,w) \cap F_\cA \neq \emptyset \iff \hat{\delta}_\cB(\eclose{q_0},w) \in F_\cB$, da cui risulta che $\cL(\cA) = \cL(\cB)$.
+\qed\end{proof}
+
+Notiamo che non abbiamo trasformato l'$\epsilon$-NFA in un NFA che accetta lo stesso linguaggio. Perch\'{e}? Provate a farlo da voi.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linguaggi regolari e loro propriet\`{a}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Linguaggio regolare]\label{def:ling-reg}
+Un linguaggio $L$ \`{e} \emph{regolare} sse esiste un DFA $\cA$ tale che $L = \cL(\cA)$.
+\end{definition}
+
+Indichiamo con $\REG$ la classe dei linguaggi regolari.
+
+Notiamo che, in virt\`{u} dei Teoremi \ref{thm:det-non-det} e \ref{thm:epselim}, nella Definizione \ref{def:ling-reg} si pu\`{o} equivalentemente richiedere l'esistenza di un NFA (o di un $\epsilon$-NFA) $\cA$ tale che $L = \cL(\cA)$. Faremo uso di questo fatto in seguito.
+
+\begin{theorem}\label{thm:fin-reg}
+Ogni linguaggio finito \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $L = \{w_1,\ldots,w_n\}$ un linguaggio su $\Sigma$. Definiamo un opportuno DFA $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ come seque:
+\begin{itemize}
+\item $Q_\cA = \{x \in \Sigma^* \st \exists w \in L.\ x \mbox{ \`{e} prefisso di } w \}$
+\item $q_0 = \epsilon$
+\item $F_\cA = L$
+\item $\delta_\cA(x,a) = 
+\begin{cases}
+xa & \mbox{ se } xa \in Q_\cA \\
+\mbox{indefinito } & \mbox{ altrimenti } \\
+\end{cases}$
+\end{itemize}
+Ora \`{e} facile dimostrare per induzione sulla lunghezza delle parole in $Q_\cA$ che $\hat{\delta}_\cA(x,a) = xa$ per cui $\cL(\cA) = \{w \in \Sigma^* \st \hat{\delta}_\cA(\epsilon,w) \in F_\cA\} = L$. Ci\`{o} dimostra che $L$ \`{e} regolare.
+\qed\end{proof}
+
+In questa sezione ci occupiamo delle propriet\`{a} di chiusura della classe dei linguaggi regolari. Dimostreremo che:
+\begin{itemize}
+\item l'intersezione di due linguaggi regolari \`{e} un linguaggio regolare,
+\item il complemento di un linguaggio regolare \`{e} ancora regolare,
+\item l'unione di due linguaggi regolari \`{e} un linguaggio regolare,
+\item la differenza di due linguaggi regolari \`{e} un linguaggio regolare,
+\item la concatenazione di due linguaggi regolari \`{e} un linguaggio regolare,
+\item la potenza di un linguaggio regolare \`{e} ancora regolare,
+\item la chiusura di Kleene di linguaggio regolare \`{e} ancora regolare,
+\item il rovesciamento di linguaggio regolare \`{e} ancora regolare.
+\end{itemize}
+
+Data la Definizione \ref{def:ling-reg}, bisogna di volta in volta mostrare l'esistenza di un opportuno DFA che riconosca il linguaggio unione, intersezione ecc... Questo si pu\`{o} fare mediante delle costruzioni che andremo a definire in questa sezione.
+
+\begin{definition}[Prodotto di DFA]\label{def:prod-DFA}
+Siano $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ e \\ $\cB = (Q_\cB,\Sigma,\delta_\cB,q_0',F_\cB)$ due DFA. Definiamo il DFA $\cA \times \cB= (Q_{\cA \times \cB},\Sigma,\delta_{\cA \times \cB},(q_0,q_0'),F_{\cA \times \cB})$ come segue:
+\begin{itemize}
+\item $Q_{\cA \times \cB} = Q_\cA \times Q_\cB$,
+\item $\delta_{\cA \times \cB}((p,q),a) = (\delta_\cA(p,a),\delta_\cB(q,a))$,
+\item $F_{\cA \times \cB} = F_\cA \times F_\cB$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Intersezione]\label{thm:prod-DFA}
+L'intersezione di due linguaggi regolari \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Siano $L,L'$ due linguaggi regolari. Allora esistono due DFA $\cA,\cB$ tali che $L = \cL(\cA)$ e $L' = \cL(\cB)$. Ora abbiamo che $\cL(\cA) \cap \cL(\cB)= \{w \in \Sigma^* \st \hat{\delta}_{\cA}(q_0,w) \in F_\cA,\ \hat{\delta}_{\cB}(q_0',w) \in F_\cB\} = \{w \in \Sigma^* \st \hat{\delta}_{\cA \times \cB}((q_0,q_0'),w) \in F_{\cA\times \cB}\} = \cL(\cA \times \cB)$. Quindi $\cA\times\cB$ \`{e} un DFA che accetta $L \cap L'$, dimostrando che $L \cap L'$ \`{e} regolare.
+\qed\end{proof}
+
+\begin{definition}[Complemento di DFA]\label{def:compl-DFA}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un DFA. Definiamo suo DFA complementare $\cA^c$ ponendo $\cA^c = (Q_{\cA},\Sigma,\delta_\cA,q_0,Q_\cA-F_\cA)$.
+\end{definition}
+
+\begin{theorem}[Complemento]\label{thm:compl-DFA}
+Il complemento di un linguaggio regolare \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio regolare. Allora esiste un DFA $\cA$ tale che $L = \cL(\cA)$. Ora abbiamo che $(\cL(\cA))^c = \{w \in \Sigma^* \st \hat{\delta}_\cA(q_0,w) \in Q_\cA-F_\cA\} = \cL(\cA^c)$. Quindi $\cA^c$ \`{e} un DFA che accetta $L^c$, dimostrando che $L^c$ \`{e} regolare.
+\qed\end{proof}
+
+\begin{theorem}[Unione e differenza]\label{thm:unione-diff-DFA}
+Il l'unione e la differenza di due linguaggi regolari sono regolari.
+\end{theorem}
+
+\begin{proof}
+Siano $L,L'$ due linguaggi regolari. Abbiamo che $L \cup L' = (L^c \cap (L')^c)^c$ e $L-L' = L \cap (L')^c$, quindi per i Teoremi \ref{thm:prod-DFA} e \ref{thm:compl-DFA} i linguaggi $L \cup L'$ e $L-L'$ sono entrambi regolari.
+\qed\end{proof}
+
+\begin{remark}
+Sia $\Sigma$ un alfabeto. Notiamo che i linguaggi regolari su $\Sigma$ sono chiusi per unione finita ma non infinita. Infatti se cos\`{i} fosse siccome ogni insieme del tipo $\{w\}$ con $w \in \Sigma^*$ \`{e} regolare, allora anche ogni sottoinsieme di $\Sigma^*$ sarebbe regolare. Vedremo pi\`{u} avanti che ci\`{o} \`{e} falso: esistono dei linguaggi che non sono regolari.
+\end{remark}
+
+\begin{definition}[Concatenazione di $\epsilon$-NFA]\label{def:conc-eNFA}
+Siano $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ e $\cB = (Q_\cB,\Sigma,\delta_\cB,q_0',F_\cB)$ due $\epsilon$-NFA. Definiamo l'$\epsilon$-NFA $\cA \cdot \cB= (Q_{\cA \cdot\cB},\Sigma,\delta_{\cA\cdot\cB},q_0,F_{\cB})$ come segue:
+\begin{itemize}
+\item $Q_{\cA\cdot\cB} = Q_\cA \cup Q_\cB$,
+\item $\delta_{\cA\cdot\cB}(p,a) =
+\begin{cases}
+\delta_{\cA}(p,a) & \mbox{ se } p \in Q_\cA \\
+\delta_{\cB}(p,a) & \mbox{ se } p \in Q_\cB \\
+\end{cases}$
+\qquad
+$\delta_{\cA\cdot\cB}(p,\epsilon) =
+\begin{cases}
+\delta_{\cA}(p,\epsilon) & \mbox{ se } p \in Q_\cA - F_\cA \\
+\delta_{\cA}(p,\epsilon) \cup \{q_0'\} & \mbox{ se } p \in F_\cA \\
+\delta_{\cB}(p,\epsilon) & \mbox{ se } p \in Q_\cB \\
+\end{cases}$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Concatenazione]\label{thm:conc-eNFA}
+La concatenazione di due linguaggi regolari \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Siano $L,L'$ due linguaggi regolari. Allora esistono due $\epsilon$-NFA $\cA,\cB$ tali che $L = \cL(\cA)$ e $L' = \cL(\cB)$. Ora abbiamo che $\cL(\cA)\cL(\cB) = \{xy \in \Sigma^* \st \hat{\delta}_{\cA}(q_0,x) \in F_\cA,\ \hat{\delta}_{\cB}(q_0',y) \in F_\cB\} = \{w \in \Sigma^* \st \hat{\delta}_{\cA\cdot\cB}(q_0,w) \in F_\cB\} = \cL(\cA\cdot\cB)$. Quindi $\cA\cdot\cB$ \`{e} un $\epsilon$-NFA che accetta $LL'$, dimostrando che $LL'$ \`{e} regolare.
+\qed\end{proof}
+
+\begin{theorem}[Potenza]\label{thm:pot-eNFA}
+Ogni potenza di un linguaggio regolare \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio regolare. Dimostriamo per induzione su $n$ che $L^n$ \`{e} regolare. 
+
+\noindent\textbf{Base.} Per $n=0$ abbiamo $L^0 = \{\epsilon\}$, che \`{e} un linguaggio regolare. 
+
+\noindent\textbf{Passo induttivo.} Per $n > 0$ abbiamo $L^n = L^{n-1}L$. Ora $L^{n-1}$ \`{e} regolare per ipotesi induttiva, ed $L$ \`{e} regolare per ipotesi, quindi per il Teorema \ref{thm:conc-eNFA} anche $L^n$ \`{e} regolare.
+\qed\end{proof}
+
+\begin{definition}[Chiusura di Kleene di $\epsilon$-NFA]\label{def:Kleene-eNFA}
+Sia $\cA = (Q_\cA,\Sigma,\delta_\cA,q_0,F_\cA)$ un $\epsilon$-NFA. Definiamo l'$\epsilon$-NFA $\cA^*= (Q_\cA,\Sigma,\delta_{\cA^*},q_0,F_\cA)$ come segue:
+\begin{itemize}
+\item $\delta_{\cA^*}(p,a) = \delta_{\cA}(p,a)$; \qquad 
+$\delta_{\cA^*}(p,\epsilon) =
+\begin{cases}
+\delta_{\cA}(p,\epsilon) & \mbox{ se } p \in Q_\cA - F_\cA \\
+\delta_{\cA}(p,\epsilon) \cup \{q_0\} & \mbox{ se } p \in F_\cA \\
+\end{cases}$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Chiusura di Kleene]\label{thm:Kleene-eNFA}
+La chiusura di Kleene di un linguaggio regolare \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio regolare. Allora esiste un $\epsilon$-NFA $\cA$ tale che $L = \cL(\cA)$. Ora abbiamo che $(\cL(\cA))^* = \bigcup_{n\geq 0} \{x_1\cdots x_n \in \Sigma^* \st \forall i = 1,\ldots,n.\ \hat{\delta}_\cA(q_0,x_i) \in F_\cA\} = \{w \in \Sigma^* \st \hat{\delta}_{\cA^*} (q_0,w) \in F_\cA\} = \cL(\cA^*)$. Quindi $\cA^*$ \`{e} un $\epsilon$-NFA che accetta $L^*$, dimostrando che $L^*$ \`{e} regolare.
+\qed\end{proof}
+
+\begin{definition}[Rovesciamento di $\epsilon$-NFA]\label{def:rovesc-eNFA}
+Sia $\cA = (Q_{\cA},\Sigma,\delta,q_0,F)$ un $\epsilon$-NFA. Definiamo il DFA $\cA^R = (_{\cA^R},\Sigma,\delta_{\cA^R},q_0',F_{\cA^R})$ come segue:
+\begin{itemize}
+\item $Q_{\cA^R} = Q_{\cA} \cup \{q_0'\}\in \delta_{\cA^R}(q,a)$ sse $q \in \delta_{\cA}(p,a)$,
+\item $p \in \delta_{\cA^R}(q,a)$ sse $q \in \delta_{\cA}(p,a)$, per ogni $p,q \in Q_{\cA}$
+\item $p \in \delta_{\cA^R}(q,\epsilon)$ sse $q \in \delta_{\cA}(p,\epsilon)$, per ogni $p,q \in Q_{\cA}$
+\item $\delta_{\cA^R}(q_0',\epsilon) = F_{\cA}$
+\item $F_{\cA^R} =\{q_0\}$.
+\end{itemize}
+\end{definition}
+
+Questa costruzione, seppure pu\`{o} sembrare complessa, dice che l'automa $\cA^R$ \`{e} ottenuto rovesciando tutti gli archi presenti in $\cA$. Lo stato finale di $\cA^R$ \`{e} quello iniziale di $\cA$ e lo stato iniziale di $\cA^R$ \`{e} un nuovo stato, collegato tramite $\epsilon$-mosse a quelli che erano gli stati finali di $\cA$.
+
+\begin{theorem}[Rovesciamento]\label{thm:rovesc-eNFA}
+Il rovesciamento di un linguaggio regolare \`{e} regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio regolare. Allora esiste un $\epsilon$-NFA $\cA$ tale che $L = \cL(\cA)$. Ora abbiamo che $(\cL(\cA))^R = \{w^R \st \hat{\delta}_\cA(q_0,w) \in F_\cA\} = \{x \st \hat{\delta}_{\cA^R} (q_0',x) \in F_{\cA^R}\} = \cL(\cA^R)$. Quindi $\cA^R$ \`{e} un $\epsilon$-NFA che accetta $L^R$, dimostrando che $L^R$ \`{e} regolare.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Caratterizzazioni alternative dei linguaggi regolari}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Espressioni regolari}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In questa sezione presentiamo le cosiddette ``espressioni regolari", un tipo di notazione per definire linguaggi. Da una descrizione dei linguaggi regolari fondata su modelli di automa (DFA, NFA, $\epsilon$-NFA) volgiamo ora l'attenzione ad una descrizione algebrica. 
+
+\begin{definition}[Espressioni regolari]\label{def:regexp}
+Sia $\Sigma$ un alfabeto. Definiamo per induzione le \emph{espressione regolari} su $\Sigma$ come segue:
+\begin{itemize}
+\item le costanti $\epsilon$ e $\emptyset$ sono espressioni regolari ed ogni elemento di $\Sigma$ \`{e} un'espressione regolare;
+\item se $r,s$ sono espressioni regolari, allora $r \cdot s$ \`{e} un'espressione regolare;
+\item se $r,s$ sono espressioni regolari, allora $r + s$ \`{e} un'espressione regolare;
+\item se $r$ \`{e} un'espressione regolare, allora $r^*$ \`{e} un'espressione regolare.
+\end{itemize} 
+\end{definition}
+
+\begin{definition}[Linguaggio di un'espressione regolare]\label{def:lin-regexp}
+Definiamo per induzione il \emph{linguaggio $\cL(r)$ associato} ad un' espressione regolare $r$ come segue:
+\begin{itemize}
+\item $\cL(\epsilon) = \{\epsilon\}$, $\cL(\emptyset) = \emptyset$ e $\cL(a) = \{a\}$, per ogni $a \in \Sigma$;
+\item $\cL(r\cdot s) = \cL(r)\cdot \cL(s)$;
+\item $\cL(r+ s) = \cL(r)\cup \cL(s)$;
+\item $\cL(r^*) = (\cL(r))^*$.
+\end{itemize} 
+\end{definition}
+
+\begin{theorem}\label{thm:regexp-NFA}
+Sia $r$ un'espressione regolare. Allora esiste un $\epsilon$-NFA $\cA$ tale che $\cL(r) = \cL(\cA)$.
+\end{theorem}
+
+\begin{proof}
+Procediamo per induzione sulla costruzione delle espressioni regolari.
+
+\noindent\textbf{Base.} Riportiamo qui sotto gli automi finiti che riconoscono, rispettivamente, i linguaggi $\{\epsilon\}$, $\emptyset$ e $\{a\}$. \\
+
+%\entrymodifiers={++[o][F-]} 
+%\SelectTips{cm}{} 
+%$\xymatrix{ 
+%*\txt{start} \ar[r] & *++[o][{0} \ar@(r,u)[]^b \\ 
+%}$
+\entrymodifiers={++[o][F-]}
+\noindent$\xymatrix{
+*\txt{ } \ar[r]
+& 0 \ar[r]^{\epsilon} 
+& *++[o][F=]{1} \\ 
+}
+\qquad\qquad\qquad
+\xymatrix{
+*\txt{ } \ar[r]
+& 0 
+& *++[o][F=]{1} \\ 
+}$ \\ \\
+$\xymatrix{
+*\txt{ } \ar[r]
+& 0 \ar[r]^{a} 
+& *++[o][F=]{1} \\ 
+}$ \\
+
+\noindent\textbf{Passo induttivo.} Siano $r,s$ due espressioni regolari e supponiamo di aver costruito due $\epsilon$-NFA $\cA$, $\cB$ tali che $\cL(\cA) = \cL(r)$ e $\cL(\cB) = \cL(s)$. Allora 
+\begin{itemize}
+\item[\ ] Avendo due automi $\cA,\cB$ che riconoscono $\cL(r)$ e $\cL(s)$, rispettivamente, il seguente \`{e} un automa che riconosce $\cL(r + s)$.
+$$\xymatrix{
+*\txt{ }                  &             *\txt{ }            & \cA \ar[dr]^{\epsilon}  \\
+*\txt{ } \ar[r] & 0 \ar[ur]^{\epsilon}\ar[dr]_{\epsilon} & *\txt{ } & *++[o][F=]{1} \\ 
+*\txt{ }                  &            *\txt{ }              & \cB \ar[ur]_{\epsilon} \\
+}$$
+La lettera $\cA$ cerchiata simboleggia l'intero automa $\cA$ e la $\epsilon$-transizione entrante indica un arco etichettato da $\epsilon$ che si collega allo stato iniziale di $\cA$; inoltre la $\epsilon$-transizione che esce indica un insieme di archi etichettati da $\epsilon$, ciascuno uscente da uno stato finale di $\cA$.
+\item[\ ] Avendo due automi $\cA,\cB$ che riconoscono $\cL(r)$ e $\cL(s)$, rispettivamente, il seguente \`{e} un automa che riconosce $\cL(r\cdot s)$.
+$$\xymatrix{
+*\txt{ } \ar[r] & \cA \ar[r]^{\epsilon} & \cB \ar[r]^{\epsilon} & *++[o][F=]{1} \\
+}$$
+\item[\ ] Avendo un automa $\cA$ che riconosce $\cL(r)$, il seguente \`{e} un automa che riconosce $\cL(r^*)$.
+$$\xymatrix{
+*\txt{ } \ar[r] & \cA \ar@(r,d)[]^{\epsilon} \ar[r]^{\epsilon} & *++[o][F=]{0} \\ 
+}$$
+\end{itemize}
+\qed\end{proof}
+
+\begin{theorem}\label{thm:NFA-regexp}
+Sia $\cA$ un DFA. Allora esiste un'espressione regolare $r$ tale che $\cL(\cA) = \cL(r)$.
+\end{theorem}
+
+\begin{proof}
+Possiamo assumere senza perdita di generalit\`{a} che l'insieme degli stati di $\cA$ sia $\{1,\ldots,n\}$, per un certo $n\geq 1$. Definiamo ora $L_{ij}^{(k)}$ come il linguaggio formato da tutte e sole le stringhe $w$ tali che:
+\begin{enumerate}[(1)]
+\item $\hat{\delta}_{\cA}(i,w) = j$ e  
+\item per ogni prefisso non banale $x$ di $w$ abbiamo $\hat{\delta}_{\cA}(i,x) \leq k$.
+\end{enumerate}
+
+Andiamo quindi a costruire, per induzione su $k$, un'espressione regolare $R_{ij}^{(k)}$ avente la propriet\`{a} che $\cL(R_{ij}^{(k)}) = L_{ij}^{(k)}$.
+
+\noindent\textbf{Base.} Supponiamo $k=0$. Distinguiamo due casi:
+\begin{itemize}
+\item Se $i=j$ allora poniamo $X = \{a \in \Sigma \st \delta_\cA(i,a) = i\}$ e $R_{ii}^{(0)} = \epsilon + \sum_{a \in X} a$.
+\item Se $i\neq j$ allora poniamo $X = \{a \in \Sigma \st \delta_\cA(i,a) = j\}$ e $R_{ij}^{(0)} = \sum_{a \in X} a$, con la convenzione che $\sum_{a \in \emptyset} a = \emptyset$.
+\end{itemize}
+\`{E} immediato verificare che $\cL(R_{ij}^{(0)}) = L_{ij}^{(0)}$.
+
+\noindent\textbf{Passo induttivo.} Supponiamo di aver determinato $R_{ij}^{(k-1)}$, per ogni coppia $(i,j)$ di stati in $Q_\cA$. Allora poniamo $R_{ij}^{(k)} = R_{ij}^{(k-1)} + R_{ik}^{(k-1)}\cdot (R_{kk}^{(k-1)})^*\cdot R_{kj}^{(k-1)}$.
+
+Ancora una volta non \`{e} difficile vedere che $\cL(R_{ij}^{(k)}) = L_{ij}^{(k)}$, poich\'{e}\\ $L_{ij}^{(k)} = L_{ij}^{(k-1)} + L_{ik}^{(k-1)}\cdot (L_{kk}^{(k-1)})^*\cdot L_{kj}^{(k-1)}$.
+
+In questo modo arriviamo a calcolare $R_{ij}^{(n)}$, per ogni coppia $(i,j)$ di stati. Sia $i$ lo stato iniziale di $\cA$; a questo punto definiamo l'espressione regolare\\ $r = \sum_{j \in F_\cA} R_{ij}^{(n)}$ e per costruzione otteniamo che $\cL(r)= \bigcup_{j \in F_\cA} L_{ij}^{(n)} =\cL(\cA)$.
+\qed\end{proof}
+
+\begin{corollary}\label{cor:lin-regexp}
+Un linguaggio $L$ \`{e} regolare sse esiste un'espressione regolare $r$ tale che $L = \cL(r)$.
+\end{corollary}
+
+\begin{proof}
+Segue immediatamente dai Teoremi \ref{thm:regexp-NFA} e \ref{thm:NFA-regexp}.
+\qed\end{proof}
+
+\begin{theorem}[Teorema di Kleene per i linguaggi regolari]\label{thm:Kleene-reglin}
+L'insieme $\REG$ dei linguaggi regolari su un dato alfabeto $\Sigma$ \`{e} la pi\`{u} piccola famiglia $\cF$ di sottoinsiemi di $\Sigma^*$ tale che 
+\begin{itemize}
+\item $\cF$ contiene tutti i sottoinsiemi finiti di $\Sigma^*$,
+\item $\cF$ \`{e} chiusa per unione e concatenazione finita,
+\item $\cF$ \`{e} chiusa per stella di Kleene.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Segue dal Corollario \ref{cor:lin-regexp}, poich\'{e} $\REG$ coincide con l'insieme dei linguaggi generati da espressioni regolari, che a loro volta sono per definizione introdotti tramite le propriet\`{a} algebriche sopraccitate.
+\qed\end{proof}
+
+La famiglia dei linguaggi regolari su un dato alfabeto $\Sigma$ \`{e} un insieme, ma di solito si parla di $\REG$ come della \emph{classe} dei linguaggi regolari. Questa terminologia va usata quando non si fa riferimento ad un alfabeto fissato, perch\'{e} allora la famiglia diventa ``troppo grande" per essere un insieme.
+
+Notiamo inoltre come non sia immediato dimostrare, partendo dalla teoria delle espressioni regolari e dal Corollario \ref{cor:lin-regexp}, che $\REG$ \`{e} chiusa per complementazione.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Grammatiche regolari}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Grammatica regolare]\label{def:reg-gramm}
+Una \emph{grammatica regolare} su un alfabeto $\Sigma$ \`{e} una quadrupla $\cG = (V_T,V_N,P,S)$ dove
+\begin{itemize}
+\item $V_T$ \`{e} un sottoinsieme di $\Sigma$, detto l'insieme dei terminali;
+\item $V_N$ \`{e} l'insieme dei non-terminali (si assume $V_N \cap V_T = \emptyset$);
+\item $S \in V_N$ \`{e} il simbolo iniziale;
+\item $P$, detto l'insieme delle produzioni, \`{e} un insieme finito di regole che definiscono una relazione $\to \subseteq (V_N \times V_TV_N \cup V_T \cup \{\epsilon\})$. In altre parole le regole possono assumere la forma $A \to aB$, $A \to a$, oppure $A \to \epsilon$ dove le lettere maiuscole $A,B,\ldots$ variano su $V_N$ e le lettere minuscole $a,b,\ldots$ variano su $V_T$
+\end{itemize}
+\end{definition}
+
+Le grammatiche regolari sono anche dette \emph{tipo 3}.
+
+Per abbreviare le notazioni nella scrittura delle produzioni grammaticali scriveremo $A \to aB \mid aC$ ove vi siano due produzioni $A \to aB$ e $A \to aC$.
+
+Definiamo la concatenazione $\to^*$ di produzioni informalmente, con un esempio, come segue: se $A \to aB$ e $B \to bC$ sono due produzioni, allora $A \to^* abC$.
+
+\begin{definition}[Linguaggio generato da una grammatica]\label{def:ling-reg-gramm}
+Il linguaggio generato da una grammatica $\cG$ \`{e} l'insieme $\cL(\cG)$ definito come segue:\\ $\cL(\cG) = \{w \in V_T^* \st S \to^* w\}$.
+\end{definition}
+
+\begin{theorem}\label{thm:ling-reg-gramm1}
+Se un linguaggio $L$ \`{e} regolare, allora esiste una grammatica regolare $\cG$ tale che $L = \cL(\cG)$.
+\end{theorem}
+
+\begin{proof}
+Sia $\cA=(Q,\Sigma,\delta,q_0,F)$ un DFA tale che $\cL(\cA) = L$. Costruiamo una grammatica $\cG = (V_T,V_N,P,S)$ tale che $\cL(\cA) = \cL(\cG)$. Per evitare confusione supponiamo di avere, per ogni stato $q$, un non-terminale corrispondente $A_q$. Poniamo:
+\begin{itemize}
+\item $V_N = \{A_q \st q \in Q\}$;
+\item $V_T = \Sigma$;
+\item $S = A_{q_0}$;
+\item infine definiamo l'insieme $P$ delle produzioni come il pi\`{u} piccolo che soddisfa le seguenti propriet\`{a}:
+\begin{itemize}
+\item se $\delta(q,b) = p$, allora $A_q \to bA_p$ appartiene a $P$;
+\item se $\delta(q,b) \in F$, allora $A_q \to b$ appartiene a $P$.
+\end{itemize}
+\end{itemize}
+Non \`{e}  complicato ora mostrare che $\hat{\delta}(q_0,w) \in F$ sse $S \to^* w$, da cui segue il risultato che volevamo.
+\qed\end{proof}
+
+\begin{theorem}\label{thm:ling-reg-gramm2}
+Sia $\cG$ una grammatica regolare. Allora $\cL(\cG)$ \`{e} un linguaggio regolare.
+\end{theorem}
+
+\begin{proof}
+Sia $\cG = (V_T,V_N,P,S)$ una grammatica regolare su $\Sigma$. Dimostriamo che esiste un $\epsilon$-NFA $\cA=(Q,\Sigma,\delta,q_0,F)$ tale che $\cL(\cG) = \cL(\cA)$. Per evitare confusione supponiamo di avere, per ogni terminale $a$, uno stato corrispondente $q_a$ e per ogni non-terminale $A$ uno stato $q_A$; inoltre prendiamo uno stato $q_\epsilon$. Poniamo
+\begin{itemize}
+\item $Q = \{q_A \st A \in V_N\} \cup \{q_a \st a \in V_T\} \cup \{q_\epsilon\}$;
+\item $F = \{q_a \st a \in V_T\} \cup \{q_\epsilon\}$;
+\item $q_0 = q_S$;
+\item $\delta$ \`{e} la pi\`{u} piccola funzione parziale (in termini del suo grafico) che soddisfa le seguenti propriet\`{a}:
+\begin{itemize}
+\item se $A \to bB$ \`{e} una produzione di $P$, allora $q_B \in \delta(q_A,b)$;
+\item se $A \to b$ \`{e} una produzione di $P$, allora $q_b \in \delta(q_A,\epsilon)$;
+\item se $A \to \epsilon$ \`{e} una produzione di $P$, allora $q_\epsilon \in \delta(q_A,\epsilon)$.
+\end{itemize}
+\end{itemize}
+Non \`{e}  complicato ora mostrare che $S \to^* w$ sse $\hat{\delta}(q_S,w) \in F$, da cui segue il risultato che volevamo.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Pumping lemma tipo 3}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Concludiamo la sezione dedicata alle descrizioni alternative per il linguaggi regolari con il cosiddetto approccio descrittivo. Esso non risulta in una caratterizzazione dei linguaggi regolari, ma in una condizione necessaria alla regolarit\`{a}, che si concretizza nel cosiddetto \emph{Pumping Lemma}. 
+
+\begin{lemma}[Pumping Lemma tipo 3]\label{lem:pumping3}
+Se $L$ \`{e} un linguaggio regolare, allora esiste una costante $n \geq 1$, che dipende solo da $L$, tale che per ogni $w \in L$, con $|w| \geq n$, esistono stringhe $u,v,z$ tali che 
+\begin{itemize}
+  \item $w = uvz$,
+  \item $|uv| \leq n$,
+  \item $|v| \geq 1$,
+  \item per ogni $k \geq 0$ abbiamo $uv^kz \in L$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+Supponiamo $L$ regolare. Allora esiste un DFA $\cA$ tale che $L = \cL(\cA)$. Sia $n$ il numero di stati di $\cA$ e sia $w$ una stringa di lunghezza $\geq n$. Poniamo $X = \{\hat{\delta}_\cA(q_0,x) \st x \mbox{ prefisso di } w\}$. Poich\'{e} $|Q_\cA| = n$ e $w$ ha almeno $n+1$ prefissi, esistono necessariamente due prefissi $u,u'$ di $w$ tali per cui $\hat{\delta}_\cA(q_0,u) = \hat{\delta}_\cA(q_0,u')$. Possiamo assumere, senza perdita di generalit\`{a}, che $u$ sia prefisso di $u'$. Riassumendo quindi esistono due stringhe $v,z$ tali che $uv = u'$ e $u'z = w$; quindi $uvz = w$. Notiamo inoltre che $\hat{\delta}_\cA(\hat{\delta}_\cA(q_0,u),v) = \hat{\delta}_\cA(q_0,u)$, ovvero $v$ porta l'automa da $\hat{\delta}_\cA(q_0,u)$ in se stesso, e quindi la sequenza di input che compongono $v$ pu\`{o} essere ripetuta un numero arbitrario di volte. Infine, poich\`{e} $w \in L$, abbiamo che $\hat{\delta}_\cA(\hat{\delta}_\cA(q_0,u'),z) \in F$; quindi per il ragionamento fatto qui sopra $\hat{\delta}_\cA(\hat{\delta}_\cA(q_0,uv^k),z) \in F$ per ogni $k \geq 0$. Questo dimostra che $uv^kz \in L$ per ogni $k \geq 0$.
+\qed\end{proof}
+
+Il Lemma \ref{lem:pumping3} trova la sua migliore applicazione nel provare quando un linguaggio non \`{e} regolare. Difatti se, dato $L$, non si verifica che non esiste una costante $n$ che soddisfa le propriet\`{a} dell'enunciato, allora $L$ non pu\`{o} essere regolare.
+
+\begin{remark}
+Notiamo che il reciproco del Pumping Lemma non vale. In altre parole vi \`{e} un linguaggio non regolare $L$ (in verit\`{a} ve ne sono molti), tale per cui esiste una costante $n$, che dipende solo da $L$, tale che per ogni $w \in L$, con $|z| \geq n$, esistono stringhe $u,v,w$ tali che 
+\begin{itemize}
+  \item $w = uvz$,
+  \item $|uv| \leq n$,
+  \item $|v| \geq 1$,
+  \item per ogni $k \geq 0$ abbiamo $uv^kz \in L$.
+\end{itemize}
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Esercizi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{example}
+Dimostrare se i seguenti linguaggi sono o meno regolari:
+\begin{itemize}
+\item $L_1 = \{0^n1^n \st n \geq 1\}$
+\item $L_2 = \{0^n \st n \mbox{ \`{e} potenza di } 2\}$
+\item $L_3 = \{w \in \{0,1\}^* \st |w| \leq 1000\}$
+\item $L_4 = \{w \in \{0,1\}^* \st |w| > 1000\}$
+\item $L_5 = \{ww^R \st w \in \{0,1\}^*\}$
+\item $L_6 = \bigcup_{i=1}^{100} \{w \in \{0,1\}^* \st i \leq |w| \leq 1000\}$
+\item $L_7 = \{w \in \{0,1\}^* \st |w| \mbox{ \`{e} multiplo di } 5 \}$
+\end{itemize}
+\end{example}
+
+\begin{example}
+Sia $L$ un linguaggio regolare. \`{E} vero che ogni linguaggio $L' \subseteq L$ \`{e} anch'esso regolare?
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

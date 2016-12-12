@@ -1,0 +1,280 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 6}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 6}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 30 novembre}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\'{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 6}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Funzioni Turing-calcolabili}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Finora abbiamo visto le TM come dispositivi per riconoscere linguaggi. Tuttavia una importantissima loro applicazione \`{e} il loro utilizzo al fine di calcolare funzioni.
+
+\begin{definition}[Funzione Turing-calcolabile]\label{def:funz-Turing-Calc}
+Sia $f: \Sigma^* \hookrightarrow \Sigma^*$ una funzione parziale e sia $\cM$ una TM. Diciamo che $\cM$ \emph{calcola} $f$ se per ogni $w \in \Sigma^*$ abbiamo che:
+\begin{itemize}
+\item se $w\in\dom{f}$, allora esiste uno stato finale $p$ tale che la computazione che inizia in $(\epsilon,q_0,w)$ termina in $(\epsilon,p,f(w))$.
+\item se $w\not\in\dom{f}$, allora la computazione che inizia in $(\epsilon,q_0,w)$ non termina.
+\end{itemize}
+\end{definition}
+
+Una funzione \`{e} \emph{Turing-calcolabile} se esiste una TM che la calcola.
+
+\`{E} chiaro quindi dalla Definizione \ref{def:funz-Turing-Calc} che $f$ \`{e} una funzione Turing-calcolabile totale sse esiste un decisore $\cM$ tale che per ogni $w \in \Sigma^*$  esiste uno stato finale $p$ tale che la computazione che inizia in $(\epsilon,q_0,w)$ termina in $(\epsilon,p,f(w))$.
+
+Non \`{e} difficile ora generalizzare la Definizione \ref{def:funz-Turing-Calc} al caso di funzioni di ariet\`{a} maggiore di $1$. Sia $f: (\Sigma^*)^n \hookrightarrow \Sigma^*$ una funzione parziale $n$-aria e sia $\cM$ una TM. Diciamo che $\cM$ calcola $f$ se per ogni $n$-upla $(w_1,\ldots,w_n)$ di stringhe abbiamo che:
+\begin{itemize}
+\item se $(w_1,\ldots,w_n)\in\dom{f}$, allora esiste uno stato finale $p$ tale che la computazione che inizia in $(\epsilon,q_0,w_1B \cdots B w_n)$ termina in $(\epsilon,p,f(w_1,\ldots,w_n))$.
+\item se $(w_1,\ldots,w_n)\not\in\dom{f}$, allora la computazione che inizia in $(\epsilon,q_0,w_1B \cdots B w_n)$ non termina.
+\end{itemize}
+Si noti che scrivendo $w_1B \cdots B w_n$ intendiamo la stringa ottenuta concatenando le stringhe $w_1,\ldots,w_n$ intervallate dal simbolo blank.
+
+Per quanto riguarda di funzioni sui numeri naturali, \`{e} usuale dare una definizione di calcolabilit\`{a} via opportuna codifica.
+ Una funzione $f: \mathbb{N} \hookrightarrow \mathbb{N}$ \`{e} Turing-calcolabile se esiste una ....
+
+Similmente si pu\`{o} generalizzare la Definizione \ref{def:funz-Turing-Calc} anche al caso di funzioni che operano su insiemi finiti di stringhe. Sia $f: \mathcal{P}_{\mathrm{f}}(\Sigma^*) \hookrightarrow \Sigma^*$ una funzione parziale e sia $\cM$ una TM. Diciamo che $\cM$ calcola $f$ se per ogni $n$-upla $(w_1,\ldots,w_n)$ di stringhe abbiamo che:
+\begin{itemize}
+\item se $\{w_1,\ldots,w_n\}\in\dom{f}$, allora esiste uno stato finale $p$ tale che per ogni permutazione $\sigma$ dei numeri da $1$ ad $n$, la computazione che inizia in $(\epsilon,q_0,w_{\sigma(1)}B \cdots B w_{\sigma(n)})$ termina in $(\epsilon,p,f(\{w_1,\ldots,w_n\}))$ (ovvero il risultato non dipende dall'ordine in cui scrivo le stringhe di input sul nastro). 
+\item se $\{w_1,\ldots,w_n\}\not\in\dom{f}$, allora per ogni permutazione $\sigma$ dei numeri da $1$ ad $n$, la computazione che inizia in $(\epsilon,q_0,w_{\sigma(1)}B \cdots B w_{\sigma(n)})$ non termina.
+\end{itemize}
+
+\begin{remark}\label{rem:compos}
+Se $f,g: \Sigma^* \hookrightarrow \Sigma^*$ sono funzioni Turing-calcolabili parziali, allora $f \circ g$ \`{e} una funzione Turing-calcolabile parziale.
+\end{remark}
+
+\begin{definition}[Turing-riduzione]\label{def:Turing-rid}
+Siano $L,L' \subseteq \Sigma^*$ due linguaggi. Diciamo che $L$ \`{e} \emph{Turing-riducibile} a $L'$, notazione $L \leq_T L'$, sse esiste una funzione $f: \Sigma^* \to \Sigma^*$ Turing-calcolabile totale tale che $w \in L \iff f(w) \in L'$.
+\end{definition}
+
+\begin{proposition}\label{prop:Turing-rid-comp}
+\begin{enumerate}[label=(\roman*)]
+\item Se $L \leq_T L'$, allora $L^c \leq_T (L')^c$.
+\item Se $L \leq_T L' \leq_T L''$, allora $L \leq_T L''$. Quindi $\leq_T$ \`{e} un preordine.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item Supponiamo che $f$ sia una funzione Turing-calcolabile totale tale che $w \in L \iff f(w) \in L'$. Allora vale anche $w \in L^c \iff f(w) \in (L')^c$ e pertanto $L^c \leq_T (L')^c$.
+\item Se $f,g$ sono funzioni calcolabili e totali tali che $w \in L \iff f(w) \in L'$ e $x \in L' \iff g(x) \in L''$, allora $g \circ f$ \`{e} una funzione calcolabile e totale (per la Remark \ref{rem:compos}) e $w \in L \iff g(f(w)) \in L''$.
+\end{enumerate}
+\end{proof}
+
+\begin{theorem}\label{thm:Turing-rid}
+Siano $L,L' \subseteq \Sigma^*$ due linguaggi e supponiamo $L \leq_T L'$. Allora
+\begin{enumerate}[label=(\roman*)]
+\item se $L'$ \`{e} decidibile, allora anche $L$ lo \`{e};
+\item se $L'$ \`{e} semi-decidibile, allora anche $L$ lo \`{e};
+\item se $(L')^c$ \`{e} decidibile, allora anche $L^c$ lo \`{e};
+\item se $(L')^c$ \`{e} semi-decidibile, allora anche $L^c$ lo \`{e}.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Chiamiamo $f$ la funzione Turing-calcolabile totale che permette di ridurre $L$ ad $L'$ e chiamiamo $\cN$ la TM che la calcola.
+\begin{enumerate}[label=(\roman*)]
+\item Supponiamo che $L'$ sia decidibile. Allora esiste un decisore $\cM'$ tale che $\cL(\cM')=L'$. Costruisco una TM $\cM$ che fa le seguenti cose:
+\begin{itemize}
+\item data una stringa $w \in \Sigma^*$ calcola $f(w)$ simulando $\cN$ (che \`{e} un decisore);
+\item simula $\cM'$ sull'input $f(w)$;
+\item se quest'ultima simulazione accetta $f(w)$, allora dico che $\cM$ accetta $w$, altrimenti $\cM$ non accetta $w$.
+\end{itemize}
+Siccome tutte le TM simulate sono decisori, anche $\cM$ \`{e} un decisore e $\cL(\cM) = L$.
+\item Supponiamo che $L'$ sia semi-decidibile. Allora esiste una TM $\cM'$ tale che $\cL(\cM')=L'$. Costruisco una TM $\cM$ che fa le seguenti cose:
+\begin{itemize}
+\item data una stringa $w \in \Sigma^*$ calcola $f(w)$ simulando $\cN$ (che \`{e} un decisore);
+\item simula $\cM'$ sull'input $f(w)$;
+\item se quest'ultima simulazione accetta $f(w)$, allora dico che $\cM$ accetta $w$.
+\end{itemize}
+Si noti che l'ultima simulazione pu\`{o} non terminare. In questo caso chiaramente $\cM$ non accetta $w$. Infine $\cM$ \`{e} una TM tale che $\cL(\cM) = L$.
+\item Per il punto (i) e la Proposizione \ref{prop:Turing-rid-comp}.
+\item Per il punto (ii) e la Proposizione \ref{prop:Turing-rid-comp}.
+\end{enumerate}
+\qed\end{proof}
+
+Concludiamo la sezione con un'importante osservazione: se ``A implica B" allora ``non B implica non A". Pertanto abbiamo gratuitamente il seguente corollario al Teorema \ref{thm:Turing-rid}.
+
+\begin{corollary}\label{cor:Turing-rid}
+Siano $L,L' \subseteq \Sigma^*$ due linguaggi e supponiamo $L \leq_T L'$. Allora
+\begin{enumerate}[label=(\roman*)]
+\item se $L$ non \`{e} decidibile, allora nemmeno $L'$ lo \`{e};
+\item se $L$ non \`{e} semi-decidibile, allora nemmeno $L'$ lo \`{e};
+\item se $L^c$ non \`{e} decidibile, allora nemmeno $(L')^c$ lo \`{e};
+\item se $L^c$ non \`{e} semi-decidibile, allora nemmeno $(L')^c$ lo \`{e}.
+\end{enumerate}
+\end{corollary}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Macchina di Turing universale}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Sappiamo, intuitivamente, che una TM pu\`{o} essere utilizzata per simulare un computer che esegue un singolo programma caricato in memoria. La grande potenza delle TM risiede nel fatto che tale programma pu\`{o} essere uno \emph{qualsiasi}, e quindi anche una sorta di ``compilatore" che legge codifiche di programmi e input ed esegue i primi dandovi in pasto i secondi. In questa sezione descriveremo in maniera formale il fenomeno sopraccitato.
+
+Il nostro prossimo obiettivo \`{e} quello di elaborare una codifica per le macchine di Turing in modo che ogni TM possa essere pensata come un semplice numero naturale. 
+
+\`{E} molto comodo utilizzare l'insieme $\mathbb{N}$ dei numeri naturali perch\`{e} abbiamo due importanti biiezioni: $\mathcal{P}_{\mathrm{f}}(\mathbb{N}) \cong \mathbb{N}$ e $\mathbb{N} \times \mathbb{N} \cong \mathbb{N}$. Indichiamo con $\pair{n}{m}$ il numero che codifica la coppia $(n,m)$ e con $\fset{X}$ il numero che codifica l'insieme finito $X \subseteq \nat$. Utilizzando la funzione $\pair{\cdot}{\cdot}$ definiamo codifiche di sequenze finite di naturali ponendo induttivamente $\langle n_1,\ldots,n_k \rangle = \pair{\langle n_1,\ldots,n_{k-1}\rangle}{n_k}$.
+
+Prima di tutto \`{e} importante dire che si pu\`{o} imporre il vincolo che per ogni TM $\cM=(Q,\Sigma,\Gamma,\delta,q_0,B,F)$ gli insiemi $Q,\Sigma$ siano sottoinsiemi finiti di $\nat$ e $\Gamma = \{0,1\}$ (ci\`{o} non \`{e} affatto restrittivo) e che $q_0$, $B$, e le direzioni  $\{L,R\}$ siano numeri naturali. Ora la funzione $\delta$ non \`{e} altro che un insieme finito della forma $\delta = \{((q_1,X_1),(p_1,n_1,D_1)),\ldots,((q_k,X_k),(p_k,n_k,D_k))\}$ e quindi si pu\`{o} codificare con un unico numero, diciamo $m_\delta$. A questo punto possiamo codificare $\cM$ in maniera univoca con il numero $\langle \fset{Q},\fset{\Sigma},\fset{\Gamma},m_\delta,q_0,\fset{F}\rangle$. Scriviamo $\cM_i$ per indicare la TM con codice $i$.
+
+In ci\`{o} che segue, sar\`{a} comodo assegnare un numero naturale ad ogni stringa binaria (e viceversa) in modo che ogni stringa corrisponda ad uno ed un solo numero naturale. Una maniera molto semplice di farlo \`{e} ordinare in maniera totale le stringhe binarie secondo l'ordine lessicografico. A questo punto ogni stringa appare nell'elenco lessicografico e quindi identificheremo il numero $i$ con l'$i$-esima stringa nell'elenco. Pertanto la codifica delle TM esibita qui sopra utilizzando i numeri naturali pu\`{o} essere eseguita utilizzando stringhe binarie.
+
+Prima di procedere con l'utilizzo effettivo delle codifiche per le Macchine di Turing enunciamo un importante risultato, ma senza dimostrarlo, che \`{e} alla base della possibilit\`{a} di costruire quella che chiameremo una \emph{Macchina di Turing Universale}.
+
+\begin{proposition}\label{prop:cod-calc}
+Le biiezioni $\fset{\cdot}: \mathcal{P}_{\mathrm{f}}(\mathbb{N}) \to \mathbb{N}$ e $\pair{\cdot}{\cdot}: \mathbb{N} \times \mathbb{N} \to \mathbb{N}$ sopraccitate sono Turing-calcolabili (usando la codifica dei naturali in stringhe).
+\end{proposition}
+
+\begin{definition}[Linguaggio universale]\label{def:uni-lang}
+Definiamo $L_u = \{w_{\pair{n}{m}} \in \{0,1\}^* \st w_n \in \cL(\cM_m)\}$.
+\end{definition}
+
+Chiamiamo $L_u$ il \emph{linguaggio universale}.
+
+\begin{theorem}[Macchina di Turing universale]\label{thm:uni-mac}
+Esiste una TM $\cU$ tale che $\cL(\cU) = L_u$.
+\end{theorem}
+
+Una macchina come quella citata nel Teorema \ref{thm:uni-mac} \`{e} detta \emph{macchina universale}.
+
+Non daremo una prova del Teorema \ref{thm:uni-mac}: tuttavia possiamo garantire che la redazione di tale dimostrazione \`{e} paragonabile alla scrittura di un compilatore per un qualche linguaggio di programmazione. Infine, come conseguenza del Teorema \ref{thm:uni-mac}, il linguaggio $L_u$ \`{e} semidecidibile.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linguaggi non ricorsivamente enumerabili}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Linguaggio diagonale]\label{def:diag-lang}
+Definiamo $L_d = \{w_i \in \{0,1\}^* \st w_i \not\in \cL(\cM_i)\}$.
+\end{definition}
+
+Chiamiamo $L_d$ il \emph{linguaggio diagonale}.
+
+\begin{theorem}\label{thm:Ld-non-semidec}
+Il linguaggio $L_d$ non \`{e} semidecidibile.
+\end{theorem}
+
+\begin{proof}
+Supponiamo per assurdo che esista una TM $\cD$ tale che $\cL(\cD) = L_d$. Allora esiste un numero $i$ tale che $\cD = \cM_i$. Ora vediamo l'assurdo:
+\begin{itemize}
+\item se $w_i \in L_d$ allora per definizione $w_i \in \cL(\cM_i)$, e quindi $w_i \not\in L_d$
+\item se $w_i \not\in L_d$ allora per definizione $w_i \not\in \cL(\cM_i)$, e quindi $w_i \in L_d$
+\end{itemize}
+Quindi l'ipotesi che $L_d$ sia semiecidibile \`{e} assurda, perch\'{e} porta al paradosso $w_i \in L_d \iff w_i \not\in L_d$.
+\end{proof}
+
+Definiamo il linguaggio $L_{ne} =\{w_i \in \{0,1\}^* \st \cL(\cM_i) \neq \emptyset \}$.
+
+\begin{proposition}\label{prop:Ld-rid-Luc}
+$L_d \leq_T (L_u)^c \leq_T (L_{ne})^c$.
+\end{proposition}
+
+\begin{proof}
+Definiamo la funzione $f:\{0,1\}^* \to \{0,1\}^*$ ponendo $f(w_i)= w_{\pair{i}{i}}$. Chiaramente $w \in L_d \iff f(w) \in (L_u)^c$ e $f$ \`{e} Turing-calcolabile e totale: questo dimostra che $L_d \leq_T (L_u)^c$.
+
+Dimostriamo $L_u \leq_T L_{ne}$. A tal scopo definiamo la funzione $g:\{0,1\}^* \to \{0,1\}^*$ ponendo $g(w_{\pair{n}{m}})= w_m$. Chiaramente $w \in L_u \iff g(w) \in L_{ne}$ e $g$ \`{e} Turing-calcolabile e totale: questo dimostra che $L_u \leq_T L_{ne}$. Infine ci\`{o} implica che $(L_u)^c \leq_T (L_{ne})^c$.
+\end{proof}
+
+\begin{theorem}\label{thm:Lu-non-semidec}
+I linguaggi $(L_u)^c$ e $(L_{ne})^c$ non sono semi-decidibili.
+\end{theorem}
+
+\begin{proof}
+Ora per il Teorema \ref{thm:Ld-non-semidec} $L_d$ non \`{e} semi-decidibile e quindi per il Corollario \ref{cor:Turing-rid} e la Proposizione \ref{prop:Ld-rid-Luc} ci\`{o} implica che sia $(L_u)^c$ che $(L_{ne})^c$ non sono semi-decidibili.
+\end{proof}
+
+\begin{theorem}\label{thm:Le-non-semidec}
+Il linguaggio $L_{ne} =\{w_i \in \{0,1\}^* \st \cL(\cM_i) \neq \emptyset \}$ \`{e} semidecidibile ma non decidibile.
+\end{theorem}
+
+\begin{proof}
+Tramite un argomento informale, diciamo che \`{e} possibile definire una TM $\cM$ che genera in sequenza tutte le coppie di numeri naturali $(i,j)$ e
+\begin{itemize}
+\item decodifica $i$ in $w_i$ e $j$ in $\cM_j$;
+\item simula $\cM_j$ con input $w_i$;
+\item accetta $w_j$ se $w_i \in \cL(\cM_j)$.
+\end{itemize}
+\`{E} evidente che $\cL(\cM) = L_{ne}$. Infine la seconda parte dell'enunciato segue immediatamente dal fatto che $(L_{ne})^c$ non \`{e} semi-decidibile.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

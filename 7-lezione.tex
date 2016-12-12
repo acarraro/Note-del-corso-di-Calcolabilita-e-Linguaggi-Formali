@@ -1,0 +1,562 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+% \usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 7}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 7}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\'{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 7}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduzione}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nelle precedenti lezioni sono stati introdotti vari modelli astratti di automi che implementano  dispositivi di calcolo. Per le Macchine di Turing inoltre sono state definite codifiche e ``protocolli" per il loro utilizzo allo scopo di calcolare funzioni sui numeri naturali. In questa lezione faremo una cosa diversa: descriveremo una classe di funzioni sui numeri naturali in termini puramente matematici, senza riferimento ad alcun modello di macchina di calcolo e solo successivamente scopriremo che tali funzioni sono esattamente quelle calcolabili dalle Macchine di Turing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Le funzioni primitive ricorsive}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Un tipo di funzioni molto importanti sono le cosiddette \emph{funzioni caratteristiche}, che sono funzioni a valori in $\{0,1\}$ da intendersi come valori booleani che indicano l'appartenenza (o non-appartenenza) di $n$-uple di numeri a sottoinsiemi di $\nat^n$.
+
+\begin{definition}[Funzione caratteristica]\label{def:fun-car}
+Sia $R \subseteq \nat^n$ una relazione $n$-aria. La \emph{funzione caratteristica} di $R$, indicata con $\ca{R}: \nat^n \to \nat$, \`{e} definita come segue
+$$
+\ca{R}(\vec x) = 
+\begin{cases}
+1 & \mbox{se } R(\vec x) \\
+0 & \mbox{altrimenti} \\
+\end{cases}
+$$
+\end{definition}
+
+\begin{definition}[Funzioni di base]\label{def:bas-fun}
+Chiamiamo \emph{funzioni di base} quelle qui di seguito elencate:
+\begin{itemize}
+\item[(1)] la funzione $\ca{=}$;
+\item[(2)] la funzione \emph{zero} $\zr: \nat \to \nat$ data da $\zr(x) = 0$, per ogni $x \in \nat$;
+\item[(3)] la funzione \emph{successore} $\suc: \nat \to \nat$ data da $\suc(x) = x+1$, per ogni $x \in \nat$;
+\item[(4)] per ogni coppia di numeri $j,n$ con $1\leq j \leq n$ la funzione \emph{proiezione $j$-esima} $\prj{j}{n}: \nat^n \to \nat$ data da $\prj{j}{n}(x_1,\ldots,x_n) = x_j$, per ogni $n$-upla $(x_1,\ldots,x_n) \in \nat^n$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Funzioni primitive ricorsive]\label{def:ric-prim}
+L'insieme $\PRIMREC$ delle \emph{funzioni ricorsive primitive} \`{e}  il pi\`{u} piccolo insieme di funzioni sui numeri naturali che soddisfa le seguenti propriet\`{a}:
+\begin{itemize}
+\item[$(\mathbf{r1})$] Contiene tutte le funzioni di base della Definizione \ref{def:bas-fun}.
+\item[$(\mathbf{r2})$] \`{E} chiuso per composizione, ovvero se contiene $\psi,\gamma_1,\ldots,\gamma_m$ allora contiene anche la funzione $\varphi$ data da $\varphi(\vec x) = \psi(\gamma_1(\vec x),\ldots,\gamma_m(\vec x))$.
+\item[$(\mathbf{r3})$] \`{E} chiuso per ricorsione primitiva, ovvero se contiene $\psi,\gamma$ allora contiene anche la funzione $\varphi$ data da 
+$$
+\varphi(\vec x,y) = 
+\begin{cases}
+\psi(\vec x) & \mbox{se } y = 0 \\
+\gamma(\vec x,y-1,\varphi(\vec x,y-1)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+\end{itemize}
+\end{definition}
+
+Le propriet\`{a} di chiusura $(\mathbf{r2})$ ed $(\mathbf{r3})$ della Definizione \ref{def:ric-prim}, sono detti, rispettivamente, \emph{schema di composizione} e \emph{schema di ricorsione primitiva}. Infatti, avendo definito $\PRIMREC$ come il pi\`{u} piccolo insieme di funzioni chiuse rispetto alle costruzioni elencate, esse rappresentano di fatto i soli schemi di definizione, da applicare un numero finito di volte alle funzioni di base, per creare nuove funzioni primitive ricorsive a partire da altre esistenti. In altre parole l'insieme $\PRIMREC$ \`{e} definito per induzione, e si possono pertanto fare dimostrazioni e costruzioni per induzione sulla definizione delle funzioni che vi appartengono.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Schemi alternativi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Grazie alle funzioni di proiezione e alle propriet\`{a} elementari dell'aritmetica, si possono creare nuovi e pi\`{u} flessibili schemi derivati da quello di composizione e di ricorsione primitiva che rendono pi\`{u} comode le definizioni, pur non aggiungendo nuove funzioni a $\PRIMREC$.
+
+\begin{lemma}\label{def:alt-ric-prim1}
+\begin{enumerate}[label=(\roman*)]
+\item La funzione identit\`{a} \`{e} in $\PRIMREC$.
+\item Sia $\psi: \nat^m \to \nat$ una funzione in $\PRIMREC$, sia $n \geq m$ e siano ${j_1},\ldots,{j_m}$ indici presi in $\{1,\ldots,n\}$. Allora la funzione $\varphi: \nat^n \to \nat$ data da\\
+$\varphi(x_1,\ldots,x_n) = \psi(x_{j_1},\ldots,x_{j_m})$ \`{e} anch'essa in $\PRIMREC$.
+\item Ogni funzione costante \`{e} in $\PRIMREC$.
+\item Se $\psi,\gamma$ sono in $\PRIMREC$, anche la funzione $\varphi$ data da 
+$$
+\varphi(\vec x,y) = 
+\begin{cases}
+\psi(\vec x) & \mbox{se } y = 0 \\
+\gamma(\varphi(\vec x,y-1)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+\`{e} in $\PRIMREC$.
+\item Se $\psi,\gamma$ sono in $\PRIMREC$, anche la funzione $\varphi$ data da 
+$$
+\varphi(\vec x,y) = 
+\begin{cases}
+\psi(\vec x) & \mbox{se } y = 0 \\
+\gamma(\vec x,\varphi(\vec x,y-1)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+\`{e} in $\PRIMREC$.
+\item La funzione predecessore \`{e} in $\PRIMREC$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item L'identit\`{a} \`{e} la funzione $\prj{1}{1}(x)$.
+\item Chiaramente $\varphi(\vec x) = \psi(\prj{j_1}{n}(\vec x),\ldots,\prj{j_m}{n}(\vec x))$, quindi \`{e} in $\PRIMREC$ per lo schema di composizione.
+\item Sia $\psi$ data da $\psi(\vec x) = n$, per un certo $n \in \nat$. Allora 
+$$\psi(\vec x) = \underbrace{\suc(\cdots\suc(}_{n\mbox{ volte}}\zr(x_1))\cdots)$$
+quindi $\psi \in \PRIMREC$ per il punto (2) e lo schema di composizione.
+\item Si ponga $\gamma'(\vec x,y,z) = \gamma(z)$. Allora $\gamma'$ \`{e} in $\PRIMREC$ per il punto (2). Ora la funzione $\varphi$ \`{e} data da 
+$$
+\varphi(\vec x,y) = 
+\begin{cases}
+\psi(\vec x) & \mbox{se } y = 0 \\
+\gamma'(\vec x,y-1,\varphi(\vec x,y-1)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+e quindi, per lo schema di ricorsione primitiva, \`{e} in $\PRIMREC$.
+\item Simile al punto precedente.
+\item La funzione predecessore sui numeri naturali \`{e} data da 
+$$
+\pred(y) = 
+\begin{cases}
+0 & \mbox{se } y = 0 \\
+\prj{1}{2}(y-1,\pred(y-1)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+e quindi \`{e} in $\PRIMREC$ per lo schema di ricorsione primitiva.
+\end{enumerate}
+\qed\end{proof}
+
+Notiamo che se $\varphi(\vec x,y): \nat^{n+1} \to \nat$ \`{e} una funzione ricorsiva, allora per ogni numero naturale $k$ fissato la funzione $\varphi(\vec x,k): \nat^n \to \nat$ \`{e} una funzione ricorsiva, per via dello schema di composizione.
+
+Facciamo seguire alcuni esempi di funzioni a noi familiari che sono primitive ricorsive. Per ciascuna di esse cercate di capire quali schemi sono stati utilizzati nella definizione. 
+
+\[
+\begin{array}{ll}
+x\minus y = 
+\begin{cases}
+x & \mbox{se } y = 0 \\
+\pred(x\minus(y-1)) & \mbox{altrimenti} \\
+\end{cases}
+\qquad
+&
+x+y = 
+\begin{cases}
+x & \mbox{se } y = 0 \\
+\suc(x+(y-1)) & \mbox{altrimenti} \\
+\end{cases}
+\\
+x \cdot y = 
+\begin{cases}
+0 & \mbox{se } y = 0 \\
+x + (x\cdot (y-1)) & \mbox{altrimenti} \\
+\end{cases}
+&
+x^y = 
+\begin{cases}
+1 & \mbox{se } y = 0 \\
+x \cdot (x^{y-1}) & \mbox{altrimenti} \\
+\end{cases}
+\\
+!y = 
+\begin{cases}
+1 & \mbox{se } y = 0 \\
+y \cdot !(y-1) & \mbox{altrimenti} \\
+\end{cases}
+&
+\end{array}
+\]
+
+Chiaramente, utilizzando il solo schema di rimpiazzamento, otteniamo che se $\psi_1(\vec x),\ldots,\psi_k(\vec x)$ sono funzioni primitive ricorsive, anche le funzioni $\varphi(\vec x) = \sum_{i=1}^{k} \psi_i(\vec x)$ e $\gamma(\vec x) = \prod_{i=1}^{k} \psi_i(\vec x)$ sono primitive ricorsive. Altre importantissime funzioni primitive ricorsive sono le cosiddette \emph{somme e prodotti limitati}, che generalizzano il caso delle somme appena visto, in quanto si vuole permettere al numero degli addendi di variare in funzione dell'argomento passato alla funzione. Data una funzione primitiva ricorsiva $n+1$-aria $\varphi(\vec x,y)$, le funzioni $\sum_{y < z} \varphi(\vec x,y)$ e $\prod_{y < z} \varphi(\vec x,y)$ (anch'esse da $\nat^{n+1}$ in $\nat$) sono definite come segue:
+
+\[
+\begin{array}{l}
+\sum_{y < z} \varphi(\vec x,y) = 
+\begin{cases}
+0 & \mbox{se } z = 0 \\
+\varphi(\vec x,z) + \sum_{y < z-1} \varphi(\vec x,y) & \mbox{altrimenti} \\
+\end{cases}
+\\
+\qquad
+\\
+\prod_{y < z} \varphi(\vec x,y) = 
+\begin{cases}
+1 & \mbox{se } z = 0 \\
+\varphi(\vec x,z) \cdot \prod_{y < z-1} \varphi(\vec x,y) & \mbox{altrimenti} \\
+\end{cases}
+\\
+\end{array}
+\]
+
+Inoltre per lo schema di rimpiazzamento anche le funzioni $\sum_{y < \psi(\vec x,z)} \varphi(\vec x,y)$ e $\prod_{y < \psi(\vec x,z)} \varphi(\vec x,y)$ sono primitive ricorsive, qualora $\psi(\vec x,z)$ e $\varphi(\vec x,y)$ lo siano.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Insiemi e predicati primitivi ricorsivi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}\label{def:prim-ric-pred}
+Sia $R \subseteq \nat^n$ una relazione $n$-aria. Diciamo che $R$ \`{e} \emph{primitiva ricorsiva} se la sua funzione caratteristica $\ca{R}$ \`{e} una funzione primitiva ricorsiva.
+\end{definition}
+
+Ad esempio l'uguglianza \`{e} una relazione primitiva ricorsiva. Vediamo come si comportano i predicati primitivi ricorsivi rispetto alle operazioni logiche.
+
+\begin{lemma}\label{lem:log-clos}
+Siano $R,P \subseteq \nat^n$ due predicati primitivi ricorsivi. Allora $P \vee R$, $P \wedge R$, $P \Rightarrow R$ e $\neg P$ sono tutti predicati primitivi ricorsivi.
+\end{lemma}
+
+\begin{proof}
+Abbiamo che $\ca{P \wedge R}(\vec x) = \ca{P}(\vec x) \cdot \ca{P}(\vec x)$ e $\ca{\neg P}(\vec x) = 1 - \ca{P}(\vec x)$. Infine $\ca{P \vee R}(\vec x) = \ca{\neg(\neg P \wedge \neg R)}(\vec x)$ e $\ca{P \Rightarrow R}(\vec x) = \ca{\neg P \vee R}(\vec x)$.
+\qed\end{proof}
+
+\begin{lemma}\label{lem:confronto}
+Le relazioni $<,>,\leq,\geq,\neq$ sono primitive ricorsive.
+\end{lemma}
+
+\begin{proof}
+Abbiamo che $x < y \sse (x \minus y = 0) \wedge (y \minus x \neq 0)$. Quindi $\ca{<}(x,y)$ \`{e} una funzione primitiva ricorsiva dato che $\ca{<}(x,y)=\ca{=}(x \minus y,0) \cdot (1- \ca{=}(y \minus x,0))$. Usando le propriet\`{a} degli operatori logici ora si possono definire le funzioni caratteristiche delle altre relazioni.
+\qed\end{proof}
+
+\begin{lemma}
+Sia $\varphi(\vec x)$ in $\PRIMREC$. Allora il predicato $P(\vec x,y) \ass \varphi(\vec x) = y$ (oppure $<,>$, ecc...) \`{e} primitivo ricorsivo.
+\end{lemma}
+
+\begin{proof}
+Immediato, poich\'{e} $\ca{P}(\vec x,y) = \ca{=}(\varphi(\vec x),y)$ che \`{e} in $\PRIMREC$ per lo schema di rimpiazzamento.
+\qed\end{proof}
+
+
+\begin{lemma}[Schema di definizione per casi]\label{lem:def-casi}
+Siano $\psi_1,\ldots,\psi_k$ funzioni primitive ricorsive e siano $R_1,\ldots,R_k$ predicati primitivi ricorsivi $n$-ari a due a due disgiunti e tali che $\bigcup_{i=1}^{k} R_i=\nat^k$. Allora la funzione $\varphi$ definita dallo schema
+$$
+\varphi(\vec x) =
+\begin{cases}
+\psi_1(\vec x) & \mbox{se } R_1(\vec x) \\
+\vdots & \vdots \\
+\psi_k(\vec x) & \mbox{se } R_k(\vec x) \\
+\end{cases}
+$$
+\`{e} primitiva ricorsiva.
+\end{lemma}
+
+\begin{proof}
+Abbiamo $\varphi(\vec x) = \sum_{i=1}^{k} \ca{R_i}(\vec x)\cdot\psi_i(\vec x)$.
+\qed\end{proof}
+
+Come conseguenza dei Lemmi \ref{lem:def-casi} e \ref{lem:confronto} la funzione \emph{massimo} tra due numeri \`{e} primitiva ricorsiva poich\'{e} abbiamo 
+$$
+max(x,y) =
+\begin{cases}
+x & \mbox{se } x \geq y \\
+y & \mbox{se } x < y \\
+\end{cases}
+$$
+
+Quindi anche il massimo di una lista di valori di funzione primitiva ricorsiva $\varphi$ \`{e} una funzione primitiva ricorsiva in quanto
+$$
+max_{y < z} \varphi(\vec x,y) = 
+\begin{cases}
+0 & \mbox{se } z = 0 \\
+max(\varphi(\vec x,z), max_{y < z-1} \varphi(\vec x,y)) & \mbox{altrimenti} \\
+\end{cases}
+$$
+
+Con un ragionamento analogo si dimostra che la funzione $min_{y < z} \varphi(\vec x,y)$ \`{e} anch'essa primitiva ricorsiva se $\varphi$ lo \`{e}.
+
+Vediamo come si comportano i predicati primitivi ricorsivi rispetto alla quantificazione. Anticipando che essi non sono chiusi rispetto a quantificazioni universali ed esistenziali arbitrarie, ci interessiamo ad una particolare forma di quantificazione, detta \emph{quantificazione limitata}. Sia $P(\vec x,y)$ una relazione $n+1$-aria. Definiamo due relazioni $n+1$-arie
+$$ \bforall{y}{z}.P(\vec x,y) \ass \forall y.(y \geq z \vee P(\vec x,y)) \qquad\qquad \bexists{y}{z}.P(\vec x,y) \ass \exists y.(y < z \wedge P(\vec x,y)) $$
+
+\begin{lemma}[Quantificazione limitata]\label{lem:bound-quant}
+Siano $R\subseteq \nat^{n+1}$ un predicato primitivo ricorsivo. Allora $\bforall{y}{z}.P(\vec x,y)$ e $\bexists{y}{z}.P(\vec x,y)$ sono predicati primitivi ricorsivi.
+\end{lemma}
+
+\begin{proof}
+Siano $R \ass \bforall{y}{z}.P(\vec x,y)$ e $Q \ass \bexists{y}{z}.P(\vec x,y)$. Abbiamo che $\ca{R}(\vec x,z) = min_{y < z} \ca{P}(\vec x,z)$ e similmente $\ca{Q}(\vec x,z) = max_{y < z} \ca{Q}(\vec x,y)$.
+\qed\end{proof}
+
+Non \`{e} difficile immaginare come estendere il Lemma \ref{lem:bound-quant} al caso di predicati come $\forall y\!\leq\!z.P(\vec x,y)$ e $\bforall{y}{\psi(\vec x,y)}.P(\vec x,y)$ (con $\psi(\vec x,y)$ primitiva ricorsiva).
+
+\begin{definition}[$\mu$-ricorsione limitata]\label{def:mu-rec-lim}
+Sia $P(\vec x,y)$ un predicato $n+1$-ario primitivo ricorsivo. Allora definiamo la funzione $\bmu{y}{z}.P(\vec x,y): \nat^{n+1} \to \nat$ come segue
+$$
+\bmu{y}{z}.P(\vec x,y) = 
+\begin{cases}
+\mbox{il minimo $y$ tale che $P(\vec x,y)$} & \mbox{se } \bexists{y}{z}.P(\vec x,y) \\
+z & \mbox{altrimenti} \\
+\end{cases}
+$$
+\end{definition}
+
+\begin{lemma}[Schema di definizione per $\mu$-ricorsione limitata]\label{lem:def-mu-lim}
+Sia $R$ un predicato primitivo ricorsivo $n+1$-ario e sia $\psi(\vec x,z)$ una funzione primitiva ricorsiva $n+1$-aria. Allora
+\begin{enumerate}[label=(\roman*)]
+\item la funzione $\varphi$ definita dallo schema $\varphi(\vec x,z) = \bmu{y}{z}.P(\vec x,y)$ \`{e} primitiva ricorsiva.
+\item la funzione $\varphi$ definita dallo schema $\varphi(\vec x,z) = \bmu{y}{\psi(\vec x,z)}.P(\vec x,y)$ \`{e} primitiva ricorsiva.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item Per i Lemmi \ref{lem:log-clos} e \ref{lem:bound-quant} il predicato $R(\vec x,y) \ass P(\vec x,y) \wedge (\bforall{z}{y}.\neg P(\vec x,z))$ \`{e} primitivo ricorsivo. Infine osserviamo che $\varphi(\vec x,z) = \sum_{y < z+1} y \cdot \ca{R}(\vec x,y)$.
+\item Semplicemente usando il punto (i) e lo schema di rimpiazzamento.
+\end{enumerate}
+\qed\end{proof}
+
+Analizziamo ora un importante caso particolare del Lemma \ref{lem:def-mu-lim}. 
+
+\begin{lemma}[Schema di definizione per $\mu$-ricorsione limitata autorefente]\label{lem:def-mu-lim-auto}
+Siano $\gamma(\vec x,z,y)$ e $\delta(\vec x,z)$ due funzioni primitive ricorsive. Allora
+\begin{enumerate}[label=(\roman*)]
+\item la funzione $\varphi$ definita dallo schema $\varphi(\vec x,z) = \bmu{y}{z}.[\gamma(\vec x,\varphi(\vec x,z-1),y) = 0]$ \`{e} primitiva ricorsiva.
+\item la funzione $\varphi$ definita dallo schema $\varphi(\vec x,z) = \bmu{y}{\delta(\vec x,\varphi(\vec x,z-1))}.[\gamma(\vec x,\varphi(\vec x,z-1),y) = 0]$ \`{e} primitiva ricorsiva.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item Sia $R_\gamma(\vec x,z,y) \ass (\gamma(\vec x,z,y) = 0 \wedge (\bforall{z}{y}.\gamma(\vec x,z,y) \neq 0))$. La funzione $\ca{R}(\vec x,z,y)$ \`{e} primitiva ricorsiva. Infine osserviamo che
+$$
+\varphi(\vec x,z) = 
+\begin{cases}
+0 & \mbox{se } z = 0 \\
+\sum_{y < z} y \cdot \ca{R_\gamma}(\vec x,\varphi(\vec x,z-1),y) & \mbox{altrimenti} \\
+\end{cases}
+$$
+e quindi $\varphi(\vec x,z) \in \PRIMREC$ per lo schema di ricorsione primitiva e di rimpiazzamento.
+\item Si tratta di una semplice estensione del punto (i).
+\end{enumerate}
+\qed\end{proof}
+
+In sostanza il Lemma \ref{lem:def-mu-lim-auto} dice che quando definiamo una funzione per $\mu$-ricorsione limitata, sia il predicato di controllo che il bound possono essere dati in funzione del valore di $\varphi(\vec x,z-1)$. 
+
+Prendiamo ad esempio la definizione $\varphi(\vec x,z) = \bmu{y}{z+1}.[y > \varphi(\vec x,z-1)]$. Tale funzione si pu\`{o} definire come segue:
+$$
+\varphi(\vec x,z) = 
+\begin{cases}
+0 & \mbox{se } z = 0 \\
+z+1 & \mbox{altrimenti} \\
+\end{cases}
+$$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Codaggio delle sequenze e lo schema ``course-of-values"}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A questo punto ci si pu\`{o} domandare se una funzione famosa come quella di Fibonacci, data da
+$$ 
+F(x) =
+\begin{cases}
+0 & \mbox{se } x = 0 \\
+1 & \mbox{se } x = 1 \\
+F(x-1) + F(x-2) & \mbox{se } x \geq 2 \\
+\end{cases}
+$$
+sia o meno primitiva ricorsiva. A prima vista diremmo che non vi \`{e} uno schema che permette di definirla poich\`{e} nella sua definizione induttiva il calcolo pu\`{o} richiedere pi\`{u} di un valore della funzione stessa su argomenti pi\`{u} piccoli. Tuttavia stiamo per vedere che la funzione di Fibonacci \`{e} primitiva ricorsiva, ma per dimostrarlo abbiamo bisogno di un meccanismo di codifica (primitivo ricorsivo!) per codificare le sequenze di numeri naturali nei numeri naturali stessi.
+
+Prima di procedere abbiamo bisogno di dimostrare che alcune funzioni sono primitive ricorsive. Ricordiamo che per il Teorema Fondamentale dell'Aritmetica ogni numero naturale $n$ si scrive in maniera unica come prodotto di potenze di numeri primi: tale prodotto \`{e} chiamato \emph{decomposizione prima} del numero $n$.
+
+\begin{lemma}
+I seguenti predicati e funzioni sono primitivi ricorsivi:
+\begin{enumerate}[label=(\roman*)]
+\item il predicato $x \mid y \ass$ ``$x$ divide $y$"
+\item il predicato $\pprim{x} \ass$ ``$x$ \`{e} primo"
+\item la funzione $\fprim{x} =$ ``l'$x$-esimo numero primo"
+\item la funzione $\expn{x}{y} =$ ``il pi\`{u} grande numero $k$ tale che $x^k$ divide $y$"
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item Abbiamo $x \mid y \iff \bexists{z}{y+1}.x\cdot z = y$.
+\item Abbiamo $\pprim{x} \iff x \geq 2 \wedge \bforall{y}{x+1}.y \mid x \Rightarrow (y = 1 \vee y = x)$.
+\item Osserviamo che, per la famosa dimostrazione di Euclide sull'infinit\`{a} dei numeri primi, l'$x$-esimo numero primo \`{e} minore o uguale al prodotto dei primi $x-1$ numeri primi  aumentato di uno. Pertanto abbiamo $\fprim{x} = \bmu{y}{!\fprim{x-1}+2}.[y > \fprim{x-1} \wedge \pprim{y}]$.
+\item Abbiamo $\expn{x}{y} = \bmu{z}{y+1}.[x^z\mid y \wedge \neg (x^{z+1}\mid y)]$.
+\end{enumerate}
+\qed\end{proof}
+
+Utilizzando questi strumenti possiamo progettare funzioni primitive ricorsive di codifica e decodifica delle sequenze di numeri naturali. 
+
+Indicheremo nel seguito con $p_i$ l'$i+1$-esimo numero primo (pertanto $p_0 = 2$).
+ Definiamo la codifica della sequenza $(x_1,\ldots,x_n)$ come il numero
+ $\seq{x_1,\ldots,x_n} = p_0^n \cdot \prod_{i=1}^{n} p_i^{x_i}$. Per la decodifica, dato un numero $x$ poniamo:
+\begin{itemize}
+\item $Seq(x) \iff \forall n \leq x.[(n > 0 \wedge (x)_n \neq 0) \Rightarrow n \leq (x)_0]$
+\item $(x)_n = \expn{p_n}{x}$
+\item $ln(x) = (x)_0$
+\end{itemize}
+
+Dunque $Seq(x)$ \`{e} vero sse $x$ \`{e} la codifica di una qualche sequenza; se $Seq(x)$ vale,
+ allora $x = \seq{(x)_1,\ldots,(x)_{ln(x)}}$. I numeri naturali $n$ tali che $Seq(n)$ sono detti \emph{numeri di sequenza}.
+
+Si pu\`{o} anche definire l'operazione di \emph{concatenazione di numeri di sequenza} come segue:
+$$
+x \ast y =
+\begin{cases}
+p_0^{ln(x)+ln(y)} \cdot \prod_{i < ln(x)} p_{i+1}^{(x)_{i+1}} \cdot \prod_{j < ln(y)} p_{ln(x) + j+1}^{(y)_{j+1}} & \mbox{se $Seq(x) \wedge Seq(y)$} \\
+0 & \mbox{altrimenti} \\
+\end{cases}
+$$
+Qiondi $x \ast y$ \`{e} il numero di sequenza della concatenazione delle sequenze di cui $x$ ed $y$ sono le codifiche. In altre parole $\langle x_1,\ldots,x_n\rangle \ast \langle y_1,\ldots,y_m\rangle = \langle x_1,\ldots,x_n, y_1,\ldots,y_m\rangle$.
+
+Con il prossimo teorema, che fa uso della codifica delle sequenze, dimostriamo che la classe delle funzioni primitive ricorsive \`{e} chiusa per definizioni ricorsive in cui il calcolo di  $f(\vec x,y+1)$ possa coinvolgere non solo il valore $f(\vec x,y)$, ma anche possibilmente tutti i valori nell'insieme finito $\{f(\vec x,z) \st z < y \}$.
+
+Allo scopo del teorema definiamo la \emph{funzione storia} $\hat{f}$ di $f$ come seque:
+$$ \hat{f}(\vec x,y) = \langle f(\vec x,0),\ldots,f(\vec x,y)\rangle $$
+
+\begin{theorem}[Course-of-values recursion]\label{thm:course-of-vals}
+Siano $g,h$ funzioni primitive ricorsive e sia $f$ definita dallo schema:
+\begin{itemize}
+  \item[ ] $f(\vec x,0) = g(\vec x)$ 
+  \item[ ] $f(\vec x,y+1) = h(\vec x,y,\hat{f}(\vec x,y))$
+\end{itemize}
+Allora $f$ e $\hat{f}$ sono entrambe primitive ricorsive.
+\end{theorem}
+
+\begin{proof}
+\`{E} sufficiente dimostrare che $\hat{f}$ \`{e} primitiva ricorsiva, poich\'{e} $f$ lo sar\`{a} di conseguenza. Ora notiamo che 
+
+\begin{eqnarray*}
+\hat{f}(\vec x,0) & = & \seq{f(\vec x,0)} \\
+ & = & \seq{g(\vec x)}
+\end{eqnarray*}
+\begin{eqnarray*}
+\hat{f}(\vec x,y+1) & = & \seq{f(\vec x,0),\ldots,f(\vec x,y),f(\vec x,y+1)} \\
+ & = & \hat{f}(\vec x,y) \ast \seq{f(\vec x,y+1)} \\
+ & = & \hat{f}(\vec x,y) \ast \seq{h(\vec x,y,\hat{f}(\vec x,y))}
+\end{eqnarray*}
+
+Pertanto il calcolo di $\hat{f}(\vec x,y+1)$ utilizza solo il valore $\hat{f}(\vec x,y)$ e le funzioni primitive ricorsive $\ast$ e $h$. Quindi $\hat{f}$ \`{e} primitiva ricorsiva dato che \`{e} definita con lo schema [$(\mathbf{r3})$. Infine $f$ \`{e} primitiva ricorsiva perch\'{e} $f(\vec x,y) = (\hat{f}(\vec x,y))_{y+1}$.
+\end{proof}
+
+Come conseguenza del Teorema \ref{thm:course-of-vals} la funzione di Fibonacci (e tante altre) \`{e} primitiva ricorsiva.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Le funzioni ricorsive totali e parziali}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Un'altra famosa funzione \`{e} la \emph{funzione di Ackermann}, definita come segue:
+$$
+A(x,y) =
+\begin{cases}
+y+1 & \mbox{se $x = 0$} \\
+A(x-1,1)        & \mbox{se $x > 0$ e $y = 0$} \\
+A(x-1,A(x,y-1)) & \mbox{se $x >0$ e $y>0$} \\
+\end{cases}
+$$
+\`{E} abbastanza immediato intuire che si possa scrivere un programma per calcolatore che computi la funzione di Ackermann. Molto meno immediato \`{e} intuire che questa funzione non \`{e} primitiva ricorsiva, eppure ci\`{o} si pu\`{o} dimostrare. Questo vuol dire che le funzioni ricorsive primitive non sono sufficienti a catturare tutte quelle calcolabili dalle macchine di Turing. Un'altra osservazione importante \`{e} che alcune funzioni calcolate da macchine di Turing sono \emph{parziali}, ovvero vi sono degli input su cui esse non danno alcun risulato: questo perch\`{e} alcune macchine di Turing non si arrestano mai su certi input.
+
+Per questi motivi andiamo ad esaminare una classe pi\`{u} ampia di funzioni, che riesca a comprendere ad esempio anche la funzione di Ackermann ed in generale anche le funzioni parziali calcolate dalle macchine di Turing. Per procedere su questa strada abbiamo bisogno di un nuovo fondamentale strumento, la \emph{$\mu$-ricorsione} che andiamo a definire qui di seguito.
+
+\begin{definition}[$\mu$-ricorsione]\label{def:mu-rec}
+Sia $P(\vec x,y)$ un predicato (o sottoinsieme di $\nat^{n+1}$). Allora definiamo la funzione $\mu y.P(\vec x,y): \nat^n \to \nat$ come segue
+$$
+\mu y.P(\vec x,y) = 
+\begin{cases}
+\mbox{il minimo $y$ tale che $P(\vec x,y)$}& \mbox{se un tale $y$ esiste} \\
+\uparrow & \mbox{altrimenti} \\
+\end{cases}
+$$
+\end{definition}
+
+Appare immediatamente evidente che lo schema della Definizione \ref{def:mu-rec} pu\`{o} produrre funzioni parziali. Tale tipo di $\mu$-ricorsione \`{e} anche detta \emph{illimitata} perch\`{e} esistono alcuni importanti casi paticolari della $\mu$-ricorsione, ottenuti ponendo qualche vincolo, che producono esclusivamente funzioni totali:
+\begin{itemize}
+\item quando il predicato $P$ \`{e} tale che $\forall \vec x.\exists y.P(\vec x,y)$, allora lo schema diventa la \emph{$\mu$-ricorsione totale},
+\item quando il predicato $P$ \`{e} della forma $P(\vec x,z,y) \ass P'(\vec x,y) \vee y = z$, allora lo schema diventa la \emph{$\mu$-ricorsione limitata}. 
+\end{itemize}
+Nei due casi appena elencati lo schema di $\mu$-ricorsione produce solo funzioni totali. 
+
+Gli schemi di $\mu$-ricorsione qui sopra descritti non producono per\`{o} necessariamente delle funzioni adatte ai nostri scopi. Difatti \`{e} necessario per noi che il predicato $P(\vec x,y)$ usato nella definizione di $\mu y.P(\vec x,y)$ abbia una particolare forma.
+
+\begin{definition}[Funzioni ricorsive parziali]\label{def:ric-par}
+L'insieme $\PR$ delle \emph{funzioni ricorsive parziali} \`{e} il pi\`{u} piccolo insieme di funzioni sui numeri naturali che soddisfa le propriet\`{a} ($\mathbf{r1}$)-($\mathbf{r3}$) della Definizione \ref{def:ric-prim} ed in pi\`{u} la seguente propriet\`{a}:
+\begin{itemize}
+\item[$(\mathbf{r4})$] Se $\psi \in \PR$ e $P(\vec x,y) \ass (\forall z \leq y.\ \conv{\psi(\vec x,z)}) \wedge \psi(\vec x,y) = 0$, allora la funzione $\varphi$ data da $\varphi(\vec x) = \mu y.P(\vec x,y)$ appartiene a $\PR$.
+\end{itemize}
+\end{definition}
+
+Chiamiamo $\REC$ l'insieme delle funzioni ricorsive parziali che sono totali. Abbiamo evidentemente $\REC \subset \PR$.
+
+\begin{lemma}\label{lem:ric-tot}
+L'insieme $\REC$ delle funzioni ricorsive totali \`{e} il pi\`{u} piccolo insieme di funzioni sui naturali che soddisfa le propriet\`{a} ($\mathbf{r1}$)-($\mathbf{r3}$) della Definizione \ref{def:ric-prim} e la seguente restrizione della propriet\`{a} ($\mathbf{r4}$):
+\begin{itemize}
+\item[$(\mathbf{r4}')$] Se $\psi \in \REC$ e $\forall \vec x.\exists y.\psi(\vec x,y) = 0$, allora la funzione $\varphi$ data da $\varphi(\vec x) = \mu y.[\psi(\vec x,y) = 0]$ appartiene a $\REC$.
+\end{itemize}
+\end{lemma}
+
+Si noti che l'unica causa possibile di parzialit\`{a} per una funzione in $\PR$ \`{e} proprio lo schema di $\mu$-ricorsione illimitata, per cui con la $\mu$-ricorsione totale si catturano tutte le funzioni ricorsive totali.
+
+Riportiamo, senza dimostrarlo, il fatto che la funzione di Ackermann appartiene a $\REC$. Siccome essa non appartiene a $\PRIMREC$, abbiamo $\PRIMREC \subset \REC$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,318 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 5}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 5}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 23 novembre 2011}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\'{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 5}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Macchine di Turing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Le Macchine d Turing sono gli automi pi\`{u} potenti che tratteremo in tutto il corso. Tali automi possono essere considerati un'astrazione matematica dei nostri computer, proprio come le teorie fisiche sono un'astrazione del nostro mondo.
+
+Come per le altre classi di automi, esistono le Macchine d Turing \emph{deterministiche} e quelle \emph{non-deterministiche}; noi vedremo solo quelle deterministiche e pertanto non menzioneremo mai pi\`{u} questa distinzione in seguito.
+
+\begin{definition}[TM]\label{def:TM}
+Una Macchina di Turing (TM, in breve) \`{e} una settupla $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input,
+\item $\Gamma$ \`{e} l'alfabeto di nastro (ed abbiamo $\Sigma \subseteq \Gamma$),
+\item $\delta: Q\times\Gamma \hookrightarrow Q\times\Gamma\times\{L,R\}$ \`{e} la funzione di transizione ed $\{L,R\}$ \`{e} l'insieme dei simboli di \emph{direzione},
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $B \in \Gamma - \Sigma$ \`{e} il blank,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+Infine si richiede che $(F \times \Gamma) \cap \dom{\delta} = \emptyset$.
+\end{definition}
+
+La condizione $(F \times \Gamma) \cap \dom{\delta} = \emptyset$ vuol dire che non vi devono essere delle transizioni indicate da $\delta$ a partire dalle coppie $(q,X)$ dove $q$ \`{e} uno stato finale.
+
+Si pu\`{o} notare una certa somiglianza con la definizione di PDA. Difatti una TM \`{e} in un certo senso una specie di automa a pila dove la pila \`{e} infinita e la si pu\`{o} scorrere avati e indietro. Si utilizzano le ultime lettere maiuscole dell'alfabeto inglese $X,Y,Z,\ldots$ per indicare generici elementi di $\Gamma$ mentre si utilizzano le prime lettere minuscole dell'alfabeto greco $\alpha,\beta,\gamma,\ldots$ per indicare generici elementi di $\Gamma^*$.
+
+Il meccanismo di base di una Macchina di Turing \`{e} il seguente:
+\begin{itemize}
+\item vi \`{e} un nastro, diviso in celle di uguale dimensione, posto in posizione orizzontale che si estende all'infinito sia verso destra che verso sinistra;
+\item vi \`{e} una testina che prima legge una cella del nastro poi, in base a ci\`{o} che c'\`{e} scritto, allo stato in cui si trova la macchina ed a ci\`{o} che dice la funzione $\delta$, scrive un simbolo nella cella, ed infine si sposta verso sinistra o destra sul nastro.
+\end{itemize}
+
+La prossima tappa \`{e} definire il linguaggio accettato da una TM. A tal fine dobbiamo precisare cosa significa dire che una stringa \`{e} accettata da una TM.
+
+Al contrario di quanto fatto per gli automi finiti, ed analogamente al caso dei PDA, per le Macchine di Turing non si pu\`{o} definire una funzione di transizione estesa $\hat{\delta}: Q\times\Sigma^* \times \Gamma \to Q\times\Gamma\times\{L,R\}$. In luogo della funzione di transizione estesa si definisce una relazione binaria $\vdash$ su $\Gamma^* \times Q \times \Gamma^*$ che svolge un compito analogo a quello della funzione di transizione estesa nel caso degli automi finiti.
+
+\begin{definition}\label{def:ID}
+Una \emph{descrizione istantanea} (ID, in breve) \`{e} una tripla $(\ga,q,\gb) \in \Gamma^* \times Q \times \Gamma^*$.
+\end{definition}
+
+In una ID $(\ga,q,\gb)$ abbiamo che:
+\begin{itemize}
+\item $q$ indica lo stato attuale,
+\item $\ga\gb$ \`{e} la sequenza di simboli contenuti nelle celle che appartengono alla porzione di nastro compresa tra il simbolo non-blank pi\`{u} a sinistra e il simbolo non-blank pi\`{u} a destra.
+\item la testina si trova sopra la cella che contiene il primo simbolo della stringa $\gb$.
+\end{itemize}
+
+\begin{definition}[Relazione di transizione estesa]\label{def:trans-est3}
+Data una TM $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ definiamo la sua \emph{relazione di transizione estesa} $\vdash$ su $\Gamma^* \times Q \times \Gamma^*$ come la pi\`{u} piccola che soddisfa le seguenti propriet\`{a}:
+\begin{itemize}
+\item se $\delta(q,X_i)=(p,Y,L)$, allora $(X_1\cdots X_{i-1},q,X_{i}X_{i+1}\cdots X_{n}) \vdash (X_1\cdots X_{i-2},p,X_{i-1}YX_{i+1}\cdots X_{n})$.\\ Si hanno due casi particolari:
+\begin{itemize}
+\item[(1)] se $i=1$, allora $(\epsilon,q,X_1\cdots X_{n}) \vdash (\epsilon,p,BYX_{2}\cdots X_{n})$
+\item[(2)] se $i=n$ e $Y=B$, allora $(X_1\cdots X_{n-1},q,X_n) \vdash (X_{1}\cdots X_{n-2},p,X_{n-1})$
+\end{itemize}
+\item se $\delta(q,X_i)=(p,Y,R)$, allora $(X_1\cdots X_{i-1},q,X_{i}X_{i+1}\cdots X_{n}) \vdash (X_1\cdots X_{i-1}Y,p,X_{i+1}\cdots X_{n})$.\\ Si hanno due casi particolari:
+\begin{itemize}
+\item[(1)] se $i=1$ e $Y=B$, allora $(\epsilon,q,X_1\cdots X_n) \vdash (\epsilon,p,X_{2}\cdots X_{n})$
+\item[(2)] se $i=n$, allora $(X_1\cdots X_{n-1},q,X_{n}) \vdash (X_1\cdots X_{n-1}Y,p,\epsilon)$
+\end{itemize}
+\end{itemize}
+dove gli $X_j$ sono elementi di $\Gamma$ e $p,q \in Q$.
+\end{definition}
+
+La relazione $\vdash$ spiega completamente il funzionamento di una TM. Ad esempio $(\ga X,q,Y\gb) \vdash (\ga,p,XZ\gb)$ dice che se l'automa si trova nello stato $q$ e la testina legge il simbolo $Y$, allora la TM
+\begin{itemize}
+\item passa nello stato $q$,
+\item sostituisce il simbolo $Y$ con il simbolo $Z$ nella cella che ha appena letto,
+\item si sposta di una cella verso sinistra.
+\end{itemize}
+Chiaramente la sequenza di azioni descritta qui sopra si pu\`{o} verificare solo se $\delta(q,Y) = (p,Z,L)$.
+
+Facciamo seguire un esempio di Macchina di Turing.
+
+\begin{example}\label{ex:macchina-es}
+Sia $\cM = (\{q_0,q_1,q_2,q_3,q_4\}, \{0,1\}, \{0,1,X,Y,B\}, \delta,q_0, B, \{q_4\})$ con la funzione di transizione definita come segue:
+
+\begin{center}
+\begin{tabular}{c | c c c c c |}
+       & 0 & 1 & X & Y & B \\
+\hline
+$q_0$ & $(q_1,X,R)$ &  &  & $(q_3,Y,R)$ &  \\
+$q_1$ & $(q_1,0,R)$ & $(q_2,Y,L)$ &  & $(q_1,Y,R)$ &  \\
+$q_2$ & $(q_0,0,L)$ &  & $(q_0,X,R)$ & $(q_2,Y,L)$ &  \\
+$q_3$ &  &  &  & $(q_3,Y,R)$ & $(q_4,B,R)$ \\
+$q_4$ &  &  &  &  &  \\ 
+\hline
+\end{tabular}
+\end{center}
+In questo caso abbiamo che $\cL(\cM) = \{0^n1^n \st n \geq 1\}$.
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Una rappresentazione grafica delle TM}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Come nel caso dei PDA, la descrizione formale di una Macchina di Turing pu\`{o} essere complicata da cogliere immediatamente. Vediamo ora brevemente come si possono disegnare delle TM con una notazione che dia le stesse informazioni di quella formale, ma che sia pi\`{u} semplice da capire. Introdurremo questa notazione con un esempio, che speriamo dia l'idea di come applicare la notazione grafica ad ogni caso possibile.
+
+\begin{example}\label{ex:macchina-es-grafica}
+Ecco la rappresentazione grafica della macchina dell'esempio \ref{ex:macchina-es}.
+\entrymodifiers={++[o][F-]}
+$$
+\xymatrix{
+*\txt{ } \ar[r] & q_0 \ar[dd]_{Y/Y,R}\ar[r]^{0/Y,R} & q_1 \ar@(ur,ul)[]_{\txt{$Y/Y,R$ \\ $0/0,R$}} \ar[r]^{1/Y,L}   & q_2 \ar@(dr,ur)[]_{\txt{$Y/Y,L$ \\ $0/0,L$}} \ar@/^2pc/[ll]^{X/X,R} \\
+*\txt{ }         & *\txt{ } &*\txt{ } &*\txt{ } \\
+*\txt{ }         & q_3 \ar@(dr,dl)[]^{Y/Y,R} \ar[r]^{B/B,R}  & *++[o][F=]{q_4} \\
+}
+$$
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Computazioni e terminazione}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}\label{def:computation}
+Sia $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ una TM. Una \emph{computazione} \`{e} sequenza
+$$ \pi = (\ga_1,q_1,\gb_1),\ldots,(\ga_n,q_n,\gb_n),\ldots $$
+di ID legate dalla relazione $\vdash$, cio\`{e} $(\ga_i,q_i,\gb_i) \vdash (\ga_{i+1},q_{i+1},\gb_{i+1})$ per ogni coppia di indici $i,i+1$ in $\pi$.
+\end{definition}
+
+Si noti che, siccome la TM \`{e} deterministica, ogni computazione \`{e} univocamente determinata dalla prima ID che vi compare.
+
+In seguito noteremo $\pi_i = (\ga_i,q_i,\gb_i)$, cio\`{e} $\pi_i$ \`{e} l'$i$-esima ID di $\pi$. Si noti che vi possono essere delle computazioni infinite. Diciamo che una computazione $\pi$ 
+\begin{itemize}
+\item \emph{termina} se esiste una ID $(\ga_i,q_i,\gb_i)$ tale che $(\ga_i,q_i,\gb_i) \nvdash$, ovvero non esiste alcuna ID $(\ga_{i+1},q_{i+1},\gb_{i+1})$ tale che $(\ga_i,q_i,\gb_i) \vdash (\ga_{i+1},q_{i+1},\gb_{i+1})$.
+\item \emph{non termina} altrimenti.
+\end{itemize}
+
+Si noti che il requisito $(F \times \Gamma) \cap \dom{\delta} = \emptyset$ implica che se $(\ga,q,\gb)$ \`{e} una ID tale che $q \in F$, allora $(\ga,q,\gb) \nvdash$. Pertanto tutte le computazioni che raggiungono uno stato finale terminano.
+
+\begin{definition}[Decisore]\label{def:decisore}
+Una TM $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ \`{e} un \emph{decisore} se per ogni  $w \in \Sigma^*$ la computazione che comincia in $(\epsilon,q_0,w)$ termina.
+\end{definition}
+
+La TM dell'esempio \ref{ex:macchina-es} \`{e} un decisore.
+
+Indichiamo con $\vdash^*$ la chiusura riflessiva e transitiva della relazione $\vdash$, cio\`{e} la pi\`{u} piccola relazione riflessiva e transitiva contenente $\vdash$.
+
+\begin{definition}[Accettazione]\label{def:lang-acc-TM}
+Diciamo che una stringa $w \in \Sigma^*$ \`{e} \emph{accettata} da una TM $\cM$ sse esiste una configurazione $(\ga,p,\gb)$ tale che $p \in F$ e $(\epsilon,q_0,w) \vdash^* (\ga,p,\gb)$.
+\end{definition}
+
+In altre parole $w$ \`{e} accettata se la computazione eseguita da $\cM$ partire dalla ID iniziale $(\epsilon,q_0,w)$ termina raggiungendo uno stato finale. Si noti vi possono essere due diverse situazioni in cui $w$ NON \`{e} accettata:
+\begin{enumerate}
+\item la computazione eseguita da $\cM$ partire dalla ID iniziale $(\epsilon,q_0,w)$ termina raggiungendo uno stato NON finale;
+\item la computazione eseguita da $\cM$ partire dalla ID iniziale $(\epsilon,q_0,w)$ NON termina affatto.
+\end{enumerate} 
+
+\begin{definition}[Linguaggio di una TM]\label{def:lang-acc-TM}
+Sia $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ una TM. Il linguaggio \emph{accettato} da $\cM$, indicato con $\cL(\cM)$, \`{e} l'insieme delle stringhe accettate da $\cM$, ovvero $\cL(\cM) = \{w \in \Sigma^* \st \exists p \in F.\exists \ga,\gb \in \Gamma^*.\ (\epsilon,q_0,w) \vdash^* (\ga,p,\gb) \}$.
+\end{definition}
+
+Per cui tra le stringhe che non appartengono a $\cL(\cM)$ vi sono tutte quelle che inducono $\cM$ ad eseguire una computazione che non termina.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Linguaggi (semi-)decidibili}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Andiamo ora a studiare la classe dei linguaggi accettati dalle TM.
+
+\begin{definition}[Linguaggio semi-decidibile]\label{def:semi-dec-ling}
+Un linguaggio $L$ \`{e} \emph{semi-decidibile} sse esiste una TM $\cM$ tale che $L = \cL(\cM)$.
+\end{definition}
+
+\begin{definition}[Linguaggio decidibile]\label{def:dec-ling}
+Un linguaggio $L$ \`{e} \emph{decidibile} sse esiste un decisore $\cM$ tale che $L = \cL(\cM)$.
+\end{definition}
+
+Indichiamo con $\SDEC$ la classe dei linguaggi semi-decidibili ed indichiamo con $\DEC$ la classe dei linguaggi decidibili. Facciamo notare che nel libro di testo \cite{HMU} i linguaggi semi-decidibili vengono chiamati \emph{ricorsivamente enumerabili}, mentre in linguaggi decidibili vengono chiamati \emph{ricorsivi}. Si tratta di una pura questione di termini e la teminologia nell'area della calcolabilit\`{a} non \`{e} del tutto standard, ma ha una lunga storia (vedere \cite{Soare96}).
+
+\begin{remark}\label{rem:semi-dec-dec}
+Se un linguaggio \`{e} decidibile, allora \`{e} anche semi-decidibile.
+\end{remark}
+
+\begin{theorem}\label{thm:compl-dec}
+Se un linguaggio \`{e} decidibile, allora anche il suo complementare \`{e} decidibile.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio decidibile. Allora esiste un decisore $\cM$ tale che $\cL(\cM) = L$. Costruiamo un decisore $\cM^c$ a partire da $\cM$ come segue:
+\begin{itemize}
+\item Gli stati di $\cM^c$ sono gli stessi di $\cM$, pi\`{u} un nuovo stato $r$;
+\item Le transizioni di $\cM^c$ sono le stesse di $\cM$, pi\`{u} una nuova transizione $(q,X)\mapsto (r,X,R)$ per ogni coppia $(q,X)$ dove $q$ \`{e} un o stato non-finale in cui si pu\`{o} arrivare in $\cM$ e tale che non vi \`{e} una ransizione prevista per $(q,X)$ in $\cM$;
+\item L'unico stato finale di $\cM^c$ \`{e} $r$.
+\end{itemize}
+Allora si vede subito che $\cM^c$ \`{e} un decisore tale che $\cL(\cM^c) = L^c$.
+\qed\end{proof}
+
+\begin{theorem}\label{thm:semi-compl-dec}
+Se un linguaggio $L$ e il suo complementare sono entrambi semi-decidibili, allora $L$ \`{e} decidibile.
+\end{theorem}
+
+\begin{proof}
+Siano $L$ ed $L^c$ entrambi semi-decidibili. Allora esistono due TM $\cM$ e $\cM'$ tali che $\cL(\cM) = L$ e $\cL(\cM') = L^c$. Sia $w$ una stringa qualsiasi. Siccome $w$ sta in almeno uno tra $L$ ed $L^c$, almeno una delle due macchine prendendo in input $w$ si arresta dopo una computazione finita raggiungendo uno stato finale. Possiamo costruire una terza TM $\cM''$ seguendo le seguenti indicazioni: data una stringa $w$ in input
+\begin{itemize}
+\item $\cM''$ simula la computazione in parallelo di $\cM$ e $\cM'$ con input $w$;
+\item se la computazione in $\cM$ termina in uno stato finale, allora $\cM''$ termina in uno stato finale;
+\item \item se la computazione in $\cM'$ termina in uno stato finale, allora $\cM''$ termina in uno stato non-finale.
+\end{itemize}
+\`{E} evidente che le due situazioni non possono presentarsi entrambe, ma almeno una di esse si presenter\`{a} di sicuro. Pertanto $\cM''$ \`{e} un decisore ed inotre $\cL(\cM'') = L$.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Robustezza del modello di Turing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nelle lezioni passate abbiamo visto come i modelli di automi visti ammettesero modifiche che non modificavano la classe dei linguaggi ricoosciuti (per esempio determinismo/non-determinismo, $\varepsilon$-mosse, accettazione per pila vuota/stati finali). Anche nel caso delle Macchine di Turing discutiamo, per\`{o} in maniera breve ed informale, alcune modifiche ``senza conseguenze".
+
+Il particolare modello di macchina di Turing introdotto nella Definizione \ref{def:TM} \`{e} in un certo senso irrilevante per il prosieguo del nostro corso, poich\'{e} noi ci occuperemo solo della potenza di calcolo e non dell'efficienza del modello (come invece fa la Teoria degli Automi e la Teoria della Complessit\`{a})). Citeremo i risultati ottenuti in letteratura; per alcune dimostrazioni e per ulteriori informazioni il lettore interessato pu\`{o} fare riferimento a \cite{HMU,Minsky67,Arbib69} per le loro prove e per ulteriori informazioni.
+
+\textbf{Stati.} Anche se un solo stato non \`{e} in genere sufficienti per riconoscere ogni linguaggio semi-decidibile, due stati lo sono. Cos\`{i} non \`{e} rilevante se si limita il nostro modello di macchina con un numero fisso $n\geq 2$ di stati, si permette un qualsiasi numero di stati.
+
+\textbf{Simboli.} Chiaramente dobbiamo avere almeno due simboli, dal momento che noi consideriamo il blank come un simbolo. Due simboli sono sufficienti per per riconoscere ogni linguaggio semi-decidibile, dal momento che \`{e} possibile economizzare sul numero di simboli, aumentando il numero di stati.
+
+\textbf{Cancellazione.} Si pu\`{o} indifferentemente ammettere o meno che la testina possa cancellare simboli dal nastro\`{e}, nel senso che tutti i linguaggi semi-decidibili possono essere opportunamente riconosciuti da macchine che non cancellano mai. Il risultato dimostra che in linea di principio non abbiamo bisogno di materiale cancellabile, come nastri magnetici o dischi, per la memoria esterna del computer.
+
+\textbf{Nastri e testine.} Qui la libert\`{a} \`{e} pressoch\'{e} assoluta. Lo sintetizziamo nel seguente risultato. Una Macchina di Turing con un numero finito di nastri, ognuno di dimensione infinita e con il suo numero finito di testine che lo scansionano contemporaneamente, pu\`{o} essere simulata da una Macchina di Turing con un solo nastro lineare, infinito in una sola direzione, e analizzato da una sola testina. Tuttavia, abbiamo bisogno delle due direzioni di movimento, dal momento che la limitazione ad una sarebbe compatibile solo con il comportamento finito o periodico sulle cellule al di fuori degli inputs.
+
+\textbf{Determinismo.} Il nostro modello di una macchina di Turing \`{e} deterministico, nel senso che la funzione di transizione associa un solo risultato per ogni coppia stato-simbolo letto. Elementi di randomizzazione a nei dispositivi di calcolo sono stati introdotti da Shannon\textendash De Leeuw, Moore, Shannon\textendash Shapiro. Ci sono fondamentalmente due modelli. Le Macchine di Turing \emph{non-deterministiche} si comportano, in una situazione ambigua in cui pi\`{u} transizioni diverse sono applicabili, scegliendo casualmente una di loro: la loro potenza di calcolo, almeno per linguaggi sull'alfabeto $\{0,1\}$, non supera la potenza di quelle deterministiche. Le Macchine di Turing \emph{probabilistiche} differiscono da quelle non-deterministiche in quanto lo stato successivo ha una probabilit\`{a}, e quindi le istruzioni in conflitto non hanno la stessa probabilit\`{a} di essere scelte dalla macchina.
+
+In conclusione, quando consideriamo una Macchina di Turing $\cM = (Q,\Sigma,\Gamma,\delta,q_0,B,F)$ \`{e} possibile assumere 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Modello di Turing e computers}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Gran parte dell'interesse nella teoria della calcolabilit\`{a} ed in particolare nelle Mcchine di Turing \`{e} dovuto al fatto che esse sono considerate un modello matematico dei nostri moderni computers. Pertanto i risultati teorici che mostrano cosa le TM possono e non possono fare, ci fanno anche capire cosa i computer possono e non possono fare. Tutto ci\`{o} \`{e} legato alla \emph{fedelt\`{a}} del modello astratto alle caratteristiche dei reali calcolatori. Facciamo per\`{o} notare la differenza fondamentale tra i computer e le TM: ogni calcolatore sulla Terra ha una memoria \emph{finita} e pu\`{o} effettuare calcoli su numeri finiti compresi entro certi limiti, oltre i quali si ottengono degli errori di \emph{overflow}. Le TM invece, con il loro nastro infinito, non hanno questi problemi e possono infatti maneggiare qualsiasi numero naturale (oltre ogni limite imponibile) e simulare una memoria di qualsiasi dimensione. Considerato questo, non esiste alcun calcolatore sulla terra che possa fare tutto quello che fanno le TM, ma una cosa \`{e} sicuramente vera: i problemi che  dimostriamo irrisolvibili per tutte le TM sono irrisolvibili anche per i nostri calcolatori concreti! Per approfondire leggete la Sezione 8.6 di \cite{HMU} (escludendo la sezione 8.6.3).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrv}%splncs
+\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

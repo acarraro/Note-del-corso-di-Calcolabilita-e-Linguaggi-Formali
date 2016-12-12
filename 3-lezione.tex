@@ -1,0 +1,383 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+\usepackage{multirow}
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 3}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 3}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 26 ottobre 2011}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 3}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Automi a a pila deterministici e non}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Tra gli automi a pila si distinguono due categorie: quelli \emph{deterministici} (DPDA, abbreviazione di Deterministic Push-Down Automata) e quelli \emph{non-deterministici} (NPDA, abbreviazione di Non-deterministic Push-Down Automata). I primi sono un caso particolare dei secondi.
+
+\begin{definition}[NPDA]\label{def:NPDA}
+Un automa a pila non-deterministico (NPDA, in breve) \`{e} una settupla $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input,
+\item $\Gamma$ \`{e} l'alfabeto di pila,
+\item $\delta: Q \times (\Sigma \cup \{\epsilon\}) \times \Gamma \to \Psf{Q \times \Gamma^*}$ \`{e} la funzione di transizione,
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $Z_0 \in \Gamma$ \`{e} il simbolo iniziale nella pila,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+\end{definition}
+
+Nella Definizione \ref{def:NPDA} vediamo chiamato in causa un altro alfabeto $\Gamma$, che rappresenta i simboli che possono essere messi nella pila: si noti che $\Gamma$, in quanto alfabeto, \`{e} un insieme finito. Per evitare confusione si assume che $\Gamma \cap \Sigma = \emptyset$; si utilizzano le ultime lettere maiuscole dell'alfabeto inglese $X,Y,Z,\ldots$ per indicare generici elementi di $\Gamma$ mentre si utilizzano le prime lettere minuscole dell'alfabeto greco $\alpha,\beta,\gamma,\ldots$ per indicare generici elementi di $\Gamma^*$.
+
+La prossima tappa \`{e} definire il linguaggio accettato da un automa a pila non-deterministico. A tal fine dobbiamo precisare cosa significa dire che una stringa \`{e} accettata da un automa.
+
+Al contrario di quanto fatto per gli automi finiti, nel caso dei PDA non si pu\`{o} definire una funzione di transizione estesa $\hat{\delta}: Q \times \Sigma^* \times \Gamma \to \Psf{Q \times \Gamma^*}$. Il motivo \`{e} che a causa transizioni con etichetta di input $\epsilon$, ci potrebbero essere delle triple $(q,w,X)$ tali per cui $\hat{\delta}(q,w,X)$ \`{e} un sottoinsieme infinito di $Q \times \Gamma^*$, dato che il contenuto della pila pu\`{o} crescere arbitrariamente.
+
+Per tale motivo in luogo della funzione di transizione estesa si definisce una relazione binaria $\vdash$ su $Q \times \Sigma^* \times \Gamma^*$ che svolge un compito analogo a quello della funzione di transizione estesa nel caso degli automi finiti.
+
+\begin{definition}[Relazione di transizione estesa]\label{def:trans-est3}
+Dato un NPDA $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ definiamo la sua \emph{relazione di transizione estesa} $\vdash$ su $Q \times \Sigma^* \times \Gamma^*$ come la pi\`{u} piccola che soddisfa le seguenti propriet\`{a}:
+\begin{itemize}
+\item se $(p,\ga) \in \delta(q,\epsilon,X)$, allora $(q,x,X\gb) \vdash (p,x,\ga\gb)$
+\item se $(p,\ga) \in \delta(q,a,X)$, allora $(q,ax,X\gb) \vdash (p,x,\ga\gb)$
+\end{itemize}
+dove $x$ e $a$ sono, rispettivamente, elementi qualunque di $\Sigma^*$ e $\Sigma$.
+\end{definition}
+
+Una tripla $(q,x,\gb)$ \`{e} detta una \emph{descrizione istantanea} (o \emph{configurazione}) dell'automa: $q$ indica lo stato attuale, $x$ una stringa di input da analizzare e $\gb$ \`{e} il contenuto attuale della pila, dove il simbolo pi\`{u} a sinistra sta in testa alla pila e quello pi\`{u} a destra sta in fondo.
+
+La relazione $\vdash$ spiega completamente il funzionamento di un NPDA. Infatti $(q,ax,X\gb) \vdash (p,x,\ga\gb)$ dice che se l'automa si trova nello stato $q$, in testa alla pila c'\`{e} il simbolo $X$, ed in input arriva una stringa che inizia con il simbolo $a$, allora l'automa 
+\begin{itemize}
+\item passa nello stato $p$,
+\item sostituisce il simbolo $X$ in testa alla pila con la stringa $\ga$, il cui simbolo pi\`{u} a sinistra diviene la nuova testa della pila,
+\item scarta il simbolo $a$ appena analizzato dall'input, cosicch\`{e} il prossimo simbolo in input sar\`{a} il primo della stringa $x$.
+\end{itemize}
+Chiaramente la sequenza di azioni descritta qui sopra si pu\`{o} verificare solo se $(p,\ga) \in \delta(q,a,X)$; inoltre a partire dalla medesima configurazione $(q,ax,X\gb)$ l'automa potrebbe compiere una transizione diversa ed ha tante scelte quanti sono gli elementi dell'insieme $\delta(q,a,X)$. Questo fenomeno spiega l'aggettivo ``non-deterministico" inserito nel nome degli NPDA.
+
+Similmente una transizione $(q,x,X\gb) \vdash (p,x,\ga\gb)$ dice che se l'automa si trova nello stato $q$, in testa alla pila c'\`{e} il simbolo $X$, ed in input arriva una stringa che inizia con il simbolo $a$, allora l'automa 
+\begin{itemize}
+\item passa nello stato $p$,
+\item sostituisce il simbolo $X$ in testa alla pila con la stringa $\ga$, il cui simbolo pi\`{u} a sinistra diviene la nuova testa della pila,
+\item il prossimo simbolo in input sar\`{a} il primo della stringa $x$.
+\end{itemize}
+Chiaramente la sequenza di azioni descritta qui sopra si pu\`{o} verificare solo se $(p,\ga) \in \delta(q,\epsilon,X)$.
+
+Indichiamo con $\vdash^*$ la chiusura riflessiva e transitiva della relazione $\vdash$, cio\`{e} la pi\`{u} piccola relazione riflessiva e transitiva contenente $\vdash$.
+
+\begin{definition}[Accettazione per stati finali]\label{def:lang-acc-stati-PDA}
+Diciamo che una stringa $w \in \Sigma^*$ \`{e} \emph{accettata} (\emph{per stati finali}) da un NPDA $\cA$ sse esiste una configurazione $(p,\epsilon,\ga)$ tale che $p \in F$ e $(q_0,w,Z_0) \vdash^* (p,\epsilon,\ga)$.
+\end{definition}
+
+\begin{definition}[Linguaggio di un NPDA]\label{def:lang-acc-NPDA}
+Sia $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ un NPDA. Il linguaggio \emph{accettato} (\emph{per stati finali}) da $\cA$, indicato con $\cL(\cA)$, \`{e} l'insieme delle stringhe accettate da $\cA$, ovvero $\cL(\cA) = \{w \in \Sigma^* \st \exists p \in F.\exists \ga \in \Gamma^*.\ (q_0,w,Z_0) \vdash^* (p,\epsilon,\ga) \}$.
+\end{definition}
+
+\begin{definition}[DPDA]
+Un automa a pila deterministico (DPDA, in breve) \`{e} una settupla $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ dove 
+\begin{itemize}
+\item $Q$ \`{e} l'insieme finito degli stati,
+\item $\Sigma$ \`{e} l'alfabeto di input,
+\item $\Gamma$ \`{e} l'alfabeto di pila,
+\item $\delta: Q \times (\Sigma \cup \{\epsilon\}) \times \Gamma \hookrightarrow Q \times \Gamma^*$ \`{e} la funzione (parziale) di transizione, soggetta alla condizione che se $\delta(q,a,X)$ \`{e} definita, allora $\delta(q,\epsilon,X)$ \`{e} indefinita
+\item $q_0 \in Q$ \`{e} lo stato iniziale,
+\item $Z_0 \in \Gamma$ \`{e} il simbolo iniziale nella pila,
+\item $F \subseteq Q$ \`{e} l'insieme degli stati finali.
+\end{itemize}
+\end{definition}
+
+Chiaramente vi sono degli NPDA che non sono dei DPDA. Viceversa, si pu\`{o} constatare direttamente che ogni DPDA \`{e} un NPDA in cui 
+\begin{enumerate}[(1)]
+\item ogni valore $\delta(q,a,X)$ della funzione di transizione \`{e} un insieme di cardinalit\`{a} uno,
+\item se $\delta(q,a,X) \neq \emptyset$, allora $\delta(q,\epsilon,X) = \emptyset$.
+\end{enumerate}
+
+Grazie a quest'osservazione le Definizioni \ref{def:trans-est3}, \ref{def:lang-acc-stati-PDA}, e \ref{def:lang-acc-NPDA} si estendono immediatamente anche ai DPDA.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Una rappresentazione grafica dei PDA}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Come nel caso degli FA, la descrizione formale di un automa pu\`{o} essere complicata da cogliere immediatamente. Vediamo ora brevemente come si possono disegnare dei PDA con una notazione che dia le stesse informazioni di quella formale, ma che sia pi\`{u} semplice da capire. Introdurremo questa notazione con due esempi, che speriamo diano l'idea di come applicare la notazione grafica ad ogni caso possibile. 
+
+\begin{example}\label{ex:Lwwr}
+Sia $\cA = (\{q_0,q_1,q_2\}, \{0,1\}, \{Z_0,X_0,X_1\}, \delta, q_0, Z_0, \{q_2\})$ con la funzione di transizione definita come segue:
+\[
+\begin{array}{lll}
+\delta(q_0,0,Z_0) = \{(q_0,X_0Z_0)\}; \quad & \delta(q_0,1,Z_0) = \{(q_0,X_1Z_0)\}; & \\
+\delta(q_0,0,X_0) = \{(q_0,X_0X_0)\}; \quad & \delta(q_0,1,X_0) = \{(q_0,X_1X_0)\}; & \\
+\delta(q_0,0,X_1) = \{(q_0,X_0X_1)\}; \quad & \delta(q_0,1,X_1) = \{(q_0,X_1X_1)\}; & \\
+\delta(q_0,\epsilon,Z_0) = \{(q_1,Z_0)\}; & \delta(q_0,\epsilon,X_0) = \{(q_1,X_0)\}; & \delta(q_0,\epsilon,X_1) = \{(q_1,X_1)\}; \\
+\delta(q_1,0,X_0) = \{(q_1,\epsilon)\}; & \delta(q_1,1,X_1) = \{(q_1,\epsilon)\}; & \delta(q_1,\epsilon,Z_0) = \{(q_2,Z_0)\}.
+\end{array}
+\]
+Graficamente l'automa si pu\`{o} rappresentare come segue:
+\entrymodifiers={++[o][F-]}
+$$
+\xymatrix{
+*\txt{ } \ar[r] & 
+q_0 \ar@(u,ul)[]_{\txt{$1,X_1 / X_1X_1$ \\ $1,X_0 / X_1X_0$ \\ $1,Z_0 / X_1Z_0$}} \ar@(d,dl)[]^{\txt{$0,X_0 / X_0X_0$ \\ $0,X_1 / X_0X_1$\\ $0,Z_0 / X_0Z_0$}} \ar[rr]^{\txt{$\epsilon,Z_0 / Z_0$ \\ $\epsilon,X_0 / X_0$ \\ $\epsilon,X_1 / X_1$}} & *\txt{ } & %\ar@/^2pc/[rr]^{\txt{$\epsilon,X_0 / X_0$}} \ar@/_2pc/[rr]_{\txt{$\epsilon,X_1 / X_1$}}
+q_1 \ar@(u,ur)[]^{\txt{$0,X_0 / \epsilon$}} \ar@(d,dr)[]_{\txt{$1,X_1 / \epsilon$}} \ar[rr]^{\txt{$\epsilon,Z_0 / Z_0$}} & *\txt{ } &
+*++[o][F=]{q_2} \\
+}
+$$
+\end{example}
+
+\begin{example}\label{ex:Lwcwr}
+Sia $\cA = (\{q_0,q_1,q_2\}, \{0,1,c\}, \{Z_0,X_0,X_1\}, \delta, q_0, Z_0, \{q_2\})$ con la funzione di transizione definita come segue:
+\[
+\begin{array}{lll}
+\delta(q_0,0,Z_0) = \{(q_0,X_0Z_0)\}; \quad & \delta(q_0,1,Z_0) = \{(q_0,X_1Z_0)\}; & \\
+\delta(q_0,0,X_0) = \{(q_0,X_0X_0)\}; \quad & \delta(q_0,1,X_0) = \{(q_0,X_1X_0)\}; & \\
+\delta(q_0,0,X_1) = \{(q_0,X_0X_1)\}; \quad & \delta(q_0,1,X_1) = \{(q_0,X_1X_1)\}; & \\
+\delta(q_0,c,Z_0) = \{(q_1,Z_0)\}; & \delta(q_0,c,X_0) = \{(q_0,X_0)\}; & \delta(q_0,c,X_1) = \{(q_1,X_1)\}; \\
+\delta(q_1,0,X_0) = \{(q_1,\epsilon)\}; & \delta(q_1,1,X_1) = \{(q_1,\epsilon)\}; & \delta(q_1,\epsilon,Z_0) = \{(q_2,Z_0)\}.
+\end{array}
+\]
+Graficamente l'automa si pu\`{o} rappresentare come segue:
+\entrymodifiers={++[o][F-]}
+$$
+\xymatrix{
+*\txt{ } \ar[r] & 
+q_0 \ar@(u,ul)[]_{\txt{$1,X_1 / X_1X_1$ \\ $1,X_0 / X_1X_0$ \\ $1,Z_0 / X_1Z_0$}} \ar@(d,dl)[]^{\txt{$0,X_0 / X_0X_0$ \\ $0,X_1 / X_0X_1$\\ $0,Z_0 / X_0Z_0$}} \ar[rr]^{\txt{$c,Z_0 / Z_0$ \\ $c,X_0 / X_0$ \\ $c,X_1 / X_1$}} & *\txt{ } & %\ar@/^2pc/[rr]^{\txt{$\epsilon,X_0 / X_0$}} \ar@/_2pc/[rr]_{\txt{$\epsilon,X_1 / X_1$}}
+q_1 \ar@(u,ur)[]^{\txt{$0,X_0 / \epsilon$}} \ar@(d,dr)[]_{\txt{$1,X_1 / \epsilon$}} \ar[rr]^{\txt{$\epsilon,Z_0 / Z_0$}} & *\txt{ } &
+*++[o][F=]{q_2} \\
+}
+$$
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Accettazione per pila vuota}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Esiste un modo alternativo di definire il linguaggio accettato da un NPDA. Lo vediamo nella prossima definizione.
+
+\begin{definition}\label{def:lang-acc-NPDA2}
+Sia $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ un NPDA. Il linguaggio \emph{accettato} (\emph{per pila vuota}) da $\cA$ \`{e} l'insieme $\cN(\cA) = \{w \in \Sigma^* \st \exists p \in Q.\ (q_0,w,Z_0) \vdash^* (p,\epsilon,\epsilon) \}$.
+\end{definition}
+
+Si noti la differenza rispetto alla Definizione \ref{def:lang-acc-NPDA}. Non si richiede pi\`{u} di arrivare in uno stato finale, ma piuttosto di vuotare la pila. \`{E} naturale a questo punto domandarsi quale sia il rapporto tra $\cN(\cA)$ ed $\cL(\cA)$ ed in generale come siano correlati i due criteri di accettazione. Le risposte sono le seguenti:
+\begin{itemize}
+\item i due linguaggi $\cN(\cA)$ ed $\cL(\cA)$ non sono necessariamente uguali, ma
+\item i due criteri di accettazione sono equivalenti, nel senso dei seguenti Teoremi \ref{thm:equiv-stack-final1} e \ref{thm:equiv-stack-final2}.
+\end{itemize}
+
+\begin{theorem}\label{thm:equiv-stack-final1}
+Sia $\cA = (Q_\cA,\Sigma,\Gamma,\delta_\cA,q_0,Z_0,F_\cA)$ un PDA e sia $L = \cN(\cA)$. Allora esiste un PDA $\cB$ tale che $\cL(\cB) = L$.
+\end{theorem}
+
+\begin{proof}
+L'idea \`{e} di costruire un nuovo automa a partire da $\cA$ nel modo seguente. Prendiamo due nuovi stati $q_0',q_f \not\in Q_\cA$ e un nuovo simbolo di pila $Z_0' \not \in \Gamma$. Gli stati $q_0'$ e $q_f$ saranno, rispettivamente, il nuovo stato iniziale e finale, ed il simbolo $Z_0'$ sar\`{a} il nuovo simbolo iniziale di pila. Creiamo un nuovo automa $\cB$ come segue:
+
+\entrymodifiers={++[o][F-]}
+$$
+\xymatrix{
+*\txt{ } \ar[r] & 
+q_0' \ar[rr]_{\txt{$\epsilon,Z_0' / Z_0Z_0'$}} \ar@/^2pc/[rrrr]^{\txt{$\epsilon,Z_0' / \epsilon$}} & *\txt{ } & 
+\cA \ar[rr]_{\txt{$\epsilon, Z_0' / \epsilon$}} & *\txt{ } &
+*++[o][F=]{q_f} \\
+}
+$$
+Nel disegno qui sopra il cerchio contenente $\cA$ rappresenta l'intero disegno dell'automa $\cA$. L'arco uscente da $q_0'$ che punta a $\cA$ rappresenta un arco che entra in $q_0$, il vecchio stato iniziale. Definiamo $G = \{p \in Q_\cA \st \exists r \in Q.\exists w \in \Sigma^*.\ (q_0,w,Z_0) \vdash^* (p,\epsilon,\epsilon)\}$. L'arco entrante in $q_f$ ed uscente da $\cA$ indica un insieme di archi uscenti da ogni stato nell'insieme $G$. Pi\`{u} precisamente se chiamiamo $\delta_\cB$ la funzione di transizione di $\cB$, allora $\delta_\cB$ estende $\delta_\cA$ ed inoltre
+\begin{itemize}
+\item $\delta_\cB(q_0',\epsilon,Z_0') = \{(q_0,Z_0Z_0')\}$,
+\item $\delta_\cB(q_0,\epsilon,Z_0') = \{(q_f,\epsilon)\}$,
+\item per ogni $p \in G$ si ha la transizione $\delta_\cB(p,\epsilon,Z_0') = \{(q_f,\epsilon)\}$.
+\end{itemize}
+A questo punto non \`{e} difficile verificare che 
+$$\exists p \in Q_\cA.\ (q_0,w,Z_0) \vdash_\cA^* (p,\epsilon,\epsilon) \quad \mbox{ sse } \quad (q_0',w,Z_0') \vdash_\cB^* (q_f,\epsilon,\epsilon) $$
+e pertanto $\cN(\cA)=\cL(\cB)$.
+\qed\end{proof}
+
+\begin{theorem}\label{thm:equiv-stack-final2}
+Sia $\cA = (Q,\Sigma,\Gamma,\delta,q_0,Z_0,F)$ un PDA e sia $L = \cL(\cA)$. Allora esiste un PDA $\cB$ tale che $\cN(\cB) = L$.
+\end{theorem}
+
+\begin{proof}
+L'idea \`{e} di costruire un nuovo automa a partire da $\cA$ nel modo seguente. Prendiamo due nuovi stati $q_0',q' \not\in Q$ e un nuovo simbolo di pila $Z_0' \not \in \Gamma$. Lo stato $q_0'$ sar\`{a} il nuovo stato iniziale, ed il simbolo $Z_0'$ sar\`{a} il nuovo simbolo iniziale di pila. Creiamo un nuovo automa $\cB$ come segue:
+
+\entrymodifiers={++[o][F-]}
+$$
+\xymatrix{
+*\txt{ } \ar[r] & 
+q_0' \ar[rr]^{\txt{$\epsilon,Z_0' / Z_0Z_0'$}} & *\txt{ } & 
+\cA \ar[rr]^{\txt{$\epsilon, ? / \epsilon$}} & *\txt{ } &
+q' \ar@(ur,dr)[]^{\txt{$\epsilon, ? / \epsilon$}} \\
+}
+$$
+Ancora una volta il cerchio contenente $\cA$ rappresenta l'intero disegno dell'automa $\cA$. L'arco uscente da $q_0'$ entra in $q_0$, il vecchio stato iniziale mentre l'arco entrante in $q'$ che non \`{e} un cappio indica un insieme di archi uscenti da ogni stato finale di $\cA$: l'etichetta ``$\epsilon, ? / \epsilon$" sta ad indicare che su ogni arco uscente da un o stato finale di $\cA$ apponiamo l'etichetta $\epsilon, X / \epsilon$, per ogni possibile simbolo $X$ di pila. Pi\`{u} precisamente se chiamiamo $\delta_\cB$ la funzione di transizione di $\cB$, allora $\delta_\cB$ estende $\delta_\cA$ e
+\begin{itemize}
+\item $\delta_\cB(q_0',\epsilon,Z_0') = \{(q_0,Z_0Z_0')\}$ e
+\item per ogni stato finale $p \in F_\cA$ ed ogni simbolo $X \in \Gamma \cup \{Z_0'\}$ si ha la transizione $\delta_\cB(p,\epsilon,X) = \{(q',\epsilon)\}$.
+\end{itemize}
+A questo punto non \`{e} difficile verificare che 
+$$\exists p \in F_\cA.\ (q_0,w,Z_0) \vdash_\cA^* (p,\epsilon,\epsilon) \quad \mbox{ sse } \quad (q_0',w,Z_0') \vdash_\cB^* (q',\epsilon,\epsilon) $$
+e pertanto $\cL(\cA)=\cN(\cB)$.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linguaggi liberi dal contesto}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Linguaggio libero dal contesto]\label{def:ling-CFL}
+Un linguaggio $L$ \`{e} \emph{libero dal contesto} sse esiste un NPDA $\cA$ tale che $L = \cL(\cA)$.
+\end{definition}
+
+Indichiamo con $\CFL$ la classe dei linguaggi liberi dal contesto. 
+
+Ci si pu\`{o} legittimamente porre la questione se, come nel caso degli automi finiti, nella Definizione \ref{def:ling-CFL} non si possa equivalentemente richiedere l'esistenza di un DPDA $\cA$ tale che $L = \cL(\cA)$. Abbiamo osservato che la classe degli NPDA contiene propriamente quella dei DPDA. Fino a qui la situazione \`{e} analoga al contesto degli automi finiti. Tuttavia in questa sezione dimostreremo che le due classi non hanno la stessa potenza, ovvero che la classe dei linguaggi accettati dagli NPDA include propriamente quella dei linguaggi accettati dai DPDA, in contrasto con ci\`{o} che accade nel contesto degli automi finiti. Dimostrare l'inclusione \`{e} banale: se $L$ \`{e} un linguaggio tale che esiste un DPDA $\cA$ per cui $L = \cL(\cA)$, allora esiste anche un NPDA $\cB$ tale che $L = \cL(\cB)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Linguaggi di NPDA, DPDA e DFA a confronto}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Rimane da esibire un linguaggio accettato da un NPDA che non sia il linguaggio accettato da alcun DPDA. Questo viene fatto nella Proposizione \ref{prop:palindrome-NPDA} che segue.
+
+\begin{proposition}\label{prop:palindrome-NPDA}
+Sia $L = \{ww^R \st w \in \{0,1\}^* \}$. Allora
+\begin{enumerate}[(i)]
+  \item esiste un NPDA $\cA$ tale che $L = \cL(\cA)$;
+  \item non esiste alcun DPDA $\cB$ tale che $L =\cL(\cB)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[(i)]
+\item Basta prendere per $\cA$ l'automa dell'Esempio \ref{ex:Lwwr}.
+\item Non daremo una dimostrazione formale e precisa, ma diamo l'intuizione che porta ad essa. Essensialmente un automa che riconosce tutte e sole le stringe di $L$ deve implementare un meccanismo che memorizzi stringhe arbitrariamente lunghe e sia poi in grado di ripercorrerle all'indietro. Per fare ci\`{o} vi sar\`{a} uno stato dell'automa in cui avviene il ``cambio di direzione". Il punto \`{e} che siccome il processo di riconoscimento ``in avanti" pu\`{o} protrarsi abitrariamente a lungo, si dovranno lo stato dell'automa da cui pu\`{o} partire il cambio di direzione deve anche permettere, a parit\`{a} di condizioni, di continuare il riconoscimento in avanti.
+\end{enumerate}
+\qed\end{proof}
+
+In seguito alla Proposizione \ref{prop:palindrome-NPDA}, \`{e} evidente che la classe degli automi a pila deterministici \`{e} strettamente meno potente di quella degli automi a pila non-deterministici.
+
+\begin{definition}[Linguaggio deterministicamente libero dal contesto]\label{def:ling-dCFL}
+Un linguaggio $L$ \`{e} \emph{deterministicamente libero dal contesto} sse esiste un DPDA $\cA$ tale che $L = \cL(\cA)$.
+\end{definition}
+
+Indichiamo con $\dCFL$ la classe dei linguaggi deterministicamente liberi dal contesto. Per quanto detto sopra quindi $\dCFL$ \`{e} strettamente contenuta in $\CFL$.
+
+Ora poniamo a confronto le classi $\dCFL$ e $\REG$.
+
+\begin{proposition}\label{prop:c-palindrome-DPDA}
+Sia $L = \{wcw^R \st w \in \{0,1\}^* \}$. Allora
+\begin{enumerate}[(i)]
+  \item esiste un DPDA $\cA$ tale che $L=\cL(\cA)$;
+  \item non esiste alcun DFA $\cB$ tale che $L =\cL(\cB)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}[(i)]
+\item Basta prendere per $\cA$ l'automa dell'Esempio \ref{ex:Lwcwr}.
+\item Applichiamo il Pumping Lemma tipo 3. Sia $n$ un numero naturale $\geq 1$ e consideriamo la stringa $w=0^nc0^n$. Siano $u,v,z$ tre stringhe tali che $w = uvz$. Allora abbiamo le seguenti possibilit\`{a}:
+\begin{enumerate}[(1)]
+  \item $v=0^h$, con $1\leq h \leq n$;
+  \item $v=0^mc0^h$, con $0\leq m,h \leq n$.
+\end{enumerate}
+A questo punto si vede immediatamente che $uv^kz \not\in L$, per ogni $k \geq 0$. Il fatto che il Pumping Lemma tipo 3 non \`{e} soddisfatto implica che $L$ non pu\`{o} essere regolare.
+\end{enumerate}
+\qed\end{proof}
+
+\begin{proposition}\label{prop:DFA-DPDA}
+Sia $\cA$ un DFA. Allora esiste un DPDA $\cB$ tale che $\cL(\cA) = \cL(\cB)$.
+\end{proposition}
+
+\begin{proof}
+Sia $\cA = (Q_{\cA},\Sigma,\delta_{\cA},q_0,F_{\cA})$ un DFA. Definiamo un PDA $\cB = (Q_{\cB},\Sigma,\Gamma,\delta_\cB,q_0,Z_0,F_\cB)$ come segue:
+\begin{itemize}
+\item $Q_{\cB} = Q_{\cA}$,
+\item $\Gamma = \{Z_0\}$,
+\item $F_{\cB} = F_{\cA}$,
+\item $\delta_\cB(q,a,Z_0) = \{(\delta_\cA(q,a),Z_0)\}$.
+\end{itemize}
+\qed\end{proof}
+
+Le Proposizioni \ref{prop:c-palindrome-DPDA} e \ref{prop:DFA-DPDA} insieme dimostrano che $\REG$ \`{e} strettamente contenuta in $\dCFL$, come recita il seguente teorema.
+
+\begin{theorem}\label{thm:reg-cfl}
+Ogni linguaggio regolare \`{e} deterministicamente libero dal contesto.
+\end{theorem}
+
+\begin{proof}
+Sia $L$ un linguaggio regolare. Allora esiste un DFA $\cA$ tale che $L = \cL(\cA)$ e quindi per la Proposizione \ref{prop:DFA-DPDA} esiste un DPDA $\cB$ tale che $L = \cL(\cB)$.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

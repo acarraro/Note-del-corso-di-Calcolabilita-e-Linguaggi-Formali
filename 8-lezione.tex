@@ -1,0 +1,364 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 8}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 8}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 8}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Insiemi e predicati ricorsivi e ricorsivamente enumerabili}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Ricordiamo che per quanto concerne ci\`{o} che diciamo in questo corso, un insieme di numeri naturali non \`{e} altro che un predicato unario su $\nat$ (ovvero una relazione unaria).
+
+\begin{definition}
+Sia $R \subseteq \nat^n$ una relazione $n$-aria. Diciamo che $R$ \`{e} \emph{ricorsiva} se la sua funzione
+ caratteristica \`{e} ricorsiva totale.
+\end{definition}
+
+Ad esempio $\emptyset$ e $\nat$ sono insiemi ricorsivi.
+
+Non \`{e} difficile dimostrare che la $\mu$-ricorsione pu\`{o} essere impiegata come schema aggiuntivo per definire funzioni
+ ricorsive parziali, utilizzando predicati ricorsivi. Pi\`{u} precisamente, se $R(\vec x,y)$ \`{e} un predicato ricorsivo, allora
+ la funzione $\mu y.R(\vec x,y): \nat^n \to \nat$ come segue
+$$
+\mu y.R({\vec x},y) = 
+\begin{cases}
+\mbox{il minimo $y$ tale che $R(\vec{x},y)$} & \mbox{se un tale $y$ esiste} \\
+\uparrow & \mbox{altrimenti} \\
+\end{cases}
+$$ 
+\`{e} ricorsiva parziale.
+
+\begin{definition}
+Sia $R \subseteq \nat^n$ una relazione $n$-aria. Diciamo che $R$ \`{e} \emph{ricorsivamente enumerabile} (r.e., in breve)
+ se esiste una funzione ricorsiva parziale $n$-aria $\varphi$ tale che
+$$
+\varphi(\vec x) = 
+\begin{cases}
+1        & \mbox{ se $R(\vec x)$ vale} \\
+\uparrow & \mbox{ altrimenti } \\
+\end{cases}
+$$
+In tal caso chiamiamo $\varphi$ la funzione caratteristica parziale di $R$ e la indichiamo ancora con $\car{R}$.
+\end{definition}
+
+\`{E} chiaro che ogni predicato ricorsivo \`{e} anche r.e.
+
+Per i predicati ricorsivi valgono le stesse propriet\`{a} di chiusura che abbiamo visto valere per i predicati primitivi ricorsivi.
+ Riportiamo qui di seguito un lemma che rende precisa questa affermazione. La sua dimostrazione \`{e} assolutamente analoga a quella vista
+ per i predicati primitivi ricorsivi. 
+
+\begin{lemma}\label{lem:log-clos}
+Siano $R,P \subseteq \nat^n$ due predicati ricorsivi. Allora $P \vee R$, $P \wedge R$, $P \Rightarrow R$ e $\neg P$ sono tutti predicati ricorsivi.
+\end{lemma}
+
+La discussione riguardante le propriet\`{a} di chiusura dei predicati r.e. invece \`{e} rimandata a pi\`{u} avanti, poich\`{e}
+ richiede argomenti che ancora non abbiamo dato.
+
+\begin{theorem}\label{thm:characterize-r.e.}
+Sia $P \subseteq \nat^n$ un predicato non vuoto. I seguenti enunciati sono equivalenti:
+\begin{itemize}
+\item[(i)] $P$ \`{e} r.e.
+\item[(ii)] esiste una funzione ricorsiva parziale $\varphi: \nat^n \to \nat$ tale che $\dom{\varphi} = P$.
+\item[(iii)] esiste un predicato ricorsivo $R \subseteq \nat^{n+1}$ tale che $P(\vec x) \Leftrightarrow \exists y.R(\vec x,y)$
+\item[(iv)] esiste una funzione ricorsiva totale $\phi: \nat \to \nat$ tale che\\ $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Procediamo a dimostrare le varie implicazioni.
+\begin{itemize}
+\item[(i)$\Rightarrow$(ii)] Per definizione, basta considerare la funzione caratteristica di $P$.
+\item[(ii)$\Rightarrow$(i)] Sia $\varphi: \nat^n \to \nat$ una funzione ricorsiva parziale tale che $\dom{\varphi} = P$ e sia $u$ la funzione
+ costante che vale $1$. Allora la funzione $u \circ \varphi$ \`{e} la funzione caratteristica parziale di $P$.
+\item[(iv)$\Rightarrow$(iii)] Sia $\phi: \nat^n \to \nat$ una funzione ricorsiva totale tale che\\
+ $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$.
+ Allora \`{e} chiaro che $P(\vec x) \iff \exists y.\phi(y) = \seq{\vec x}$. La conclusione segue perch\'{e} il predicato
+ $R(\vec x,y)\ass \phi(y) = \seq{\vec x}$ \`{e} ricorsivo.
+\item[(iii)$\Rightarrow$(iv)] Sia $R \subseteq \nat^{n+1}$ un predicato ricorsivo tale che $P(\vec x) \Leftrightarrow \exists y.R(\vec x,y)$.
+ Poich\'{e} $P$ \`{e} non vuoto, sia $\vec z$ una tupla fissata in $P$. Ora definiamo una funzione $\phi$ come segue
+$$
+\phi(x) = 
+\begin{cases}
+\seq{\sedecod{x}{1},\ldots,\sedecod{x}{n}} & \mbox{ se $R(\sedecod{x}{1},\ldots,\sedecod{x}{n+1})$ vale} \\
+\seq{\vec z} & \mbox{ altrimenti } \\
+\end{cases}
+$$
+Chiaramente $\phi$ \`{e} ricorsiva totale e $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$.
+
+\item[(ii)$\Rightarrow$(iv)] Lo dimostreremo pi\`{u} avanti.
+
+\item[(iv)$\Rightarrow$(ii)] Sia $\phi: \nat \to \nat$ una funzione ricorsiva totale tale che
+ $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$. Definiamo la funzione $\varphi$ come segue:
+$$ \varphi(\vec x) = \mu z.[\phi(z) = \seq{\vec x}]$$
+Allora $\varphi$ \`{e} ricorsiva parziale e $\dom{\varphi} = P$.
+\end{itemize} 
+\qed\end{proof}
+
+\begin{theorem}
+Un predicato $P \subseteq \nat^n$ \`{e} ricorsivo sse sia $P$ che $\neg P$ sono r.e.
+\end{theorem}
+
+\begin{proof}
+\ 
+\noindent($\Rightarrow$) Se $P$ \`{e} ricorsivo allora anche $\neg P$ lo \`{e}. Concludiamo per il fatto che ricorsivo implica r.e.
+
+\noindent($\Leftarrow$) Supponiamo che $P$ e $\neg P$ siano entrambi r.e. Allora per il Teorema \ref{thm:characterize-r.e.} esistono
+ due predicati ricorsivi $R_1$ ed $R_2$ tali che 
+$$ P(\vec x) \iff \exists y.R_1(\vec x,y) \qquad \mbox{ e } \qquad \neg P(\vec x) \iff \exists y.R_2(\vec x,y) $$
+Definiamo una funzione $f$ come segue:
+$$f(\vec x) = \mu y.[R_1(\vec x,y) \vee R_2(\vec x,y)]$$
+Si noti che $f$ \`{e} totale e ricorsiva, pertanto il predicato $P'(\vec x) \ass R_1(\vec x, f(\vec x))$ \`{e} ricorsivo.
+ Infine abbiamo che $P(\vec x) \iff P'(\vec x)$.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Enumerazione delle funzioni parziali ricorsive}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Il simbolo $\simeq$ \`{e} chiamato \emph{uguaglianza di Kleene}. Esso si utilizza per indicare l'uguaglianza tra funzioni parziali: se 
+ $f,g$ sono due funzioni parziali unarie, allora scriviamo $f(x) \simeq g(x)$ per intendere che $f(x)\downarrow \iff g(x)\downarrow$ ed inoltre
+ $f(x) = g(x)$, qualora entrambe le funzioni siano definite sull'input $x$.
+
+\begin{theorem}[Forma normale di Kleene]\label{thm:normal-form}
+Esiste una funzione primitiva ricorsiva unaria $\cU$ e una famiglia $\{\cT_k\}_{k \in \nat}$ di predicati primitivi ricorsivi
+ tali che per ogni funzione parziale ricorsiva $n$-aria $\varphi$ esiste un numero $e$ (detto l'\emph{indice} di $\varphi$) tale che:
+\begin{itemize}
+\item[(i)] $\varphi(\vec x)\downarrow \iff \exists y.\cT_n(e,\vec x,y)$
+\item[(ii)] $\varphi(\vec x) \simeq \cU(\mu y.\cT_n(e,\vec x,y))$
+\end{itemize}
+\end{theorem}
+
+Non daremo la dimostrazione formale del Teorema \ref{thm:normal-form}, ma cerchiamo di capirne il significato.
+ L'idea della dimostrazione \`{e} di associare numeri naturali a funzioni e computazioni in maniera tale che il predicato
+ $\cT_n(e,x_1,\ldots,x_n,y)$ valga sse $y$ \`{e} il numero di una computazione del valore della funzione il cui codice \`{e} $e$
+ sugli input $x_1,\ldots,x_n$. Avendo ci\`{o}, $\mu y.\cT_n(e,x_1,\ldots,x_n,y)$ sceglie in maniera canonica 
+ il codice di una di queste computazioni e la funzione $\cU$ estrarr\`{a} il valore dell'output dalla codifica.
+ Questo procedimento include molti passaggi, tra cui l'aritmetizzazione delle funzioni parziali ricorsive.
+ Un assaggio degli strumenti necessari per far questo si \`{e} visto nella dimostrazione del teorema ``Course of values recursion''.
+ Un esempio di codifica delle funzioni \`{e} il seguente:
+\begin{itemize}
+\item Assegnare il codice $\seq{0}$ alla funzione costante con valore $0$
+\item Assegnare il codice $\seq{1}$ alla funzione successore
+\item Assegnare il codice $\seq{2,n,i}$ alla funzione proiezione $i$-esima su $n$ argomenti
+\item Assegnare il codice $\seq{3,b_1,\ldots,b_m,a}$ alla funzione $f(\vec x) = g(h_1(\vec x),\ldots,h_m(\vec x))$, dove 
+ $a$ \`{e} il codice di $g$ e ogni $b_j$ \`{e} il codice di $h_j$
+\item Assegnare il codice $\seq{4,a,b}$ alla funzione $f(\vec x,y)$ definita per ricorsione primitiva applicata a due funzioni
+ $g$ ed $h$, i cui codici sono, rispettivamente, $a$ e $b$
+\item Assegnare il codice $\seq{5,a}$ alla funzione $f(\vec x)$ definita per $\mu$-ricorsione applicata ad una funzione
+ $g$ il cui codice \`{e} $a$
+\end{itemize}
+
+In seguito bisogna sistematizzare e codificare le computazioni e definire la funzione $\cU$. Chi fosse interessato pu\`{o}
+ trovare la prova dettagliata nel libro di Odifreddi.
+
+Dal Teorema \ref{thm:normal-form} segue che vi \`{e} un modo molto conveniente di assegnare almeno un indice ad ogni funzione
+ parziale ricorsiva. Infatti ogni funzione ricorsiva parziale \`{e} estensionalemnte uguale ad una della forma
+ $\cU(\mu y.\cT_n(e,\vec x,y))$, per un opportuno numero $e$, detto l'indice di tale funzione.
+
+\begin{definition}\label{def:numerazione}
+Scriviamo $\varphi_e^n$ (o $\{e\}^n$) per indicare la funzione parziale ricorsiva $n$-aria 
+$$ \varphi_e^n(\vec x) \simeq \{e\}^n(\vec x) \simeq \cU(\mu y.\cT_n(e,\vec x,y))$$
+Scriviamo $\varphi_{e,s}^n$ (o $\{e\}_s^n$) per indicare la funzione parziale ricorsiva $n$-aria 
+$$
+\varphi_{e,s}^n(\vec x) \simeq \{e\}_s^n(\vec x) \simeq
+\begin{cases}
+\varphi_e^n(\vec x) & \mbox{ se } \exists y<s.\cT_n(e,\vec x,y) \\
+\uparrow            & \mbox{ altrimenti} \\ 
+\end{cases}
+$$
+\end{definition}
+
+Intuitivamente $\varphi_{e,s}^n$ pu\`{o} essere pensata come l'approssimazione di $\varphi_{e}^n$ ottenuta considerando le computazioni
+ di quest'ultima che si protraggono per alpi\`{u} un numero finito di passi specificato in qualche modo da $s$.
+
+Il Teorema \ref{thm:normal-form} (Forma normale di Kleene) ci dice che 
+$$\varphi_e^n(\vec x)\downarrow \iff \exists y.\cT_n(e,\vec x,y)$$
+e pertanto il predicato $\varphi_e^n(\vec x)\downarrow$ \`{e} r.e.
+
+Dalla Definizione \ref{def:numerazione} inoltre abbiamo che 
+$$\varphi_{e,s}^n(\vec x)\downarrow \iff \exists y<s.\cT_n(e,\vec x,y)$$
+e pertanto il predicato $\varphi_{e,s}^n(\vec x)\downarrow$ \`{e} ricorsivo. Useremo questa osservazione pi\`{u} volte in seguito.
+ L'idea importante \`{e} che, al contrario del caso $\varphi_{e}^n(\vec x)\uparrow$, quando $\varphi_{e,s}^n$ \`{e} indefinita su un dato input
+ $\vec x$ (notazione $\varphi_{e,s}^n(\vec x)\uparrow$) non \`{e} per il fatto che ``un algoritmo non termini'' e quindi 
+ si ha il modo di accorgersi in maniera effettiva se $\varphi_{e,s}^n$ \`{e} o meno indefinita su un dato input.
+
+Molto importante per il resto del corso \`{e} il concetto di \emph{enumerazione}. Un'enumerazione di un insieme $A$ \`{e} una 
+ funzione suriettiva da $\nat$ in $A$.
+
+\begin{theorem}[Enumerazione di Kleene]\label{thm:enumeration}
+La sequenza $(\varphi_e^n)_{e \in \nat}$ \`{e} una enumerazione parziale ricorsiva delle funzioni parziali ricorsive $n$-arie, nel senso che:
+\begin{itemize}
+\item[(i)] per ogni $e \in \nat$, $\varphi_e^n$ \`{e} una funzione parziale ricorsiva $n$-aria
+\item[(ii)] se $\psi$ \`{e} una funzione parziale ricorsiva $n$-aria, allora esiste un numero $e$ tale che $\varphi_e^n \simeq \psi$
+\item[(iii)] esiste una funzione parziale ricorsiva $n+1$-aria $u$ tale che $u(e,\vec x) \simeq \varphi_e^n(\vec x)$
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+L'enunciato segue dal Teorema \ref{thm:normal-form}. Infatti basta definire $\varphi(e,\vec x) \simeq \cU(\mu y.\cT_n(e,\vec x,y))$.
+\qed\end{proof}
+
+\begin{theorem}[Universal partial function]\label{thm:universal_pf}
+Esiste una funzione parziale ricorsiva binaria $\varphi(e,x)$, detta \emph{funzione parziale ricorsiva universale} tale che per ogni
+ funzione parziale ricorsiva $n$-aria $\psi$ esiste un numero $e$ tale che $\psi(x_1,\ldots,x_n) \simeq u(e,\seq{x_1,\ldots,x_n})$.
+\end{theorem}
+
+\begin{proof}
+Per il Teorema \ref{thm:enumeration} esiste un numero $e$ tale che $\psi(x_1,\ldots,x_n) \simeq \varphi_e^n(x_1,\ldots,x_n)$.
+Definiamo $u(e,x) \simeq \cU(\mu y.\cT_n(e,x_1,\ldots,x_n,y))$, dove la tupla $(x_1,\ldots,x_n)$ \`{e} tale che
+ $x = \seq{x_1,\ldots,x_n}$. Allora \`{e} evidente che $u(e,\seq{x_1,\ldots,x_n})\simeq \varphi_e^n(x_1,\ldots,x_n)$ e questo conclude
+ la dimostrazione.
+\qed\end{proof}
+
+Intuitivamente il Teorema \ref{thm:universal_pf} ci dice che la funzione universale genera gli indici di tutte le funzioni parziali ricorsive
+ in ogni numero di variabili. Pertanto la funzione universale \`{e} l'esatto analogo della macchina di Turing universale.
+
+\bigskip
+
+Riprendiamo ora la dimostrazione del Teorema \ref{thm:characterize-r.e.}, in particolare l'implicazione (ii)$\Rightarrow$(iv).
+
+\begin{theorem}
+Sia $P \subseteq \nat^n$ un predicato non vuoto. L'enunciato (ii) implica il (iv):
+\begin{itemize}
+\item[(ii)] esiste una funzione ricorsiva parziale $\varphi: \nat^n \to \nat$ tale che $\dom{\varphi} = P$.
+\item[(iv)] esiste una funzione ricorsiva totale $\phi: \nat \to \nat$ tale che\\ $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+(ii)$\Rightarrow$(iv). Sia $\varphi: \nat^n \to \nat$ una funzione ricorsiva parziale tale che $\dom{\varphi} = P$. Per il Teorema di
+ Enumerazione di Kleene esiste un numero $e$ tale che $\varphi \simeq \varphi_e$.
+ Sia $\vec z$ una $n$-upla in $P$. Definiamo una funzione $\phi$ come segue:
+$$
+\phi(\pair{x}{s}) =
+\begin{cases}
+x & \mbox{ se } Seq(x) \mbox{ e } x = \seq{\vec y} \mbox{ e } \varphi_{e,s}(\vec y)\downarrow \\
+\seq{\vec z} & \mbox{ altrimenti} \\ 
+\end{cases}
+$$
+Allora $\phi$ \`{e} ricorsiva totale ed inoltre $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$.
+\qed\end{proof}
+
+Sia $\varphi$ una funzione parziale $n$-aria. Il \emph{grafico} di $\varphi$ \`{e} l'insieme 
+ $\gph{\varphi} = \{(\vec x, y) \st \varphi(\vec x)\downarrow \mbox{ e } \varphi(\vec x) = y\}$.
+
+\begin{theorem}[del grafico]\label{thm:graph1}
+Sia $\varphi$ una funzione parziale e sia $f$ una funzione totale.
+\begin{enumerate}[label=(\roman*)]
+\item $\varphi$ \`{e} ricorsiva parziale sse l'insieme $\gph{\varphi}$ \`{e} r.e.
+\item $f$ \`{e} ricorsiva sse l'insieme $\gph{f}$ \`{e} ricorsivo.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\begin{enumerate}[label=(\roman*)]
+\item ($\Rightarrow$) Supponiamo $\varphi$ ricorsiva parziale. Sia $e$ un numero tale che $\varphi \simeq \varphi_e$. Abbiamo che 
+\begin{eqnarray*}
+(\vec x, z) \in \gph{\varphi} & \iff & \varphi_e(\vec x) = z \\
+                              & \iff & \cU(\mu y.\cT_n(e,\vec x,y)) = z \\
+                              & \iff & \exists y.(\cT_n(e,\vec x,y) \wedge \cU(y) = z \wedge \bforall{t}{y}.\neg\cT_n(e,\vec x,t)) \\
+\end{eqnarray*}
+Pertanto $\gph{\varphi}$ \`{e} r.e.\\
+\noindent ($\Leftarrow$) Supponiamo $\gph{\varphi}$ r.e. Sia $R$ un predicato ricorsivo tale che
+ $(\vec x, z) \in \gph{\varphi} \iff \exists y.R(\vec x,z,y)$. Allora $\vec x \in \dom{\varphi} \iff \exists z.\exists y.R(\vec x,z,y)$.
+ Pertanto $\varphi(\vec x) \simeq (\mu t.R(\vec x,(t)_1,(t)_2))_1$, dimostrando che $\varphi$ \`{e} ricorsiva parziale.
+
+\item ($\Rightarrow$) Supponiamo $f$ ricorsiva totale. Allora la funzione caratteristica di $\gph{f}$ \`{e} la seguente:
+$$
+\car{\gph{f}}(\vec x,z) =
+\begin{cases}
+1 & \mbox{ se } f(\vec x)=z \\
+0 & \mbox{ altrimenti} \\ 
+\end{cases}
+$$
+Quest'ultima \`{e} una funzione totale ricorsiva, quindi $\gph{f}$ \`{e} ricorsivo.
+\noindent ($\Leftarrow$) Supponiamo $\gph{f}$ ricorsivo. Poic\'{e} $f$ \`{e} totale, abbiamo che $\forall \vec x.\exists z.(\vec x,z) \in \gph{f}$.
+ Siccome $f(\vec x) = \mu z.[(\vec x,z) \in \gph{f}]$, \`{e} evidente che $f$ \`{e} totale e ricorsiva.
+\end{enumerate}
+\qed\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

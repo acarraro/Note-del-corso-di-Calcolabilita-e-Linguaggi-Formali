@@ -1,0 +1,266 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+% \usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 9}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 9}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 9}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Propriet\`{a} dei predicati r.e.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Ricordiamo un teorema molto importante, dimostrato nella scorsa lezione, riportandone l'enunciato qui di seguito.
+
+\begin{theorem}\label{thm:characterize-r.e.}
+Sia $P \subseteq \nat^n$ un predicato non vuoto. I seguenti enunciati sono equivalenti:
+\begin{itemize}
+\item[(i)] $P$ \`{e} r.e.
+\item[(ii)] esiste una funzione ricorsiva parziale $\varphi: \nat^n \to \nat$ tale che $\dom{\varphi} = P$.
+\item[(iii)] esiste un predicato ricorsivo $R \subseteq \nat^{n+1}$ tale che $P(\vec x) \Leftrightarrow \exists y.R(\vec x,y)$
+\item[(iv)] esiste una funzione ricorsiva totale $\phi: \nat \to \nat$ tale che\\ $\ran{\phi} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$
+\end{itemize}
+\end{theorem}
+
+Notiamo che la condizione (iv), quando $P$ \`{e} un sottoinsieme di $\nat$, si semplifica come segue:
+\begin{itemize}
+\item[(iv)'] esiste una funzione ricorsiva totale $\phi: \nat \to \nat$ tale che $\ran{\phi} = P$.
+\end{itemize}
+
+Durante la Lezione 7 abbiamo visto alcune propriet\`{a} dei predicati primitivi ricorsivi. Ora ripetiamo questo breve studio
+ sui predicati (o insiemi) r.e.
+
+Come abbreviamo la dicitura ``ricorsivamente enumerabile'' con \emph{r.e.}, nel seguito ci permetteremo di abbreviare ``ricorsiva parziale''
+ con \emph{r.p.} e ``ricorsiva totale'' con \emph{r.t.} 
+
+\begin{lemma}\label{lem:log-clos}
+Siano $P,Q \subseteq \nat^n$ due predicati r.e. Allora $P \vee Q$, $P \wedge Q$ e $\exists y.P$ sono tutti predicati r.e.
+\end{lemma}
+
+\begin{proof}
+Dimostriamo che $P \wedge Q$ \`{e} r.e. Per ipotesi abbiamo due funzioni r.p. $\varphi,\phi$ tali che 
+ $\dom{\varphi} = P$ e $\dom{\phi} = Q$. Concludiamo osservando che la funzione $\varphi \circ \phi$ \`{e} r.p. e
+ $\dom{\varphi \circ \phi} = P \wedge Q$.
+
+Dimostriamo che $P \vee Q$ \`{e} r.e. Per ipotesi abbiamo due funzioni r.t. $f,g$ tali che
+ $\ran{f} = \{\seq{\vec x} \st P(\vec x) \mbox{ vale} \}$ e $\ran{g} = \{\seq{\vec x} \st Q(\vec x) \mbox{ vale} \}$.
+ Definiamo una funzione $h$ come segue:
+$$
+h(n) = 
+\begin{cases}
+f(\frac{n}{2})   & \mbox{ se $n$ pari} \\
+g(\frac{n-1}{2}) & \mbox{ se $n$ dispari} \\
+\end{cases}
+$$
+Concludiamo osservando che la funzione $h$ \`{e} r.t. e $\ran{h} = \{\seq{\vec x} \st P(\vec x) \vee Q(\vec x) \mbox{ vale } \}$.
+
+Sia $P(\vec x,y)$ un predicato r.e. e sia $P'(\vec x) \iff \exists y.P(\vec x,y)$. Per ipotesi esiste un predicato ricorsivo
+ $R(\vec x,y,z)$ tale che $P(\vec x,y) \iff \exists z.R(\vec x,y,z)$. Ma allora
+ $P'(\vec x) \iff \exists y.\exists z.R(\vec x,y,z) \iff \exists w.\bexists{y}{w}.\bexists{z}{w}.R(\vec x,y,z)$.
+ Per concludere basta osservare che il predicato $\bexists{y}{w}.\bexists{z}{w}.R(\vec x,y,z)$ \`{e} ricorsivo.
+\qed\end{proof}
+
+Osserviamo che il Lemma \ref{lem:log-clos} dice, tra le altre cose, che gli insiemi r.e. sono chiusi per unione ed intersezione
+ finita. Notiamo le differenze di comportamento tra insiemi ricorsivi e ricorsivamente enumerabili:
+
+\begin{itemize}
+\item gli insiemi ricorsivi sono chiusi rispetto al complemento, mentre quelli ricorsivamente enumerabili non lo sono;
+\item i predicati ricorsivamente enumerabili sono chiusi rispetto alla quantificazione esistenziale, mentre quelli ricorsivi non lo sono.
+\end{itemize}
+
+Dopo aver visto il comportamento degli insiemi ricorsivi (r.e.) rispetto alle operazioni insiemistiche, vediamo il loro comportamento
+ rispetto all'applicazione di funzioni ricorsive (parziali o totali).
+
+Per il nostro scopo introduciamo qualche comoda notazione.
+ Data un funzione parziale $f: \nat \rightharpoonup \nat$ ed un insieme $A \subseteq \nat$, indicheremo con $f(A)$ l'\emph{immagine}
+ di $A$ secondo $f$, ovvero $f(A) = \{f(x) \st x \in A\}$. Indicheremo con $f^{-1}(A)$ l'\emph{antiimmagine}
+ di $A$ secondo $f$, ovvero $f^{-1}(A) = \{x \in \nat \st f(x) \in A\}$.
+
+\begin{proposition}\label{prop:re-image}
+Sia $A \subseteq \nat$ un insieme r.e. e sia $\varphi$ una funzione r.p.
+ Allora gli insiemi $\varphi(A)$ e $\varphi^{-1}(A)$ sono entrambi r.e.
+\end{proposition}
+
+\begin{proof}
+Se $A = \emptyset$ oppure $\varphi$ \`{e} la funzione completamente indefinita su $A$, allora $\varphi(A) = \emptyset$, che \`{e}
+ trivialmente un insieme r.e. Supponiamo ora $A \neq\emptyset$ e $\dom{\varphi} \cap A \neq \emptyset$.
+
+ Dimostriamo che $\varphi(A)$ \`{e} r.e. Siccome $\varphi$ \`{e} r.p. esiste un indice $e$ tale che $\varphi_e \simeq \varphi$; inoltre esiste un 
+ certo numero naturale $z \in A \cap \dom{\varphi}$. Poich\'{e} $A$ \`{e} r.e., esiste una funzione ricorsiva totale $g$ tale che $A= \ran{g}$.
+ Definiamo allora una funzione $f$ come segue:
+$$
+f(\pair{x}{s}) =
+\begin{cases}
+\varphi_{e,s}(g(x)) & \mbox{ se } \varphi_{e,s}(g(x))\downarrow \\
+\varphi_e(z)     & \mbox{ altrimenti} \\ 
+\end{cases}
+$$
+Chiaramente $f$ \`{e} ricorsiva totale ed inoltre $\varphi(A) = \varphi_e(A) = \ran{f}$.
+
+Ora dimostriamo che $\varphi^{-1}(A)$ \`{e} r.e. 
+ Abbiamo che $x \in \varphi^{-1}(A) \iff \exists y.((x,y) \in \gph{\varphi} \wedge y \in A)$.
+ Per il Teorema di enumerazione esiste un indice $e$ tale che $A = \dom{\varphi_{e}}$.
+ Chiaramente 
+ $\exists y.((x,y) \in \gph{\varphi} \wedge y \in A) \iff 
+  \exists s.\exists y.((x,y) \in \gph{\varphi} \wedge \varphi_{e,s}(y)\downarrow)$.
+Ora sappiamo che $(x,y) \in \gph{\varphi}$ \`{e} r.e. e $\varphi_{e,s}(y)\downarrow$ \`{e} ricorsivo.
+ La loro congiunzione \`{e} quindi r.e., e quantificando esistenzialmente all'esterno si ottiene ancora un 
+ predicato r.e.
+\qed\end{proof}
+
+Dato un insieme $A \subseteq \nat$, indichiamo con $A^c$ il suo complementare.
+
+\begin{remark}\label{rem:compl-im}
+Sia $f:\nat \to \nat$ una funzione totale. Abbiamo che
+\begin{enumerate}[label=(\roman*)]
+\item $f^{-1}(A^c) = (f^{-1}(A))^c$
+\item Se $f$ \`{e} suriettiva, allora $f(A^c) = (f(A))^c$
+\end{enumerate}
+\end{remark}
+
+\begin{proposition}
+Sia $A \subseteq \nat$ un insieme ricorsivo e sia $f$ una funzione r.t. Abbiamo che
+\begin{enumerate}[label=(\roman*)]
+\item $f^{-1}(A)$ \`{e} ricorsivo.
+\item Se $f$ \`{e} suriettiva, allora $f(A)$ \`{e} ricorsivo.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Dimostriamo i due punti.
+\begin{enumerate}[label=(\roman*)]
+\item Se $A$ \`{e} ricorsivo allora $f^{-1}(A)$ \`{e} r.e. (Proposizione \ref{prop:re-image}).
+ Ma anche $A^c$ \`{e} ricorsivo e quindi $f^{-1}(A^c)$ \`{e} r.e. Concludiamo osservando che $f^{-1}(A^c) = (f^{-1}(A))^c$
+ (Remark \ref{rem:compl-im}(i)).
+\item Il ragionamento \`{e} come quello per il punto (i), stavolta usando il Remark \ref{rem:compl-im}(ii).
+\end{enumerate}
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Enumerazione dei predicati r.e.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}\label{def:numerazione-r.e.}
+Scriviamo $\cW_e^n$ per indicare l'insieme $\dom{\varphi_e^n}$. Inoltre scriviamo
+ $\cW_{e,s}^n$ per indicare l'insieme $\dom{\varphi_{e,s}^n}$.
+\end{definition}
+
+\begin{theorem}[Enumerazione di Kleene\textendash Post]\label{thm:enumeration-r.e.}
+La sequenza $\cW^n = (\cW_e^n)_{e \in \nat}$ \`{e} una enumerazione parziale ricorsiva dei predicati r.e. $n$-ari, nel senso che:
+\begin{itemize}
+\item[(i)] per ogni $e \in \nat$, $\cW_e^n$ \`{e} un predicato r.e. $n$-ario
+\item[(ii)] se $P$ \`{e} un predicato r.e. $n$-ario, allora esiste un numero $e$ tale che $\cW_e^n = P$
+\item[(ii)] esiste una funzione totale ricorsiva $f$ tale che $\cW^n = (\cW_{f(x)}^n)_{x \in \nat}$
+ (ed inoltre $\cW_{f(x)}^n = \cW_{f(y)}^n$ implica $x=y$)
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Gli enunciati (i) e (ii) seguono dal Teorema \ref{thm:characterize-r.e.}. La dimostrazione del punto (iii) invece \`{e}
+ complessa e non la vedremo in questo corso.
+\qed\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Equivalenza tra ricorsivit\`{a} e Turing-calcolabilit\`{a}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In questa sezione enunciamo i teoremi che sanciscono l'equivalenza tra vari concetti in teoria della computabilit\`{a}
+ alla Turing e teoria della ricorsivit\`{a} alla Kleene.
+
+\begin{theorem}
+Sia $f: \nat^n \to \nat$ una funzione. Allora 
+$$ \mbox{ $f$ \`{e} Turing-calcolabile sse $f$ \`{e} ricorsiva parziale } $$ 
+\end{theorem}
+
+\begin{theorem}
+Sia $R \subseteq \nat^n$ una relazione. Allora 
+\begin{enumerate}
+\item $R$ \`{e} semi-decidibile sse $R$ \`{e} ricorsivamente enumerabile
+\item $R$ \`{e} decidibile sse $R$ \`{e} ricorsiva
+\end{enumerate}
+\end{theorem}
+ 
+Non diamo le dimostrazioni di questi risultati. Chi fosse interessato pu\`{o} trovarle nel libro di Odifreddi.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
