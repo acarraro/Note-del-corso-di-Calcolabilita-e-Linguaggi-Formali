@@ -1,0 +1,157 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+\usepackage{multirow}
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 12}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 12}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro \\ 14 dicembre 2016}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{IIS Bruno-Franchetti, Mestre (VE)
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 12}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nondeterministic tree automata}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}\label{def:NDPTA}
+A \emph{nondeterministic parity tree automaton} (NPTA) for $\Sigma$-labelled full binary trees is a tuple $A = (Q, \Sigma, q_I, \delta, \Omega)$
+ where $Q$ is a finite set of states, $q_I \in Q$ is the initial state, $\delta: Q \times \Sigma \to \cP(Q^2)$ is the transition function and $\Omega: Q \to \{1,\ldots, k\}$ is the priority function.
+\end{definition}
+
+A \emph{run-tree} of an automaton $A$ over a tree $t$ is a map $\rho: \{0,1\}^* \to Q$ such that 
+\begin{enumerate}
+\item $\rho(\varepsilon) = q_I$ and
+\item for all $u \in \{0,1\}^*$ we have $(\rho(u0), \rho(u1)) \in \delta(\rho(u), t(u))$.
+\end{enumerate}
+
+A run-tree $\rho$ of $A$ over $t$ is \emph{accepting} iff in every path $\pi$ of $\rho$ the least priority that occurs infinitely often is even. An automaton $A$ \emph{accepts} a tree $t$ just if there exists an accepting run-tree of $A$ over $t$.
+
+\begin{definition}\label{def:acceptance-parity-game}
+Given an NPTA $A = (Q, \Sigma, q_I, \delta, \Omega)$ and a tree $t$ the \emph{acceptance parity game} 
+ $\cG_{A,t} = (V_V, V_R, E, v_I, \Omega')$ where 
+\begin{itemize}
+\item $V_V = \{0,1\}^* \times Q$
+\item $V_R = \{0,1\}^* \times Q^2$
+\item $v_I = (\varepsilon, q_I)$
+\item $E \subseteq (V_V \times V_R) \cup (V_R \times V_V)$ is the smallest relation such that
+\begin{itemize}
+\item if $(v,q) \in V_V$ and $(q_0, q_1) \in \delta(q, a)$ and $t(v) = a$, then \mbox{$((v,q), (v,(q_0,q_1))) \in E$}
+\item if $(v,(q_0,q_1)) \in V_R$, then $((v,(q_0,q_1)), (v0, q_0) ) \in E$ and \mbox{$((v,(q_0,q_1)), (v1, q_1) ) \in E$}
+\end{itemize}
+\item $\Omega'(v,q) = \Omega(q)$ and $\Omega'(v,(q_0,q_1)) = \mathrm{max}\{\Omega(q_0),\Omega(q_1)\}$
+\end{itemize}
+\end{definition}
+
+The acceptance parity game of Definition~\ref{def:acceptance-parity-game} can be read as follows:
+\begin{itemize}
+\item Verifier can exploit the nondeterminism of $A$ by choosing the run-tree
+\item Refuter chooses the path
+\end{itemize}
+Their combined action is headed towards checking that there exists ($\exists$) a run-tree all ($\forall$) of whose paths are accepting. Again Verifier represents ($\exists$) and Refuter represents ($\forall$).
+
+\begin{lemma}\label{lem:acceptance-game}
+Verifier has a winning strategy in $\cG_{A,t}$ from vertex $v_0$ iff $t \in L(A)$.
+\end{lemma}
+
+\begin{proof}
+\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A,t}$ from $v_0$. Define the map $\rho: \{0,1\}^* \to Q$ inductively as 
+\begin{itemize}
+\item $\rho(\varepsilon) = q_I$\ ;
+\item $\rho(v0) = q_0$ if $\rho(v) = q$ and $\sigma(v,q) = (v,(q_0,q_1))$\ ;
+\item $\rho(v1) = q_1$ if $\rho(v) = q$ and $\sigma(v,q) = (v,(q_0,q_1))$\ .
+\end{itemize}
+Clearly $\rho$ is a run-tree of $A$ over $t$. A path $\pi$ of $\rho$ has vertices \\
+ $\ldots,(v,q), (v,(q_0,q_1)), (v0, q_0), (v0,(q_0',q_1')), (v01, q_1'),\ldots$ \\ and therefore has priorities\\
+ $\ldots,\Omega(q), \mathrm{max}\{\Omega(q_0), \Omega(q_1)\}, \Omega(q_0), \mathrm{max}\{\Omega(q_0'), \Omega(q_1')\}, \Omega(q_1'),\ldots$.\\
+The least priority occurring infinitely often is even but since each priority appearing at an even position is $\geq$ than its immediate successor, the subsequence obtained by removing all priorities at even positions is such that the least priority occurring infinitely often is still even. Such a subsequence witnesses an accepting path of $\rho$ and all paths of $\rho$ are obtained this way. Hence $\rho$ is accepting.
+
+\noindent ($\Leftarrow$) Suppose $\rho$ is an accepting run-tree fo $A$ over $t$. Then define the map 
+ $\sigma: (V_V \times V_R^*)V_V \to V_R$ as 
+\begin{itemize}
+\item $\sigma(\alpha (v,q)) = (v,(q_0,q_1))$ iff $\rho(v0) = q_0$ and $\rho(v1) = q_1$.
+\end{itemize}
+Clearly $\sigma$ is a strategy for Verifier in $\cG_{A,t}$ from $v_0$. A play $\pi$ respecting $\sigma$ has vertices \\
+ $\ldots,(v,q), (v,(q_0,q_1)), (v0, q_0), (v0,(q_0',q_1')), (v01, q_1'),\ldots$ \\ and therefore has priorities\\
+ $\ldots,\Omega(q), \mathrm{max}\{\Omega(q_0), \Omega(q_1)\}, \Omega(q_0), \mathrm{max}\{\Omega(q_0'), \Omega(q_1')\}, \Omega(q_1'),\ldots$.\\
+The subsequence obtained by removing all priorities at even positions is the run-tree $\rho$ and the least priority occurring infinitely often in it is even. Since each priority appearing at an even position is $\geq$ than its immediate successor, the least priority occurring infinitely often in $\pi$ is still even. Such a play is winning for Verifier.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
