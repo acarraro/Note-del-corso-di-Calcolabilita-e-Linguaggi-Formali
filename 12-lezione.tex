@@ -120,11 +120,11 @@ The acceptance parity game of Definition~\ref{def:acceptance-parity-game} can be
 Their combined action is headed towards checking that there exists ($\exists$) a run-tree all ($\forall$) of whose paths are accepting. Again Verifier represents ($\exists$) and Refuter represents ($\forall$).
 
 \begin{lemma}\label{lem:acceptance-game}
-Verifier has a winning strategy in $\cG_{A,t}$ from vertex $v_0$ iff $t \in L(A)$.
+Verifier has a winning strategy in $\cG_{A,t}$ from vertex $v_I$ iff $t \in L(A)$.
 \end{lemma}
 
 \begin{proof}
-\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A,t}$ from $v_0$. Define the map $\rho: \{0,1\}^* \to Q$ inductively as 
+\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A,t}$ from $v_I$. Define the map $\rho: \{0,1\}^* \to Q$ inductively as 
 \begin{itemize}
 \item $\rho(\varepsilon) = q_I$\ ;
 \item $\rho(v0) = q_0$ if $\rho(v) = q$ and $\sigma(v,q) = (v,(q_0,q_1))$\ ;
@@ -144,6 +144,43 @@ Clearly $\sigma$ is a strategy for Verifier in $\cG_{A,t}$ from $v_0$. A play $\
  $\ldots,(v,q), (v,(q_0,q_1)), (v0, q_0), (v0,(q_0',q_1')), (v01, q_1'),\ldots$ \\ and therefore has priorities\\
  $\ldots,\Omega(q), \mathrm{max}\{\Omega(q_0), \Omega(q_1)\}, \Omega(q_0), \mathrm{max}\{\Omega(q_0'), \Omega(q_1')\}, \Omega(q_1'),\ldots$.\\
 The subsequence obtained by removing all priorities at even positions is the run-tree $\rho$ and the least priority occurring infinitely often in it is even. Since each priority appearing at an even position is $\geq$ than its immediate successor, the least priority occurring infinitely often in $\pi$ is still even. Such a play is winning for Verifier.
+\end{proof}
+
+\begin{definition}\label{def:non-emptiness-parity-game}
+Given an NPTA $A = (Q, \Sigma, q_I, \delta, \Omega)$ the \emph{non-emptiness parity game} 
+ $\cG_{A} = (V_V, V_R, E, v_I, \Omega')$ where 
+\begin{itemize}
+\item $V_V = Q$
+\item $V_R = \{((q,a), (q_0,q_1)) \st (q_0,q_1) \in \delta(q,a)\}$.
+\item $v_I = q_I$
+\item $E \subseteq (V_V \times V_R) \cup (V_R \times V_V)$ is the smallest relation such that
+\begin{itemize}
+\item if $q \in V_V$ and $(q_0, q_1) \in \delta(q, a)$, then $(q, ((q,a),(q_0, q_1))) \in E$
+\item if $v = ((q,a),(q_0,q_1)) \in V_R$, then $(v, q_0)\in E$ and $(v,q_1) \in E$
+\end{itemize}
+\item $\Omega'(q) = \Omega(q)$ and $\Omega'((q,a),(q_0,q_1)) = \Omega(q)$
+\end{itemize}
+\end{definition}
+
+\begin{lemma}\label{lem:non-emptiness-game}
+Verifier has a winning strategy in $\cG_{A}$ from vertex $v_I$ iff $L(A) \neq \emptyset$.
+\end{lemma}
+
+\begin{proof}
+\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A}$ from $v_I$. Then $\delta(q,a) \neq \emptyset$ for every pair $(q,a) \in Q \times \Sigma$. The map $\sigma$ induces a function 
+ $\hat{\sigma}: Q \to \Sigma \times Q^2$ given by $\hat{\sigma}(q) = (a,q_0,q_1)$ iff 
+ $\sigma(q) = ((q,a),(q_0, q_1))$. Therefore the solution to the fixpoint equation  
+ $\tau(q) = (a,\tau(q_0),\tau(q_1))$ with constraints $\hat{\sigma}(q) = (a,q_0,q_1)$ is a tree whose first coordinates
+  define a tree $t \in L(A)$.
+
+\noindent ($\Leftarrow$) Suppose $t \in L(A)$ is an input tree and let $\rho$ be the associated run-tree. 
+
+Let $\bar{t}(\varepsilon) = t(\varepsilon)$ and $\bar{t}(uj) = \bar{t}(u)t(uj)$ for $u \in \{0,1\}^*$ and $j \in \{0,1\}$. 
+
+Let also $\bar{\rho}(\varepsilon) = \rho(\varepsilon)$ and $\bar{\rho}(uj) = \bar{\rho}(u)\rho(uj)$ for $u \in \{0,1\}^*$ and $j \in \{0,1\}$.
+
+Similarly Then the map $\sigma: (V_VV_R)^*V_V \to V_R$ given by $\sigma(\alpha q) = ((q,a), (q_0,q_1))$ if $\alpha$ "contains" the string $u = i_1\ldots i_n$ and $t(i_1)\ldots t(i_1\ldots i_n) = a$ and $\rho(i_1)\ldots \rho(i_1\ldots i_n) = q$. 
+
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -611,4 +611,71 @@ Overfull \hbox (17.05618pt too wide) in paragraph at lines 250--253
 /10 A$ \OT1/cmr/m/n/10 rap-p-re-senta l'intero dis-egno dell'automa
  []
 
-<x
+<xymatrix 6x1 207> [5]
+
+LaTeX Warning: Reference `def:ling-CFL' on page 6 undefined on input line 298.
+
+
+LaTeX Warning: Reference `prop:palindrome-NPDA' on page 6 undefined on input li
+ne 304.
+
+
+./3-lezione.tex:308: Package enumitem Error: (i) undefined.
+
+See the enumitem package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.308 \begin{enumerate}[(i)]
+                            
+? H
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+? 
+
+./3-lezione.tex:315: Package enumitem Error: (i) undefined.
+
+See the enumitem package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.315 \begin{enumerate}[(i)]
+                            
+? i
+insert>s
+
+LaTeX Warning: Reference `ex:Lwwr' on page 6 undefined on input line 316.
+
+
+LaTeX Warning: Reference `prop:palindrome-NPDA' on page 6 undefined on input li
+ne 321.
+
+[6]
+
+./3-lezione.tex:333: Package enumitem Error: (i) undefined.
+
+See the enumitem package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.333 \begin{enumerate}[(i)]
+                            
+? 
+./3-lezione.tex:333: Emergency stop.
+ ...                                              
+                                                  
+l.333 \begin{enumerate}[(i)]
+                            
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+ 
+Here is how much of TeX's memory you used:
+ 6741 strings out of 493089
+ 80830 string characters out of 6134841
+ 250375 words of memory out of 5000000
+ 10057 multiletter control sequences out of 15000+600000
+ 16310 words of font info for 73 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 38i,14n,26p,857b,905s stack positions out of 5000i,500n,10000p,200000b,80000s
+./3-lezione.tex:333:  ==> Fatal error occurred, no output PDF file produced!

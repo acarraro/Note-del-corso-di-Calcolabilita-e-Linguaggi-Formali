@@ -611,4 +611,116 @@ LaTeX Warning: Reference `def:epselim' on page 4 undefined on input line 220.
 LaTeX Warning: Reference `def:epselim' on page 4 undefined on input line 224.
 
 
-LaTeX Warning: Reference `def:trans-est3' on page 
+LaTeX Warning: Reference `def:trans-est3' on page 4 undefined on input line 232
+.
+
+
+LaTeX Warning: Reference `def:epselim' on page 4 undefined on input line 234.
+
+
+LaTeX Warning: Reference `def:trans-est' on page 4 undefined on input line 235.
+
+
+[4]
+
+LaTeX Warning: Reference `thm:det-non-det' on page 5 undefined on input line 25
+2.
+
+
+LaTeX Warning: Reference `thm:epselim' on page 5 undefined on input line 252.
+
+
+LaTeX Warning: Reference `def:ling-reg' on page 5 undefined on input line 252.
+
+
+LaTeX Warning: Reference `def:ling-reg' on page 5 undefined on input line 285.
+
+
+Overfull \hbox (52.17584pt too wide) in paragraph at lines 287--290
+\OMS/cmsy/m/n/10 B \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Q[]; ^^F; ^^N[]; q[]; F[
+]\OT1/cmr/m/n/10 )$ \OT1/cmr/m/it/10 due DFA. Defini-amo il DFA $\OMS/cmsy/m/n/
+10 A ^^B B \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Q[]; ^^F; ^^N[]; \OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; F[]\OT1/cmr/m/n/
+10 )$
+ []
+
+[5]
+
+LaTeX Warning: Reference `thm:prod-DFA' on page 6 undefined on input line 321.
+
+
+LaTeX Warning: Reference `thm:compl-DFA' on page 6 undefined on input line 321.
+
+
+
+Overfull \hbox (25.2203pt too wide) in paragraph at lines 328--331
+\OT1/cmr/m/it/10 e $\OMS/cmsy/m/n/10 B \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Q[];
+ ^^F; ^^N[]; q[]; F[]\OT1/cmr/m/n/10 )$ \OT1/cmr/m/it/10 due $\OML/cmm/m/it/10 
+^^O$\OT1/cmr/m/it/10 -NFA. Defini-amo l'$\OML/cmm/m/it/10 ^^O$\OT1/cmr/m/it/10 
+-NFA $\OMS/cmsy/m/n/10 A ^^A B \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Q[]; ^^F; ^^
+N[]; q[]; F[]\OT1/cmr/m/n/10 )$
+ []
+
+
+Overfull \hbox (59.63747pt too wide) in paragraph at lines 332--344
+[]$\OML/cmm/m/it/10 ^^N[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p; a\OT1/cmr/m/n/10 
+) = []$  $\OML/cmm/m/it/10 ^^N[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 p; ^^O\OT1/cm
+r/m/n/10 ) = []$ 
+ []
+
+[6]
+
+LaTeX Warning: Reference `thm:conc-eNFA' on page 7 undefined on input line 364.
+
+
+[7]
+Overfull \hbox (8.28613pt too wide) in paragraph at lines 421--422
+[]\OT1/cmr/m/it/10 le costanti $\OML/cmm/m/it/10 ^^O$ \OT1/cmr/m/it/10 e $\OMS/
+cmsy/m/n/10 ;$ \OT1/cmr/m/it/10 sono espres-sioni re-go-lari ed ogni el-e-mento
+ di $\OML/cmm/m/it/10 ^^F$ \OT1/cmr/m/it/10 ^^Re un'espressione
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 445--446
+
+ []
+
+<xymatrix 3x1 89> <xymatrix 3x1 48> <xymatrix 3x1 89>
+Underfull \hbox (badness 10000) in paragraph at lines 453--469
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 453--469
+
+ []
+
+<xymatrix 4x3 240> [8] <xymatrix 4x1 134> <xymatrix 3x1 154>
+
+./2-lezione.tex:496: Package enumitem Error: (1) undefined.
+
+See the enumitem package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.496 \begin{enumerate}[(1)]
+                            
+? 
+./2-lezione.tex:496: Emergency stop.
+ ...                                              
+                                                  
+l.496 \begin{enumerate}[(1)]
+                            
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+ 
+Here is how much of TeX's memory you used:
+ 6800 strings out of 493089
+ 81370 string characters out of 6134841
+ 195264 words of memory out of 5000000
+ 10098 multiletter control sequences out of 15000+600000
+ 23498 words of font info for 102 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 38i,14n,26p,514b,916s stack positions out of 5000i,500n,10000p,200000b,80000s
+./2-lezione.tex:496:  ==> Fatal error occurred, no output PDF file produced!
