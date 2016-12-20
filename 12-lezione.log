@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.12.13)  16 DEC 2016 10:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.12.13)  20 DEC 2016 19:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -524,8 +524,11 @@ LaTeX Font Info:    Try loading font information for U+stmry on input line 79.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
 LaTeX Font Info:    Try loading font information for U+cmllr on input line 79.
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/cmll/ucmllr.fd)
-Overfull \hbox (18.47789pt too wide) in paragraph at lines 108--109
+(/usr/local/texlive/2015/texmf-dist/tex/latex/cmll/ucmllr.fd) [1
+
+
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (18.47789pt too wide) in paragraph at lines 149--150
 []\OT1/cmr/m/it/10 if $\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 v; q\OT1/cmr/m/n/10 ) 
 \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 V[]$ \OT1/cmr/m/it/10 and $\OT1/cmr/m/n/10 
 (\OML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10
@@ -535,7 +538,7 @@ ML/cmm/m/it/10 a$\OT1/cmr/m/it/10 , then []
  []
 
 
-Overfull \hbox (38.18454pt too wide) in paragraph at lines 109--110
+Overfull \hbox (38.18454pt too wide) in paragraph at lines 150--151
 []\OT1/cmr/m/it/10 if $\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 v; \OT1/cmr/m/n/10 (\O
 ML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 V
 []$\OT1/cmr/m/it/10 , then $\OT1/cmr/m/n/10 ((\OML/cmm/m/it/10 v; \OT1/cmr/m/n/
@@ -544,40 +547,20 @@ ML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 V
  \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 E$ \OT1/cmr/m/it/10 and [] 
  []
 
-[1
-
-
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2]
-Overfull \hbox (7.31146pt too wide) in paragraph at lines 182--183
-[]\OT1/cmr/m/n/10 Similarly Then the map $\OML/cmm/m/it/10 ^^[ \OT1/cmr/m/n/10 
-: (\OML/cmm/m/it/10 V[]V[]\OT1/cmr/m/n/10 )[]\OML/cmm/m/it/10 V[] \OMS/cmsy/m/n
-/10 ! \OML/cmm/m/it/10 V[]$ \OT1/cmr/m/n/10 given by $\OML/cmm/m/it/10 ^^[\OT1/
-cmr/m/n/10 (\OML/cmm/m/it/10 q\OT1/cmr/m/n/10 ) = ((\OML/cmm/m/it/10 q; a\OT1/
-cmr/m/n/10 )\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 (\OML/cmm/m/it/10 q[]; q[]\OT1/c
-mr/m/n/10 ))$
- []
+Underfull \hbox (badness 10000) in paragraph at lines 211--214
 
-
-Overfull \hbox (40.45454pt too wide) in paragraph at lines 182--183
-\OT1/cmr/m/n/10 if $\OML/cmm/m/it/10 $ \OT1/cmr/m/n/10 "con-tains" the string 
-$\OML/cmm/m/it/10 u \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 i[] [] i[]$ \OT1/cmr/m/n
-/10 and $\OML/cmm/m/it/10 t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 i[]\OT1/cmr/m/n/10
- ) [] \OML/cmm/m/it/10 t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 i[] [] i[]\OT1/cmr/m/
-n/10 ) = \OML/cmm/m/it/10 a$ \OT1/cmr/m/n/10 and $\OML/cmm/m/it/10 ^^Z\OT1/cmr/
-m/n/10 (\OML/cmm/m/it/10 i[]\OT1/cmr/m/n/10 ) [] \OML/cmm/m/it/10 ^^Z\OT1/cmr/m
-/n/10 (\OML/cmm/m/it/10 i[] [] i[]\OT1/cmr/m/n/10 ) =
  []
 
 [3] (./12-lezione.aux) ) 
 Here is how much of TeX's memory you used:
- 6691 strings out of 493089
- 80317 string characters out of 6134841
- 189460 words of memory out of 5000000
- 10006 multiletter control sequences out of 15000+600000
+ 6692 strings out of 493089
+ 80334 string characters out of 6134841
+ 189468 words of memory out of 5000000
+ 10007 multiletter control sequences out of 15000+600000
  15405 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,7n,26p,439b,346s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,6n,26p,439b,346s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/am
@@ -590,7 +573,7 @@ msy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 sy7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti
 10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9
 .pfb>
-Output written on 12-lezione.pdf (3 pages, 136882 bytes).
+Output written on 12-lezione.pdf (3 pages, 146195 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  41 compressed objects within 1 object stream

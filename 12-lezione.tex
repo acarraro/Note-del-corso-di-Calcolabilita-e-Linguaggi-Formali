@@ -79,14 +79,55 @@
 \maketitle
 %\tableofcontents
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Parity games}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}\label{def:parity-game}
+A \emph{parity game} is a tuple $\cG = (V, R, \lambda, C, \Omega)$
+\begin{itemize}
+\item $V$ is a finite set of states vertices partitioned into two sets $V_V$ (vertices owned by "Verifier") and $V_R$ (vertices owned by "Refuter"),
+\item $R \subseteq V \times V$ is the accessibility relation,
+\item $C$ is a finite set of labels and $\lambda: V \times C$ is the labelling function,
+\item $\Omega: V \to \{1,\ldots, k\}$ is the priority function.
+\end{itemize}
+\end{definition}
+
+A \emph{play} is a finite or infinite sequence of vertices. A finite play $\pi$ is winning for Verifier if its last vertex  belongs to $V_V$. An infinite play $\pi = v_0, v1, \ldots$ is winning for Verifier if in the sequence $\Omega(\pi) = \Omega(v_0), \Omega(v1), \ldots$ the least priority that occurs infinitely often is even. We let 
+\begin{itemize}
+\item $Win = \{\pi : \pi \text{ is a winning play for Verifier} \}$, so that $Win \subseteq V^* \cup V^\omega$.
+\item $Acc = \{\lambda(\pi) : \pi \in Win \}$, so that $Acc \subseteq C^* \cup C^\omega$.
+\end{itemize}
+
+\begin{example}
+For a graph $(V, R)$ and a finite set $F \subseteq C$. We can build a game such that  $Acc \cap C^\omega = F^\omega$ by setting:
+$\Omega(v) = 0$ for every $v \in F$.
+\end{example}
+
+\begin{example}
+For a graph $(V, R)$ and a finite set $F \subseteq C$ we let $Reach_F$ be the set of plays $\pi$ with $\pi = v_0,v_1,\ldots \in V^\omega$ and such that there exists $i$ with $\lambda(v_i) \in F$. We can build a game such that  $Acc \cap C^\omega = \lambda(Reach_F)$ by setting:
+
+\end{example}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Nondeterministic tree automata}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{definition}\label{def:NDPTA}
-A \emph{nondeterministic parity tree automaton} (NPTA) for $\Sigma$-labelled full binary trees is a tuple $A = (Q, \Sigma, q_I, \delta, \Omega)$
- where $Q$ is a finite set of states, $q_I \in Q$ is the initial state, $\delta: Q \times \Sigma \to \cP(Q^2)$ is the transition function and $\Omega: Q \to \{1,\ldots, k\}$ is the priority function.
+A \emph{nondeterministic parity tree automaton} (NPTA) for $\Sigma$-labelled full binary trees is a tuple $A = (Q, \Sigma, q_I, \delta, \Omega)$ where 
+\begin{itemize}
+\item $Q$ is a finite set of states,
+\item $q_I \in Q$ is the initial state, 
+\item $\delta: Q \times \Sigma \to \cP(Q^2)$ is the transition function and 
+\item $\Omega: Q \to \{1,\ldots, k\}$ is the priority function.
+\end{itemize}
 \end{definition}
+
+\begin{remark}
+Note that the transition function $\delta: Q \times \Sigma \to \cP(Q^2)$ is by some authors seen as a function
+ $\delta: Q \times \Sigma \times \{0,1\} \to \cP(Q)$.
+\end{remark}
 
 A \emph{run-tree} of an automaton $A$ over a tree $t$ is a map $\rho: \{0,1\}^* \to Q$ such that 
 \begin{enumerate}
@@ -156,7 +197,7 @@ Given an NPTA $A = (Q, \Sigma, q_I, \delta, \Omega)$ the \emph{non-emptiness par
 \item $E \subseteq (V_V \times V_R) \cup (V_R \times V_V)$ is the smallest relation such that
 \begin{itemize}
 \item if $q \in V_V$ and $(q_0, q_1) \in \delta(q, a)$, then $(q, ((q,a),(q_0, q_1))) \in E$
-\item if $v = ((q,a),(q_0,q_1)) \in V_R$, then $(v, q_0)\in E$ and $(v,q_1) \in E$
+\item if $y = ((q,a),(q_0,q_1)) \in V_R$, then $(y, q_0)\in E$ and $(y,q_1) \in E$
 \end{itemize}
 \item $\Omega'(q) = \Omega(q)$ and $\Omega'((q,a),(q_0,q_1)) = \Omega(q)$
 \end{itemize}
@@ -167,19 +208,20 @@ Verifier has a winning strategy in $\cG_{A}$ from vertex $v_I$ iff $L(A) \neq \e
 \end{lemma}
 
 \begin{proof}
-\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A}$ from $v_I$. Then $\delta(q,a) \neq \emptyset$ for every pair $(q,a) \in Q \times \Sigma$. The map $\sigma$ induces a function 
- $\hat{\sigma}: Q \to \Sigma \times Q^2$ given by $\hat{\sigma}(q) = (a,q_0,q_1)$ iff 
- $\sigma(q) = ((q,a),(q_0, q_1))$. Therefore the solution to the fixpoint equation  
- $\tau(q) = (a,\tau(q_0),\tau(q_1))$ with constraints $\hat{\sigma}(q) = (a,q_0,q_1)$ is a tree whose first coordinates
-  define a tree $t \in L(A)$.
+\noindent ($\Rightarrow$) Suppose Verifier has a winning strategy $\sigma$ in $\cG_{A}$ from $v_I$. Then $\delta(q,a) \neq \emptyset$ for every pair $(q,a) \in Q \times \Sigma$. The solution to the fixpoint equation  
+ $\tau(q) = (a,\tau(q_0),\tau(q_1))$ with constraints $\sigma(q) = ((q,a),(q_0, q_1))$ is a tree whose first coordinates
+  define a tree $t \in L(A)$.\\
 
-\noindent ($\Leftarrow$) Suppose $t \in L(A)$ is an input tree and let $\rho$ be the associated run-tree. 
+\noindent ($\Leftarrow$) Let $\alpha \in (V_VV_R)^*V_V$ be an initial segment of a play in $\cG_{A}$ from $v_I$. 
+ The run-trees $\rho$ of the trees $t \in L(A)$.
+Suppose  is an input tree and let $\rho$ be an associated run-tree. 
 
 Let $\bar{t}(\varepsilon) = t(\varepsilon)$ and $\bar{t}(uj) = \bar{t}(u)t(uj)$ for $u \in \{0,1\}^*$ and $j \in \{0,1\}$. 
+ Let also $\bar{\rho}(\varepsilon) = \rho(\varepsilon)$ and $\bar{\rho}(uj) = \bar{\rho}(u)\rho(uj)$ for $u \in \{0,1\}^*$ and $j \in \{0,1\}$.
 
-Let also $\bar{\rho}(\varepsilon) = \rho(\varepsilon)$ and $\bar{\rho}(uj) = \bar{\rho}(u)\rho(uj)$ for $u \in \{0,1\}^*$ and $j \in \{0,1\}$.
+Come si fa a definire la strategia vincente? La run-tree su $t$ potrebbe non visitare tutti gli stati e quindi per gli stati ne non compaiono come faccio ad avere la scelta giusta del successore per la strategia? 
 
-Similarly Then the map $\sigma: (V_VV_R)^*V_V \to V_R$ given by $\sigma(\alpha q) = ((q,a), (q_0,q_1))$ if $\alpha$ "contains" the string $u = i_1\ldots i_n$ and $t(i_1)\ldots t(i_1\ldots i_n) = a$ and $\rho(i_1)\ldots \rho(i_1\ldots i_n) = q$. 
+ is a sequence $x_1(y_1,z_1), \ldots,x_n(y_n,z_n)$ with $x_i \in Q$, $y_i \in Q \times \Sigma$ and $z_i \in Q^2$. The trace of $\alpha$ is then $y_1,\ldots, y_n$. Then the map $\sigma: (V_VV_R)^*V_V \to V_R$ given by $\sigma(\alpha q) = $ component-wise first  if $\alpha$ "contains" the string $u = i_1\ldots i_n$ and $t(i_1)\ldots t(i_1\ldots i_n) = a$ and $\rho(i_1)\ldots \rho(i_1\ldots i_n) = q$. 
 
 \end{proof}
 
