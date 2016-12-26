@@ -225,6 +225,116 @@ Come si fa a definire la strategia vincente? La run-tree su $t$ potrebbe non vis
 
 \end{proof}
 
+\section{Finite automata on infinite words}
+
+A nondeterminitstic \emph{finite automaton} on $\Sigma$-labelled infinite words is a tuple $A = (Q, \Sigma, q_I, \delta)$ where 
+\begin{itemize}
+\item $Q$ is a finite set of states;
+\item $q_I \in Q$ is the initial state; 
+\item $\delta: Q \times \Sigma \to \cP(Q)$ is the transition function.
+\end{itemize}
+
+A run of a word $\alpha \in \Sigma^\omega$ is a sequence $\varrho \in Q^\Omega$ such that $\varrho(0) = q_I$ and $\varrho(i+1) \in \delta(\varrho(i), \alpha(i))$ for all $i \geq 0$. 
+
+We let $\text{Inf}(\varrho) = \{ q \in Q \st \varrho^{-1}(q) \text{ is infinite} \}$.
+
+\begin{definition}\label{def:NBW}
+A \emph{nondeterministic B\"{u}chi automaton} on $\Sigma$-labelled infinite words is a finite automaton $A = (Q, \Sigma, q_I, \delta, F)$ where $F \subseteq Q$ is the set of final states.
+ The language of $A$, $L(A)$, is the set of words for which there exists a run $\varrho$ with $\text{Inf}(\varrho) \cap F \neq \emptyset$.
+\end{definition}
+
+\begin{definition}\label{def:NMW}
+A \emph{nondeterministic M\"{u}ller automaton} on $\Sigma$-labelled infinite words is a finite automaton $A = (Q, \Sigma, q_I, \delta, \Omega)$ where $\Omega = \{F_1,\ldots,F_k\}$ is a finite set with $F_i \subseteq Q$.
+ The language of $A$, $L(A)$, is the set of words for which there exists a run $\varrho$ such that $\text{Inf}(\varrho) \in \Omega$.
+\end{definition}
+
+\begin{definition}\label{def:NRW}
+A \emph{nondeterministic Rabin automaton} on $\Sigma$-labelled infinite words is a finite automaton $A = (Q, \Sigma, q_I, \delta, \Omega)$ where $\Omega = \{(E_1,F_1),\ldots,(E_k,F_k)\}$ is a finite set with $E_i,F_i \subseteq Q$. The language of $A$, $L(A)$, is the set of words for which there exists a run $\varrho$ such that there exists a pair $(E,F) \in \Omega$ such that $\text{Inf}(\varrho) \cap E = \emptyset$ and $\text{Inf}(\varrho) \cap F \neq \emptyset$.
+\end{definition}
+
+\begin{definition}\label{def:NPW}
+A \emph{nondeterministic Parity automaton} on $\Sigma$-labelled infinite words is a finite automaton $A = (Q, \Sigma, q_I, \delta, \Omega)$ where $\Omega: Q \to \{1,\ldots,k\}$ is the set of priorities (or colors).
+ The language of $A$, $L(A)$, is the set of words for which there exists a run $\varrho$ such that the minimum element of $\text{Inf}(\Omega\circ \varrho)$ is even.
+\end{definition}
+
+\begin{theorem}\label{thm:Buchi>Muller}
+Let $A = (Q, \Sigma, q_I, \delta, F)$ be a nondeterministic B\"{u}chi automaton. Then there exists a nondeterministic M\"{u}ller automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Define $\Omega = \{G \in \cP(Q) \st G \cap F \neq \emptyset\}$. Then the nondeterministic M\"{u}ller automaton $A'= (Q, \Sigma, q_I, \delta, \Omega)$ has the desired property.
+\end{proof}
+
+\begin{theorem}\label{thm:Muller>Buchi}
+Let $A = (Q, \Sigma, q_I, \delta, \Omega)$ be a nondeterministic M\"{u}ller automaton. Then there exists a nondeterministic B\"{u}chi automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Define $Q' = Q \cup \{(G, q, X) \st G \in \Omega, q \in G, X \subseteq G\}$ and $F = \{(G, q, \emptyset) \st G \in \Omega, q \in G\}$. 
+
+Let $q \in Q$ and suppose $p \in \delta(q,a)$. Then also $p \in \delta'(q,a)$ and for each $G \in \Omega$ we have  
+$$
+\begin{cases}
+(G, p, \{q\}) \in \delta'(q, a) & \text{if } \{q\} \subset G \text{ and } p \in G \\
+(G, p, \emptyset) \in \delta'(q, a) & \text{if } \{q\} = G \text{ and } p \in G 
+\end{cases}
+$$
+and
+$$
+\begin{cases}
+(G, p, X \cup \{q\}) \in \delta'((G, q, X), a) & \text{if } X \cup \{q\} \subset G \text{ and } p \in G \\
+(G, p, \emptyset) \in \delta'((G, q, X), a) & \text{if } X \cup \{q\} = G \text{ and } p \in G 
+\end{cases}
+$$
+
+The nondeterministic B\"{u}chi automaton $A' = (Q', \Sigma, q_I, \delta', F)$ has the desired property.
+\end{proof}
+
+\begin{theorem}\label{thm:Rabin>Muller}
+Let $A = (Q, \Sigma, q_I, \delta, \Omega)$ be a nondeterministic Rabin automaton. Then there exists a nondeterministic M\"{u}ller automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Define $\Omega' = \{G \in \cP(Q) \st \exists (E,F) \in \Omega.\ (G \cap E = \emptyset \wedge G \cap F \neq \emptyset)\}$. Then the nondeterministic M\"{u}ller automaton $A'= (Q, \Sigma, q_I, \delta, \Omega')$ has the desired property.
+\end{proof}
+
+\begin{theorem}\label{thm:Parity>Rabin}
+Let $A = (Q, \Sigma, q_I, \delta, \Omega)$ be a nondeterministic Parity automaton. Then there exists a nondeterministic Rabin automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Suppose that $\{0,\ldots,k\}$ is the set of colors for $A$. Let $r = \lfloor \frac{k}{2} \rfloor$ and $\Omega' = \{(E_0,F_0),\ldots,(E_r,F_r)\}$ where
+\begin{itemize}
+\item $E_i = \{q \in Q \st \Omega(q) < 2i\}$
+\item $F_i = \{q \in Q \st \Omega(q) \leq 2i\}$
+\end{itemize}
+Then the nondeterministic Rabin automaton $A'= (Q, \Sigma, q_I, \delta, \Omega')$ has the desired property.
+\end{proof}
+
+\begin{theorem}\label{thm:Buchi>Parity}
+Let $A = (Q, \Sigma, q_I, \delta, F)$ be a nondeterministic B\"{u}chi automaton. Then there exists a nondeterministic Parity automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Let $\{0,1\}$ be the set of colors and define 
+$$
+\Omega(q) = 
+\begin{cases}
+0 & \text{if } q \in F \\
+1 & \text{if } q \not\in F
+\end{cases}
+$$
+Then the nondeterministic Parity automaton $A'= (Q, \Sigma, q_I, \delta, \Omega)$ has the desired property.
+\end{proof}
+
+\begin{theorem}\label{thm:Buchi>Rabin}
+Let $A = (Q, \Sigma, q_I, \delta, F)$ be a nondeterministic B\"{u}chi automaton. Then there exists a nondeterministic Rabin automaton $A'$ such that $L(A') = L(A)$.
+\end{theorem}
+
+\begin{proof}
+Define $\Omega = \{(\emptyset, F)\}$. Then the nondeterministic Rabin automaton $A'= (Q, \Sigma, q_I, \delta, \Omega)$ has the desired property.
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\bibliographystyle{abbrv}%splncs
 %\bibliography{bibliography}
