@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.12.13)  26 DEC 2016 22:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.12.13)  9 JAN 2017 15:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**12-lezione.tex
-(./12-lezione.tex
+**11-lezione.tex
+(./11-lezione.tex
 LaTeX2e <2015/01/01>
 Babel <3.9l> and hyphenation patterns for 79 languages loaded.
 (./llncs.cls
@@ -307,17 +307,14 @@ LaTeX Info: Redefining \addtolength on input line 81.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/ifmtarg/ifmtarg.sty
 Package: ifmtarg 2009/09/02 v1.2a check for an empty argument
 ))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/multirow/multirow.sty
-\bigstrutjot=\dimen139
-)
 (./prooftree.sty <Paul Taylor's Proof Trees, 2 August 1996>
-\proofrulebreadth=\dimen140
-\proofdotseparation=\dimen141
-\proofrulebaseline=\dimen142
+\proofrulebreadth=\dimen139
+\proofdotseparation=\dimen140
+\proofrulebaseline=\dimen141
 \proofdotnumber=\count135
-\shortenproofleft=\dimen143
-\shortenproofright=\dimen144
-\proofbelowshift=\dimen145
+\shortenproofleft=\dimen142
+\shortenproofright=\dimen143
+\proofbelowshift=\dimen144
 \proofabove=\box58
 \proofbelow=\box59
 \proofrulename=\box60
@@ -332,45 +329,45 @@ catcodes, docmode,
  Xy-pic is free software: see the User's Guide for details.
 
 Loading kernel: messages; fonts; allocations: state,
-\X@c=\dimen146
-\Y@c=\dimen147
-\U@c=\dimen148
-\D@c=\dimen149
-\L@c=\dimen150
-\R@c=\dimen151
+\X@c=\dimen145
+\Y@c=\dimen146
+\U@c=\dimen147
+\D@c=\dimen148
+\L@c=\dimen149
+\R@c=\dimen150
 \Edge@c=\toks28
-\X@p=\dimen152
-\Y@p=\dimen153
-\U@p=\dimen154
-\D@p=\dimen155
-\L@p=\dimen156
-\R@p=\dimen157
+\X@p=\dimen151
+\Y@p=\dimen152
+\U@p=\dimen153
+\D@p=\dimen154
+\L@p=\dimen155
+\R@p=\dimen156
 \Edge@p=\toks29
-\X@origin=\dimen158
-\Y@origin=\dimen159
-\X@xbase=\dimen160
-\Y@xbase=\dimen161
-\X@ybase=\dimen162
-\Y@ybase=\dimen163
-\X@min=\dimen164
-\Y@min=\dimen165
-\X@max=\dimen166
-\Y@max=\dimen167
+\X@origin=\dimen157
+\Y@origin=\dimen158
+\X@xbase=\dimen159
+\Y@xbase=\dimen160
+\X@ybase=\dimen161
+\Y@ybase=\dimen162
+\X@min=\dimen163
+\Y@min=\dimen164
+\X@max=\dimen165
+\Y@max=\dimen166
 \lastobjectbox@=\box61
 \zerodotbox@=\box62
-\almostz@=\dimen168
+\almostz@=\dimen167
  direction,
-\d@X=\dimen169
-\d@Y=\dimen170
+\d@X=\dimen168
+\d@Y=\dimen169
 \K@=\count136
 \KK@=\count137
 \Direction=\count138
-\K@dXdY=\dimen171
-\K@dYdX=\dimen172
+\K@dXdY=\dimen170
+\K@dYdX=\dimen171
 \xyread@=\read1
 \xywrite@=\write3
 \csp@=\count139
-\quotPTK@=\dimen173
+\quotPTK@=\dimen172
 
 utility macros; pictures: \xy, positions,
 \swaptoks@@=\toks30
@@ -387,12 +384,12 @@ edges, connections;  Xy-pic loaded)
 \crv@cnt@=\count140
 \crvpts@=\toks32
 \splinebox@=\box64
-\splineval@=\dimen174
-\splinedepth@=\dimen175
-\splinetol@=\dimen176
-\splinelength@=\dimen177
+\splineval@=\dimen173
+\splinedepth@=\dimen174
+\splinetol@=\dimen175
+\splinelength@=\dimen176
  circles,
-\L@=\dimen178
+\L@=\dimen177
  loaded)
 (/usr/local/texlive/2015/texmf-dist/tex/generic/xypic/xyframe.tex
  Xy-pic option: Frame and Bracket extension v.3.14 loaded)
@@ -402,7 +399,7 @@ edges, connections;  Xy-pic loaded)
  Xy-pic option: More Tips extension v.3.11 loaded) loaded)
 (/usr/local/texlive/2015/texmf-dist/tex/generic/xypic/xyline.tex
  Xy-pic option: Line styles extension v.3.10
-\xylinethick@=\dimen179
+\xylinethick@=\dimen178
  loaded)
 (/usr/local/texlive/2015/texmf-dist/tex/generic/xypic/xyrotate.tex
  Xy-pic option: Rotate and Scale extension v.3.8 loaded)
@@ -423,36 +420,35 @@ edges, connections;  Xy-pic loaded)
 (/usr/local/texlive/2015/texmf-dist/tex/generic/xypic/xygraph.tex
  Xy-pic option: Graph feature v.3.11 loaded) loaded)
 \@indexfile=\write4
-\openout4 = `12-lezione.idx'.
+\openout4 = `11-lezione.idx'.
 
 
-Writing index file 12-lezione.idx
-(./12-lezione.aux)
-\openout1 = `12-lezione.aux'.
+Writing index file 11-lezione.idx
+No file 11-lezione.aux.
+\openout1 = `11-lezione.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 (/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count146
-\scratchdimen=\dimen180
+\scratchdimen=\dimen179
 \scratchbox=\box65
 \nofMPsegments=\count147
 \nofMParguments=\count148
 \everyMPshowfont=\toks35
 \MPscratchCnt=\count149
-\MPscratchDim=\dimen181
+\MPscratchDim=\dimen180
 \MPnumerator=\count150
 \makeMPintoPDFobject=\count151
 \everyMPtoPDFconversion=\toks36
@@ -505,102 +501,76 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 (./macro.tex)
-LaTeX Font Info:    Try loading font information for U+msa on input line 79.
+LaTeX Font Info:    Try loading font information for U+msa on input line 78.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 79.
+LaTeX Font Info:    Try loading font information for U+msb on input line 78.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 79.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 78.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Try loading font information for U+stmry on input line 79.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 78.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
-LaTeX Font Info:    Try loading font information for U+cmllr on input line 79.
+LaTeX Font Info:    Try loading font information for U+cmllr on input line 78.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/cmll/ucmllr.fd) [1
 
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (18.47789pt too wide) in paragraph at lines 149--150
-[]\OT1/cmr/m/it/10 if $\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 v; q\OT1/cmr/m/n/10 ) 
-\OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 V[]$ \OT1/cmr/m/it/10 and $\OT1/cmr/m/n/10 
-(\OML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10
- ^^N\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 q; a\OT1/cmr/m/n/10 )$ \OT1/cmr/m/it/10 a
-nd $\OML/cmm/m/it/10 t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 v\OT1/cmr/m/n/10 ) = \O
-ML/cmm/m/it/10 a$\OT1/cmr/m/it/10 , then [] 
- []
+
+LaTeX Warning: Reference `thm:Kre' on page 2 undefined on input line 169.
 
 
-Overfull \hbox (38.18454pt too wide) in paragraph at lines 150--151
-[]\OT1/cmr/m/it/10 if $\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 v; \OT1/cmr/m/n/10 (\O
-ML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 V
-[]$\OT1/cmr/m/it/10 , then $\OT1/cmr/m/n/10 ((\OML/cmm/m/it/10 v; \OT1/cmr/m/n/
-10 (\OML/cmm/m/it/10 q[]; q[]\OT1/cmr/m/n/10 ))\OML/cmm/m/it/10 ; \OT1/cmr/m/n/
-10 (\OML/cmm/m/it/10 v\OT1/cmr/m/n/10 0\OML/cmm/m/it/10 ; q[]\OT1/cmr/m/n/10 ))
- \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 E$ \OT1/cmr/m/it/10 and [] 
- []
+LaTeX Warning: Reference `thm:transfer' on page 2 undefined on input line 198.
 
-[2]
-Underfull \hbox (badness 10000) in paragraph at lines 211--214
+[2] [3]
 
- []
+LaTeX Warning: Reference `thm:Kre' on page 4 undefined on input line 372.
 
-[3]
-Overfull \hbox (3.34549pt too wide) in paragraph at lines 247--249
-[]\OT1/cmr/m/it/10 A \OT1/cmr/m/n/10 non-de-ter-min-is-tic M^^?uller au-toma-to
-n \OT1/cmr/m/it/10 on $\OML/cmm/m/it/10 ^^F$\OT1/cmr/m/it/10 -labelled in-fi-ni
-te words
- []
+[4] [5] (./11-lezione.aux)
+
+LaTeX Warning: There were undefined references.
 
 
-Overfull \hbox (0.9566pt too wide) in paragraph at lines 252--253
-[]\OT1/cmr/m/it/10 A \OT1/cmr/m/n/10 non-de-ter-min-is-tic Ra-bin au-toma-ton \
-OT1/cmr/m/it/10 on $\OML/cmm/m/it/10 ^^F$\OT1/cmr/m/it/10 -labelled in-fi-nite 
-words
- []
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-
-Overfull \hbox (1.81772pt too wide) in paragraph at lines 256--258
-[]\OT1/cmr/m/it/10 A \OT1/cmr/m/n/10 non-de-ter-min-is-tic Par-ity au-toma-ton 
-\OT1/cmr/m/it/10 on $\OML/cmm/m/it/10 ^^F$\OT1/cmr/m/it/10 -labelled in-fi-nite
- words
- []
-
-Missing character: There is no   in font cmr10!
-Missing character: There is no   in font cmr10!
-[4] [5] (./12-lezione.aux) ) 
+ ) 
 Here is how much of TeX's memory you used:
- 6706 strings out of 493089
- 80518 string characters out of 6134841
- 189548 words of memory out of 5000000
- 10020 multiletter control sequences out of 15000+600000
- 16103 words of font info for 72 fonts, out of 8000000 for 9000
+ 6694 strings out of 493089
+ 80137 string characters out of 6134841
+ 187208 words of memory out of 5000000
+ 10010 multiletter control sequences out of 15000+600000
+ 17627 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,10n,26p,500b,346s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2015/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmmi7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr9.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmsy10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mti10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-tt9.pfb>
-Output written on 12-lezione.pdf (5 pages, 167215 bytes).
+ 38i,13n,26p,309b,347s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></us
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/te
+xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texli
+ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texliv
+e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
+/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2015
+/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on 11-lezione.pdf (5 pages, 186956 bytes).
 PDF statistics:
- 68 PDF objects out of 1000 (max. 8388607)
- 48 compressed objects within 1 object stream
+ 88 PDF objects out of 1000 (max. 8388607)
+ 63 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

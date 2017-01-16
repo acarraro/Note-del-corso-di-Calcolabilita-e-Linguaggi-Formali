@@ -273,19 +273,22 @@ Let $A = (Q, \Sigma, q_I, \delta, \Omega)$ be a nondeterministic M\"{u}ller auto
 Define $Q' = Q \cup \{(G, q, X) \st G \in \Omega, q \in G, X \subseteq G\}$ and $F = \{(G, q, \emptyset) \st G \in \Omega, q \in G\}$. 
 
 Let $q \in Q$ and suppose $p \in \delta(q,a)$. Then also $p \in \delta'(q,a)$ and for each $G \in \Omega$ we have  
-$$
+
+$
 \begin{cases}
 (G, p, \{q\}) \in \delta'(q, a) & \text{if } \{q\} \subset G \text{ and } p \in G \\
 (G, p, \emptyset) \in \delta'(q, a) & \text{if } \{q\} = G \text{ and } p \in G 
 \end{cases}
-$$
+$
+
 and
-$$
+
+$
 \begin{cases}
 (G, p, X \cup \{q\}) \in \delta'((G, q, X), a) & \text{if } X \cup \{q\} \subset G \text{ and } p \in G \\
 (G, p, \emptyset) \in \delta'((G, q, X), a) & \text{if } X \cup \{q\} = G \text{ and } p \in G 
 \end{cases}
-$$
+$
 
 The nondeterministic B\"{u}chi automaton $A' = (Q', \Sigma, q_I, \delta', F)$ has the desired property.
 \end{proof}

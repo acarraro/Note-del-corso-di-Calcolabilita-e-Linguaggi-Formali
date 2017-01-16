@@ -1,0 +1,144 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+\usepackage{enumitem}
+%\usepackage{enumerate}
+
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{rotating}
+%\usepackage{xparse}
+%\usepackage{latex8}
+\usepackage{upgreek} 
+\usepackage{cmll}
+\usepackage{url}
+\usepackage{xifthen}% provides \isempty test
+
+\setcounter{tocdepth}{3}
+
+\urldef{\mailsa}\path|{acarraro}@dsi.unive.it|
+%\urldef{\mailsb}\path||
+%\urldef{\mailsc}\path|
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\input prooftree.sty
+\input xy
+\xyoption{all}
+
+\makeindex
+
+\begin{document}
+
+\mainmatter  % start of an individual contribution
+
+% first the title is needed
+\title{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+
+% a short form should be given in case it is too long for the running head
+\titlerunning{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+
+% the name(s) of the author(s) follow(s) next
+%
+% NB: Chinese authors should write their first names(s) in front of
+% their surnames. This ensures that the names appear correctly in
+% the running heads and the author index.
+%
+\author{Alberto Carraro}
+%
+\authorrunning{A. Carraro}
+% (feature abused for this document to repeat the title also on left hand pages)
+
+% the affiliations are given next; don't give your e-mail address
+% unless you accept that it will be published
+\institute{DAIS, Universit\`{a} Ca' Foscari Venezia
+%\mailsa\\
+%\mailsb\\
+%\mailsc\\
+\url{http://www.dsi.unive.it/~acarraro}
+}
+
+%
+% NB: a more complex sample for affiliations and the mapping to the
+% corresponding authors can be found in the file "llncs.dem"
+% (search for the string "\mainmatter" where a contribution starts).
+% "llncs.dem" accompanies the document class "llncs.cls".
+%
+
+\toctitle{Note del corso di Calcolabilit\`{a} e Linguaggi Formali - Lezione 11}
+\tocauthor{A. Carraro}
+
+\input{macro}
+
+\maketitle
+%\tableofcontents
+
+\begin{exercise}
+Un insieme $A\subseteq \nat$ \`{e} r.e. sse $A \leq_m \cK$.
+\end{exercise}
+
+\begin{solution}
+\noindent($\Leftarrow$) Se $A \leq_m \cK$ allora $A$ \`{e} r.e. perch\'{e} $\cK$ \`{e} r.e. e la Turing-riduzione trasporta all'indietro la ricorsiva enumerabilit\`{a}.
+
+\noindent($\Rightarrow$) Supponiamo $A$ sia r.e. La funzione
+$$
+\phi(x,y) \simeq
+\begin{cases}
+1              & \text{ se } x \in A \\
+\uparrow  & \text{ altrimenti } \\
+\end{cases}
+$$
+\`{e} ricorsiva parziale e quindi per il Teorema $s$-$m$-$n$ esiste una funzione primitiva ricorsiva totale $S: \nat \in \nat$ tale che $\varphi_{S(x)}(y) \simeq \phi(x,y)$ per ogni $x,y\in \nat$.
+
+Dimostriamo che la funzione $S$ realizza la riduzione voluta da $A$ in $\cK$:
+\begin{itemize}
+\item Se $S(x) \in \cK$, allora $\varphi_{S(x)}(S(x))\downarrow$, cio\`{e} $\phi(S(x),S(x))\downarrow$. L'unico caso in cui $\phi(S(x),S(x))$ \`{e} definita (e con valore $1$) \`{e} quello in cui $S(x) \in A$.
+\item Se $x \in A$, allora $\phi(x,S(x))\downarrow$, cio\`{e} $\varphi_{S(x)}(S(x))\downarrow$, e questo significa per definizione che $S(x) \in \cK$.
+\end{itemize}
+\qed
+\end{solution}
+
+\begin{exercise}
+Studiare le caratteristiche dell'insieme $A = \{x \in \nat \st x \in \dom{\varphi_x} \cap \ran{\varphi_x}\}$.
+\end{exercise}
+
+\begin{solution}
+Sia $B = \{x \in \nat \st x \in \ran{\varphi_x}\}$. Si noti che $A = \cK \cap B$.  L'insieme $B$ \`{e} r.e. poich\'{e} $x \in B$ sse $\exists z. \varphi_x(z) = x$ e quest'ultimo predicato \`{e} r.e. Infine l'intersezione di due insiemi r.e. \`{e} ancora r.e.
+
+Dimostriamo che $A$ non \`{e} ricorsivo, verificando che $\overline{A}$ non \`{e} r.e. Per farlo riduciamo $\overline{\cK}$ ad $\overline{A}$. Definiamo
+
+Se $\overline{A}$ fosse r.e. allora esisterebbe un numero $e$ tale che $\overline{A} = \dom(\varphi_e)$
+
+$$
+\phi(x,y,z) = 
+\begin{cases}
+1 & \text{se } \varphi_x(z) = y \\
+   & \text{altrimenti}
+\end{cases}
+$$
+\qed
+\end{solution}
+
+\begin{exercise}
+Studiare le caratteristiche dell'insieme $A = \{x \in \nat \st x \in \dom{\varphi_x} \cup \ran{\varphi_x}\}$.
+\end{exercise}
+
+\begin{solution}
+
+\qed
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{abbrv}%splncs
+%\bibliography{bibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
